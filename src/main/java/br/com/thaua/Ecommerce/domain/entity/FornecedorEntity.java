@@ -13,11 +13,11 @@ import java.util.List;
 public class FornecedorEntity extends AbstractDataClientAndSupplier {
     @OneToOne
     @JoinColumn(name = "endereco_id")
-    private EnderecoEntity enderecoEntity;
+    private EnderecoEntity endereco;
 
     @OneToMany(mappedBy = "fornecedor")
-    private List<Produto> produtos;
+    private List<ProdutoEntity> produto;
 
     @OneToOne(mappedBy = "fornecedor")
-    private Users users;
+    private UsersEntity users;
 }
