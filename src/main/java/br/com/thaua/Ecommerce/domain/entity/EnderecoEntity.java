@@ -9,7 +9,7 @@ import lombok.Setter;
 @Entity
 @Getter
 @Setter
-public class Endereco extends AbstractEntity {
+public class EnderecoEntity extends AbstractEntity {
     private String rua;
     private String numero;
     private String bairro;
@@ -18,8 +18,8 @@ public class Endereco extends AbstractEntity {
     private String cep;
 
     @OneToOne(mappedBy = "endereco")
-    private Cliente cliente;
+    private ClienteEntity cliente;
 
     @OneToOne(mappedBy = "endereco")
-    private Fornecedor fornecedor;
+    private FornecedorEntity fornecedor;
 }

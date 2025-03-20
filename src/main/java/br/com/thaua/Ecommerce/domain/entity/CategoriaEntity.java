@@ -10,7 +10,7 @@ import java.util.List;
 @Entity
 @Getter
 @Setter
-public class Categoria extends AbstractEntity {
+public class CategoriaEntity extends AbstractEntity {
     private String nome;
     private String descricao;
 
@@ -21,5 +21,5 @@ public class Categoria extends AbstractEntity {
             inverseJoinColumns = @JoinColumn(name = "produto_id")
     )
 
-    private List<Produto> produtos;
+    private List<ProdutoEntity> produtos;
 }

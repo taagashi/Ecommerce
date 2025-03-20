@@ -12,15 +12,15 @@ import java.math.BigDecimal;
 @Entity
 @Getter
 @Setter
-public class ItemPedido extends AbstractEntity {
+public class ItemPedidoEntity extends AbstractEntity {
     private Integer quantidade;
     private BigDecimal valorTotal;
 
     @ManyToOne
     @JoinColumn(name="pedido_id")
-    private Pedido pedido;
+    private PedidoEntity pedido;
 
     @ManyToOne
     @JoinColumn(name="produto_id")
-    private Produto produto;
+    private ProdutoEntity produto;
 }

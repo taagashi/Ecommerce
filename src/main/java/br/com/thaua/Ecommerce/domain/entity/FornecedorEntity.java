@@ -10,10 +10,10 @@ import java.util.List;
 @Entity
 @Getter
 @Setter
-public class Fornecedor extends AbstractDataClientAndSupplier {
+public class FornecedorEntity extends AbstractDataClientAndSupplier {
     @OneToOne
     @JoinColumn(name = "endereco_id")
-    private Endereco endereco;
+    private EnderecoEntity enderecoEntity;
 
     @OneToMany(mappedBy = "fornecedor")
     private List<Produto> produtos;

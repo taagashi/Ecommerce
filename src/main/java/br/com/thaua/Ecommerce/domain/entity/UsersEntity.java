@@ -9,7 +9,7 @@ import lombok.Setter;
 @Entity
 @Getter
 @Setter
-public class Users extends AbstractCommonData {
+public class UsersEntity extends AbstractCommonData {
     private String password;
 
     @Enumerated(EnumType.STRING)
@@ -17,13 +17,13 @@ public class Users extends AbstractCommonData {
 
     @OneToOne
     @JoinColumn(name = "admin_id")
-    private Admin admin;
+    private AdminEntity admin;
 
     @OneToOne
     @JoinColumn(name = "cliente_id")
-    private Cliente cliente;
+    private ClienteEntity cliente;
 
     @OneToOne
     @JoinColumn(name = "fornecedor_id")
-    private Fornecedor fornecedor;
+    private FornecedorEntity fornecedor;
 }

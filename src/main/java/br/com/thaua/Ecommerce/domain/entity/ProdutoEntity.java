@@ -11,19 +11,19 @@ import java.util.List;
 @Entity
 @Getter
 @Setter
-public class Produto extends AbstractEntity {
+public class ProdutoEntity extends AbstractEntity {
     private String nome;
     private String descricao;
     private BigDecimal preco;
     private Integer estoque;
 
     @ManyToMany(mappedBy = "produtos")
-    private List<Categoria> categorias;
+    private List<CategoriaEntity> categorias;
 
     @OneToMany(mappedBy = "produto")
-    private List<ItemPedido> itensPedidos;
+    private List<ItemPedidoEntity> itensPedidos;
 
     @ManyToOne
     @JoinColumn(name = "fornecedor_id")
-    private Fornecedor fornecedor;
+    private FornecedorEntity fornecedor;
 }

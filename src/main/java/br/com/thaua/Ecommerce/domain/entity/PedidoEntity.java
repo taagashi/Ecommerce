@@ -14,7 +14,7 @@ import java.util.List;
 @Entity
 @Getter
 @Setter
-public class Pedido extends AbstractEntity {
+public class PedidoEntity extends AbstractEntity {
     @CreationTimestamp
     private LocalDateTime dataPedido;
     private BigDecimal valorPedido;
@@ -24,8 +24,8 @@ public class Pedido extends AbstractEntity {
 
     @ManyToOne
     @JoinColumn(name = "cliente_id")
-    private Cliente cliente;
+    private ClienteEntity cliente;
 
     @OneToMany(mappedBy = "pedido")
-    private List<ItemPedido> itensPedidos;
+    private List<ItemPedidoEntity> itensPedidos;
 }
