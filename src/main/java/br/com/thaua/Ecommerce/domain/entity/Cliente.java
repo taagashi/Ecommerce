@@ -14,8 +14,7 @@ public class Cliente extends AbstractDataClientAndSupplier {
     @OneToMany(mappedBy = "cliente")
     private List<Pedido> pedidos;
 
-    @OneToOne
-    @JoinColumn(name = "users_id")
+    @OneToOne(mappedBy = "cliente")
     private Users users;
 
     @OneToOne

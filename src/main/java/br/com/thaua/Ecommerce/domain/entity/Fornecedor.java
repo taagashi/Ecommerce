@@ -18,7 +18,6 @@ public class Fornecedor extends AbstractDataClientAndSupplier {
     @OneToMany(mappedBy = "fornecedor")
     private List<Produto> produtos;
 
-    @OneToOne
-    @JoinColumn(name = "user_id")
+    @OneToOne(mappedBy = "fornecedor")
     private Users users;
 }

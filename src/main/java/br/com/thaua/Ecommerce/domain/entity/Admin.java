@@ -1,5 +1,6 @@
     package br.com.thaua.Ecommerce.domain.entity;
 
+    import br.com.thaua.Ecommerce.domain.abstracts.AbstractCommonData;
     import br.com.thaua.Ecommerce.domain.abstracts.AbstractEntity;
     import jakarta.persistence.Entity;
     import jakarta.persistence.JoinColumn;
@@ -12,11 +13,10 @@
     @Entity
     @Getter
     @Setter
-    public class Admin extends AbstractEntity {
+    public class Admin extends AbstractCommonData {
         private Integer contasBanidas;
 
-        @OneToOne
-        @JoinColumn(name = "user_id")
+        @OneToOne(mappedBy = "admin")
         private Users users;
 
         private LocalDateTime ultimoAcesso;
