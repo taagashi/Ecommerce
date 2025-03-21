@@ -29,6 +29,6 @@ public class MyUserDetailsService implements UserDetailsService {
 
         Object typeUser = returnTyUsers.returnTypeUsers(usersEntity);
 
-        return new MyUserDetails(usersEntity.getEmail(), usersEntity.getPassword(), usersEntity.getRole().name(), typeUser);
+        return new MyUserDetails(usersEntity.getId(), usersEntity.getEmail(), usersEntity.getPassword(), usersEntity.getRole().name(), typeUser);
     }
 }

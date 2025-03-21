@@ -11,6 +11,8 @@ import java.util.List;
 
 @AllArgsConstructor
 public class MyUserDetails implements UserDetails {
+    @Getter
+    private Long id;
     private String email;
     private String password;
     private String role;
@@ -51,4 +53,5 @@ public class MyUserDetails implements UserDetails {
     public boolean isEnabled() {
         return UserDetails.super.isEnabled();
     }
+
 }

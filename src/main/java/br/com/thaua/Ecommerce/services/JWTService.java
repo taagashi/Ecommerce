@@ -29,9 +29,8 @@ public class JWTService {
     }
 
     public String generateToken(MyUserDetails myUserDetails) {
-        AbstractEntity abstractEntity = (AbstractEntity) myUserDetails.getTypeUser();
         Map<String, Object> claims = new HashMap<>();
-        claims.put("id", abstractEntity.getId());
+        claims.put("id", myUserDetails.getId());
         claims.put("role", myUserDetails.getAuthorities().iterator().next().getAuthority());
         return Jwts.builder()
                 .claims()

@@ -27,8 +27,14 @@ public class Config {
         return http.csrf(customizer -> customizer.disable())
                 .httpBasic(Customizer.withDefaults())
                 .authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers("/api/v1/users/login", "/api/v1/users/register", "/h2-console/**")
-                        .permitAll()
+                        .requestMatchers(
+                                "/api/v1/users/login",
+                                "/api/v1/users/register",
+                                "/h2-console/**",
+                                "/swagger-ui.html",
+                                "/swagger-ui/**",
+                                "/v3/api-docs/**"
+                        ).permitAll()
                         .anyRequest().authenticated())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .headers(header -> header.frameOptions(frame -> frame.disable()))
@@ -43,13 +49,13 @@ public class Config {
     @Bean
     public AuthenticationProvider authenticationProvider() {
         DaoAuthenticationProvider daoAuthenticationProvider = new DaoAuthenticationProvider();
-        daoAuthenticationProvider.setPasswordEncoder(generatePasswordEnconder());
+        daoAuthenticationProvider.setPasswordEncoder(generatePasswordEncoder());
         daoAuthenticationProvider.setUserDetailsService(myUserDetailsService);
         return daoAuthenticationProvider;
     }
 
     @Bean
-    public PasswordEncoder generatePasswordEnconder() {
+    public PasswordEncoder generatePasswordEncoder() {
         return new BCryptPasswordEncoder(10);
     }
 }

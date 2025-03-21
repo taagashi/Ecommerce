@@ -14,10 +14,11 @@ public class ClienteEntity extends AbstractDataClientAndSupplier {
     @OneToMany(mappedBy = "cliente")
     private List<PedidoEntity> pedido;
 
-    @OneToOne(mappedBy = "cliente")
-    private UsersEntity users;
-
     @OneToOne
     @JoinColumn(name = "endereco_id")
     private EnderecoEntity endereco;
+
+    @OneToOne
+    @JoinColumn(name = "user_id")
+    private UsersEntity users;
 }

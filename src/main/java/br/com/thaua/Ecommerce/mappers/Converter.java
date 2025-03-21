@@ -5,7 +5,6 @@ import br.com.thaua.Ecommerce.dto.UsersLoginRequest;
 import br.com.thaua.Ecommerce.dto.UsersRequest;
 import br.com.thaua.Ecommerce.dto.UsersResponse;
 import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
 
 @Mapper(componentModel = "spring")
 public interface Converter {

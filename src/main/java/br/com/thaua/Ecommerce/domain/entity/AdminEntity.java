@@ -2,6 +2,7 @@
 
     import br.com.thaua.Ecommerce.domain.abstracts.AbstractCommonData;
     import jakarta.persistence.Entity;
+    import jakarta.persistence.JoinColumn;
     import jakarta.persistence.OneToOne;
     import lombok.Getter;
     import lombok.Setter;
@@ -15,10 +16,11 @@
     public class AdminEntity extends AbstractCommonData {
         private Integer contasBanidas;
 
-        @OneToOne(mappedBy = "admin")
-        private UsersEntity users;
-
         @UpdateTimestamp
         private LocalDateTime ultimoAcesso;
+
+        @OneToOne
+        @JoinColumn(name = "user_id")
+        private UsersEntity users;
     }
 

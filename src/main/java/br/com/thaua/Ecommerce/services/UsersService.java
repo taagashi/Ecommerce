@@ -8,6 +8,8 @@ import br.com.thaua.Ecommerce.repositories.UsersRepository;
 import br.com.thaua.Ecommerce.services.resolvers.ReturnTyUsers;
 import br.com.thaua.Ecommerce.userDetails.MyUserDetails;
 import lombok.RequiredArgsConstructor;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -23,13 +25,14 @@ public class UsersService {
     private final JWTService jwtService;
     private final AuthenticationManager authenticationManager;
     private final PasswordEncoder passwordEncoder;
+    private final EmailMessageService emailMessageService;
 
     public UsersResponse cadastrarUsuario(UsersRequest usuario) {
         usuario.setPassword(passwordEncoder.encode(usuario.getPassword()));
         UsersEntity usersEntity = converter.toEntity(usuario);
 
         UsersEntity typeUser = (UsersEntity) returnTyUsers.returnTypeUsers(usersEntity);
-
+        emailMessageService.enviarEmails("Registro Ecommerce", "Parabéns " + usersEntity.getName() + " voce acaba de se registrar no nosso Ecommerce :)", usersEntity.getEmail());
         return converter.toResponse(usersRepository.save(typeUser));
     }
 
