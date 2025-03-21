@@ -15,15 +15,15 @@ public class UsersEntity extends AbstractCommonData {
     @Enumerated(EnumType.STRING)
     private Role role;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "admin_id")
     private AdminEntity admin;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "cliente_id")
     private ClienteEntity cliente;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "fornecedor_id")
     private FornecedorEntity fornecedor;
 }
