@@ -2,7 +2,6 @@ package br.com.thaua.Ecommerce.services;
 
 import br.com.thaua.Ecommerce.domain.abstracts.AbstractEntity;
 import br.com.thaua.Ecommerce.userDetails.MyUserDetails;
-import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import io.jsonwebtoken.Jwts;
 
@@ -33,6 +32,7 @@ public class JWTService {
         AbstractEntity abstractEntity = (AbstractEntity) myUserDetails.getTypeUser();
         Map<String, Object> claims = new HashMap<>();
         claims.put("id", abstractEntity.getId());
+        claims.put("role", myUserDetails.getAuthorities().iterator().next().getAuthority());
         return Jwts.builder()
                 .claims()
                 .add(claims)
