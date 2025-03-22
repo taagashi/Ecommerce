@@ -8,6 +8,5 @@ import lombok.Setter;
 @Getter
 @Setter
 public class AbstractDataClientAndSupplier extends AbstractCommonData{
-    private String cpf;
     private String telefone;
 }

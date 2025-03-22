@@ -11,6 +11,8 @@ import java.util.List;
 @Getter
 @Setter
 public class FornecedorEntity extends AbstractDataClientAndSupplier {
+    private String cnpj;
+
     @OneToOne
     @JoinColumn(name = "endereco_id")
     private EnderecoEntity endereco;
