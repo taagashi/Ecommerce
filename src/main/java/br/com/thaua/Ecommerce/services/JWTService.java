@@ -1,7 +1,7 @@
 package br.com.thaua.Ecommerce.services;
 
-import br.com.thaua.Ecommerce.domain.abstracts.AbstractEntity;
 import br.com.thaua.Ecommerce.userDetails.MyUserDetails;
+import io.jsonwebtoken.Claims;
 import org.springframework.stereotype.Service;
 import io.jsonwebtoken.Jwts;
 
@@ -9,6 +9,7 @@ import java.security.*;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.function.Function;
 
 @Service
 public class JWTService {
@@ -41,5 +42,32 @@ public class JWTService {
                 .and()
                 .signWith(privateKey)
                 .compact();
+    }
+
+    public String extractEmail(String token) {
+        return extractClaims(token, Claims::getSubject);
+    }
+
+    public <T> T extractClaims(String token, Function<Claims, T> claimsResolver) {
+        final Claims claims = extractAllClaims(token);
+        return claimsResolver.apply(claims);
+    }
+
+
+    public boolean validateToken(String token) {
+        return new Date(System.currentTimeMillis()).before(extractDate(token));
+    }
+
+    private Date extractDate(String token) {
+            return extractClaims(token, Claims::getExpiration);
+    }
+
+    private Claims extractAllClaims(String token) {
+        return Jwts.parser()
+                .verifyWith(publicKey)
+                .build()
+                .parseSignedClaims(token)
+                .getPayload();
+
     }
 }

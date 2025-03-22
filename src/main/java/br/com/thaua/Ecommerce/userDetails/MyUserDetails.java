@@ -9,7 +9,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 import java.util.Collection;
 import java.util.List;
 
-@AllArgsConstructor
 public class MyUserDetails implements UserDetails {
     @Getter
     private Long id;
@@ -18,6 +17,14 @@ public class MyUserDetails implements UserDetails {
     private String role;
     @Getter
     private Object typeUser;
+
+    public MyUserDetails(Long id, String email, String password, String role, Object typeUser) {
+        this.id = id;
+        this.email = email;
+        this.password = password;
+        this.role = "ROLE_" + role;
+        this.typeUser = typeUser;
+    }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
