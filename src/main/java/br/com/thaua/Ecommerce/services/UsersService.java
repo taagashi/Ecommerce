@@ -32,6 +32,8 @@ public class UsersService {
         UsersEntity usersEntity = converter.toEntity(usuario);
 
         UsersEntity typeUser = (UsersEntity) returnTyUsers.returnTypeUsers(usersEntity);
+
+//        PRECISO COLOCAR UMA MENSAGEM MELHOR AQUI
         emailMessageService.enviarEmails("Registro Ecommerce", "Parabéns " + usersEntity.getName() + " voce acaba de se registrar no nosso Ecommerce :)", usersEntity.getEmail());
         return converter.toResponse(usersRepository.save(typeUser));
     }
