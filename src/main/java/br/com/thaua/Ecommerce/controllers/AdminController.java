@@ -14,12 +14,12 @@ import java.util.List;
 
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("/api/v1/clientes")
+@RequestMapping("/api/v1")
 public class AdminController {
     private final AdminService adminService;
 
     @Operation(summary = "Listar clientes", description = "Lista todos os clientes", security = @SecurityRequirement(name = "bearerAuth"))
-    @GetMapping
+    @GetMapping("/clientes")
     public ResponseEntity<List<ClienteResponse>> listarClientes() {
         return ResponseEntity.ok(adminService.listarClientes());
     }

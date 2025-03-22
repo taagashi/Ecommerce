@@ -11,6 +11,8 @@ import java.util.List;
 @Getter
 @Setter
 public class ClienteEntity extends AbstractDataClientAndSupplier {
+    private String cpf;
+
     @OneToMany(mappedBy = "cliente")
     private List<PedidoEntity> pedido;
 
