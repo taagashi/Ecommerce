@@ -1,5 +1,6 @@
 package br.com.thaua.Ecommerce.config;
 
+import br.com.thaua.Ecommerce.filters.JWTFilter;
 import br.com.thaua.Ecommerce.services.MyUserDetailsService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -15,17 +16,21 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.stereotype.Component;
 
 @RequiredArgsConstructor
 @Configuration
 @EnableWebSecurity
 public class Config {
     private final MyUserDetailsService myUserDetailsService;
+    private final JWTFilter jwtFilter;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http.csrf(customizer -> customizer.disable())
                 .httpBasic(Customizer.withDefaults())
+                .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers(
                                 "/api/v1/users/login",
@@ -35,7 +40,9 @@ public class Config {
                                 "/swagger-ui/**",
                                 "/v3/api-docs/**"
                         ).permitAll()
-                        .anyRequest().authenticated())
+                        .requestMatchers(
+                                "/api/v1/clientes"
+                        ).hasRole("ADMIN"))
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .headers(header -> header.frameOptions(frame -> frame.disable()))
                 .build();
