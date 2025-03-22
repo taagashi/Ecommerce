@@ -7,6 +7,7 @@ import br.com.thaua.Ecommerce.dto.UsersLoginRequest;
 import br.com.thaua.Ecommerce.dto.UsersRequest;
 import br.com.thaua.Ecommerce.dto.UsersResponse;
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 
 import java.util.List;
 
@@ -17,6 +18,7 @@ public interface Converter {
 
     UsersResponse toResponse(UsersEntity usersEntity);
 
+    @Mapping(target = "id", expression = "java(clienteEntity.getUsers().getId())")
     ClienteResponse toResponse(ClienteEntity clienteEntity);
     List<ClienteResponse> toResponse(List<ClienteEntity> clienteEntities);
 }

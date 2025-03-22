@@ -1,6 +1,7 @@
 package br.com.thaua.Ecommerce.domain.entity;
 
 import br.com.thaua.Ecommerce.domain.abstracts.AbstractCommonData;
+import br.com.thaua.Ecommerce.domain.abstracts.AbstractEntity;
 import br.com.thaua.Ecommerce.domain.enums.Role;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -9,7 +10,9 @@ import lombok.Setter;
 @Entity
 @Getter
 @Setter
-public class UsersEntity extends AbstractCommonData {
+public class UsersEntity extends AbstractEntity {
+    private String name;
+    private String email;
     private String password;
 
     @Enumerated(EnumType.STRING)
