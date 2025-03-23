@@ -9,7 +9,6 @@ import java.util.List;
 
 @Mapper(componentModel = "spring")
 public interface ClienteMapper {
-    @Mapping(target = "id", expression = "java(clienteEntity.getUsers().getId())")
     ClienteResponse toResponse(ClienteEntity clienteEntity);
     List<ClienteResponse> toResponse(List<ClienteEntity> clienteEntities);
 }

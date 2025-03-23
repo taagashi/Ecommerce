@@ -1,20 +1,17 @@
 package br.com.thaua.Ecommerce.domain.abstracts;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.EmbeddedId;
-import jakarta.persistence.Id;
-import jakarta.persistence.MappedSuperclass;
+import br.com.thaua.Ecommerce.domain.entity.UsersEntity;
+import jakarta.persistence.*;
+import jakarta.validation.constraints.Email;
 import lombok.Getter;
 import lombok.Setter;
-import org.springframework.stereotype.Component;
 
 @MappedSuperclass
 @Getter
 @Setter
-public class AbstractCommonData {
+public class AbstractCommonData extends AbstractEntity{
     private String name;
-
-    @Id
-    @Column(unique = true, nullable = false)
+    @Email
     private String email;
+
 }

@@ -10,9 +10,7 @@ import lombok.Setter;
 @Entity
 @Getter
 @Setter
-public class UsersEntity extends AbstractEntity {
-    private String name;
-    private String email;
+public class UsersEntity extends AbstractCommonData {
     private String password;
 
     @Enumerated(EnumType.STRING)

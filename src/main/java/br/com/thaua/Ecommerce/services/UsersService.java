@@ -5,12 +5,13 @@ import br.com.thaua.Ecommerce.dto.UsersRequest;
 import br.com.thaua.Ecommerce.dto.UsersResponse;
 import br.com.thaua.Ecommerce.mappers.UserMapper;
 import br.com.thaua.Ecommerce.repositories.UsersRepository;
-import br.com.thaua.Ecommerce.services.resolvers.ReturnTyUsers;
+import br.com.thaua.Ecommerce.services.resolvers.ResolverGeralUsers;
 import br.com.thaua.Ecommerce.userDetails.MyUserDetails;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -18,7 +19,7 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class UsersService {
     private final UsersRepository usersRepository;
-    private final ReturnTyUsers returnTyUsers;
+    private final ResolverGeralUsers resolverGeralUsers;
     private final JWTService jwtService;
     private final AuthenticationManager authenticationManager;
     private final PasswordEncoder passwordEncoder;
@@ -29,10 +30,9 @@ public class UsersService {
         usuario.setPassword(passwordEncoder.encode(usuario.getPassword()));
         UsersEntity usersEntity = userMapper.toEntity(usuario);
 
-        UsersEntity typeUser = (UsersEntity) returnTyUsers.returnTypeUsers(usersEntity);
+        UsersEntity typeUser = (UsersEntity) resolverGeralUsers.returnTypeUsers(usersEntity);
 
-//        PRECISO COLOCAR UMA MENSAGEM MELHOR AQUI
-        emailMessageService.enviarEmails("Registro Ecommerce", "Parabéns " + usersEntity.getName() + " voce acaba de se registrar no nosso Ecommerce :)", usersEntity.getEmail());
+//        emailMessageService.registroDeUsuario(usuario.getName(), usuario.getEmail());
         return userMapper.toResponse(usersRepository.save(typeUser));
     }
 
@@ -44,5 +44,11 @@ public class UsersService {
         }
 
         return jwtService.generateToken((MyUserDetails) authenticateUser.getPrincipal());
+    }
+
+    public String deletarConta() {
+        MyUserDetails entity = (MyUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        UsersEntity usersEntity = (UsersEntity) entity.getUser();
+        return resolverGeralUsers.deleteAccount(usersEntity);
     }
 }

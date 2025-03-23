@@ -11,9 +11,9 @@ import org.springframework.stereotype.Service;
 public class EmailMessageService {
     private final JavaMailSender mailSender;
     @Value("${spring.mail.username}")
-    String remetente;
+    private String remetente;
 
-    public void enviarEmails(String assunto, String texto, String destinatario) {
+    private void enviarEmails(String assunto, String texto, String destinatario) {
         SimpleMailMessage message = new SimpleMailMessage();
         message.setTo(destinatario);
         message.setSubject(assunto);
@@ -21,5 +21,9 @@ public class EmailMessageService {
         message.setFrom(remetente);
 
         mailSender.send(message);
+    }
+
+    public void registroDeUsuario(String nome, String destinatario) {
+        enviarEmails("Registro Ecommerce", "Parabéns " + nome + ", você acaba de se registrar no nosso Ecommerce :)", destinatario);
     }
 }
