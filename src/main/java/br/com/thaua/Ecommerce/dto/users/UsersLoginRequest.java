@@ -1,4 +1,4 @@
-package br.com.thaua.Ecommerce.dto;
+package br.com.thaua.Ecommerce.dto.users;
 
 import lombok.Getter;
 import lombok.Setter;

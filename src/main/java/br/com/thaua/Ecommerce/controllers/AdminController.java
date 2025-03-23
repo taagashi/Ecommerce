@@ -1,6 +1,6 @@
 package br.com.thaua.Ecommerce.controllers;
 
-import br.com.thaua.Ecommerce.dto.ClienteResponse;
+import br.com.thaua.Ecommerce.dto.cliente.ClienteResponse;
 import br.com.thaua.Ecommerce.services.AdminService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;

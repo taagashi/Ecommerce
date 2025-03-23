@@ -1,8 +1,8 @@
 package br.com.thaua.Ecommerce.services;
 
 import br.com.thaua.Ecommerce.domain.entity.UsersEntity;
-import br.com.thaua.Ecommerce.dto.UsersRequest;
-import br.com.thaua.Ecommerce.dto.UsersResponse;
+import br.com.thaua.Ecommerce.dto.users.UsersRequest;
+import br.com.thaua.Ecommerce.dto.users.UsersResponse;
 import br.com.thaua.Ecommerce.mappers.UserMapper;
 import br.com.thaua.Ecommerce.repositories.UsersRepository;
 import br.com.thaua.Ecommerce.services.resolvers.ResolverGeralUsers;
@@ -48,7 +48,7 @@ public class UsersService {
 
     public String deletarConta() {
         MyUserDetails entity = (MyUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        UsersEntity usersEntity = (UsersEntity) entity.getUser();
+        UsersEntity usersEntity = entity.getUser();
         return resolverGeralUsers.deleteAccount(usersEntity);
     }
 }

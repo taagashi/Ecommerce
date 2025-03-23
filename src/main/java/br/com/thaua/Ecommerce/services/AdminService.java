@@ -1,6 +1,6 @@
 package br.com.thaua.Ecommerce.services;
 
-import br.com.thaua.Ecommerce.dto.ClienteResponse;
+import br.com.thaua.Ecommerce.dto.cliente.ClienteResponse;
 import br.com.thaua.Ecommerce.mappers.ClienteMapper;
 import br.com.thaua.Ecommerce.repositories.ClienteRepository;
 import lombok.RequiredArgsConstructor;

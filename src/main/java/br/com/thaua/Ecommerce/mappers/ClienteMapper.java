@@ -1,9 +1,8 @@
 package br.com.thaua.Ecommerce.mappers;
 
 import br.com.thaua.Ecommerce.domain.entity.ClienteEntity;
-import br.com.thaua.Ecommerce.dto.ClienteResponse;
+import br.com.thaua.Ecommerce.dto.cliente.ClienteResponse;
 import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
 
 import java.util.List;
 

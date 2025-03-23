@@ -1,7 +1,5 @@
-package br.com.thaua.Ecommerce.dto;
+package br.com.thaua.Ecommerce.dto.users;
 
-import br.com.thaua.Ecommerce.domain.enums.Role;
-import jakarta.persistence.Enumerated;
 import lombok.Getter;
 import lombok.Setter;
 

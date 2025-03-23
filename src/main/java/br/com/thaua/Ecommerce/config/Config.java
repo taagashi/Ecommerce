@@ -42,6 +42,9 @@ public class Config {
                         .requestMatchers(
                                 "/api/v1/clientes"
                         ).hasRole("ADMIN")
+                        .requestMatchers(
+                                "api/v1/clientes/**"
+                        ).hasRole("CLIENTE")
                         .anyRequest().authenticated())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .headers(header -> header.frameOptions(frame -> frame.disable()))
