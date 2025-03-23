@@ -8,7 +8,7 @@ import java.util.List;
 
 @Component
 @RequiredArgsConstructor
-public class ReturnTyUsers {
+public class ResolverGeralUsers {
     private final List<ResolverUsers> resolverUsers;
 
     public Object returnTypeUsers(UsersEntity usersEntity) {
@@ -17,5 +17,13 @@ public class ReturnTyUsers {
                 .findFirst()
                 .orElseThrow(() -> new RuntimeException("Role não encontrada"))
                 .identificarUsers(usersEntity);
+    }
+
+    public String deleteAccount(UsersEntity usersEntity) {
+        return resolverUsers.stream()
+                .filter(user -> user.roleEsperada(usersEntity.getRole()))
+                .findFirst()
+                .orElseThrow(() -> new RuntimeException("Role não encontada"))
+                .deletarConta();
     }
 }

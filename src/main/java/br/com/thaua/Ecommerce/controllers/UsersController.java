@@ -6,6 +6,7 @@ import br.com.thaua.Ecommerce.dto.UsersResponse;
 import br.com.thaua.Ecommerce.services.JWTService;
 import br.com.thaua.Ecommerce.services.UsersService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -26,5 +27,11 @@ public class UsersController {
     @PostMapping("/login")
     public ResponseEntity<String> login(@RequestBody UsersLoginRequest usersLoginRequest) {
         return ResponseEntity.ok(userService.login(usersLoginRequest.getEmail(), usersLoginRequest.getPassword()));
+    }
+
+    @Operation(summary = "Deletar conta", description = "O usuario autenticado pode deletar a conta dele", security = @SecurityRequirement(name = "bearerAuth"))
+    @DeleteMapping("/delete")
+    public ResponseEntity<String> deletarConta() {
+        return ResponseEntity.ok(userService.deletarConta());
     }
 }

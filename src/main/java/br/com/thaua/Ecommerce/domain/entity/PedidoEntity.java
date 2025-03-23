@@ -26,6 +26,6 @@ public class PedidoEntity extends AbstractEntity {
     @JoinColumn(name = "cliente_id")
     private ClienteEntity cliente;
 
-    @OneToMany(mappedBy = "pedido")
+    @OneToMany(mappedBy = "pedido", cascade = CascadeType.ALL)
     private List<ItemPedidoEntity> itensPedidos;
 }

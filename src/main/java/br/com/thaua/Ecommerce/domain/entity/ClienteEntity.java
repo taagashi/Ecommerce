@@ -15,10 +15,10 @@ public class ClienteEntity extends AbstractDataClientAndSupplier {
     @CPF
     private String cpf;
 
-    @OneToMany(mappedBy = "cliente")
+    @OneToMany(mappedBy = "cliente", fetch = FetchType.EAGER)
     private List<PedidoEntity> pedido;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "endereco_id")
     private EnderecoEntity endereco;
 

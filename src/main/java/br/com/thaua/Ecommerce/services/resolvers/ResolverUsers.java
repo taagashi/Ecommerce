@@ -8,4 +8,5 @@ import org.springframework.stereotype.Component;
 public interface ResolverUsers {
     boolean roleEsperada(Role role);
     Object identificarUsers(UsersEntity users);
+    String deletarConta();
 }

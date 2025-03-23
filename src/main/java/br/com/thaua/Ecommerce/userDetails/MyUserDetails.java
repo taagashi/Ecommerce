@@ -16,13 +16,16 @@ public class MyUserDetails implements UserDetails {
     private String password;
     private String role;
     @Getter
+    private Object user;
+    @Getter
     private Object typeUser;
 
-    public MyUserDetails(Long id, String email, String password, String role, Object typeUser) {
+    public MyUserDetails(Long id, String email, String password, String role, Object user, Object typeUser) {
         this.id = id;
         this.email = email;
         this.password = password;
         this.role = "ROLE_" + role;
+        this.user = user;
         this.typeUser = typeUser;
     }
 
