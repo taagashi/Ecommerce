@@ -20,7 +20,4 @@ public class ClienteEntity extends AbstractDataClientAndSupplier {
     @JoinColumn(name = "endereco_id")
     private EnderecoEntity endereco;
 
-    @OneToOne
-    @JoinColumn(name = "user_id")
-    private UsersEntity users;
 }

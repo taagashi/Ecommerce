@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 import java.util.Optional;
 
 @Component
-public class FornecedorResolver implements ResolverUsers{
+public class FornecedorResolver extends AbstractResolver<FornecedorEntity> implements ResolverUsers{
     @Override
     public boolean roleEsperada(Role role) {
         return role.equals(Role.FORNECEDOR);
@@ -20,9 +20,7 @@ public class FornecedorResolver implements ResolverUsers{
         if(usersEntity.getFornecedor() == null) {
             FornecedorEntity fornecedorEntity = new FornecedorEntity();
             usersEntity.setFornecedor(fornecedorEntity);
-            fornecedorEntity.setName(usersEntity.getName());
-            fornecedorEntity.setEmail(usersEntity.getEmail());
-            fornecedorEntity.setUsers(usersEntity);
+            setInformationEntity(fornecedorEntity, usersEntity);
 
             return usersEntity;
         }

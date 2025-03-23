@@ -7,6 +7,6 @@ import lombok.Setter;
 @MappedSuperclass
 @Getter
 @Setter
-public class AbstractDataClientAndSupplier extends AbstractCommonData{
+public class AbstractDataClientAndSupplier extends AbstractRelationWithUsers{
     private String telefone;
 }

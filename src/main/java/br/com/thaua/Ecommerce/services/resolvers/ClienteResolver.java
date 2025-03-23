@@ -10,7 +10,7 @@ import javax.swing.text.html.Option;
 import java.util.Optional;
 
 @Component
-public class ClienteResolver implements ResolverUsers{
+public class ClienteResolver extends AbstractResolver<ClienteEntity> implements ResolverUsers{
     @Override
     public boolean roleEsperada(Role role) {
         return role.equals(Role.CLIENTE);
@@ -21,9 +21,7 @@ public class ClienteResolver implements ResolverUsers{
         if(usersEntity.getCliente() == null) {
             ClienteEntity clienteEntity = new ClienteEntity();
             usersEntity.setCliente(clienteEntity);
-            clienteEntity.setName(usersEntity.getName());
-            clienteEntity.setEmail(usersEntity.getEmail());
-            clienteEntity.setUsers(usersEntity);
+            setInformationEntity(clienteEntity, usersEntity);
 
             return usersEntity;
         }

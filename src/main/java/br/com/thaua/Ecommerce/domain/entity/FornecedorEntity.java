@@ -20,7 +20,4 @@ public class FornecedorEntity extends AbstractDataClientAndSupplier {
     @OneToMany(mappedBy = "fornecedor")
     private List<ProdutoEntity> produto;
 
-    @OneToOne
-    @JoinColumn(name = "user_id")
-    private UsersEntity users;
 }

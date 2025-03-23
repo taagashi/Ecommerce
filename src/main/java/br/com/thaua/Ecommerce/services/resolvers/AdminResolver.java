@@ -9,8 +9,7 @@ import javax.swing.text.html.Option;
 import java.util.Optional;
 
 @Component
-public class AdminResolver implements ResolverUsers{
-
+public class AdminResolver extends AbstractResolver<AdminEntity> implements ResolverUsers {
     @Override
     public boolean roleEsperada(Role role) {
         return role.equals(Role.ADMIN);
@@ -21,9 +20,7 @@ public class AdminResolver implements ResolverUsers{
         if(usersEntity.getAdmin() == null) {
             AdminEntity adminEntity = new AdminEntity();
             usersEntity.setAdmin(adminEntity);
-            adminEntity.setName(usersEntity.getName());
-            adminEntity.setEmail(usersEntity.getEmail());
-            adminEntity.setUsers(usersEntity);
+            setInformationEntity(adminEntity, usersEntity);
 
             return usersEntity;
         }
