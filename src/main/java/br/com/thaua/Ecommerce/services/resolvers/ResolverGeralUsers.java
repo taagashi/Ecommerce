@@ -16,6 +16,7 @@ public class ResolverGeralUsers {
                 .filter(user -> user.roleEsperada(usersEntity.getRole()))
                 .findFirst()
                 .orElseThrow(() -> new RuntimeException("Role não encontrada"))
-                .identificarUsers(usersEntity);
+                .trackUserForRegister(usersEntity);
     }
+
 }

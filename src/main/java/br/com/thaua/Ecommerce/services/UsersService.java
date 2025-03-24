@@ -1,8 +1,12 @@
 package br.com.thaua.Ecommerce.services;
 
+import br.com.thaua.Ecommerce.domain.entity.EnderecoEntity;
 import br.com.thaua.Ecommerce.domain.entity.UsersEntity;
+import br.com.thaua.Ecommerce.dto.endereco.EnderecoRequest;
+import br.com.thaua.Ecommerce.dto.endereco.EnderecoResponse;
 import br.com.thaua.Ecommerce.dto.users.UsersRequest;
 import br.com.thaua.Ecommerce.dto.users.UsersResponse;
+import br.com.thaua.Ecommerce.mappers.EnderecoMapper;
 import br.com.thaua.Ecommerce.mappers.UserMapper;
 import br.com.thaua.Ecommerce.repositories.UsersRepository;
 import br.com.thaua.Ecommerce.services.resolvers.ResolverGeralUsers;
@@ -12,7 +16,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -26,6 +29,7 @@ public class UsersService {
     private final PasswordEncoder passwordEncoder;
     private final EmailMessageService emailMessageService;
     private final UserMapper userMapper;
+    private final EnderecoMapper enderecoMapper;
 
     public UsersResponse cadastrarUsuario(UsersRequest usuario) {
         usuario.setPassword(passwordEncoder.encode(usuario.getPassword()));
@@ -51,5 +55,14 @@ public class UsersService {
         UsersEntity usersEntity = ExtractTypeUserContextHolder.extractUser();
         usersRepository.delete(usersEntity);
         return usersEntity.getName() + " sua conta foi deletada com sucesso";
+    }
+
+    public EnderecoResponse cadastrarEndereco(EnderecoRequest enderecoRequest) {
+        UsersEntity usersEntity = ExtractTypeUserContextHolder.extractUser();
+        EnderecoEntity enderecoEntity = enderecoMapper.enderecoRequestToEntity(enderecoRequest);
+        enderecoEntity.setUsers(usersEntity);
+        usersEntity.setEndereco(enderecoEntity);
+
+        return enderecoMapper.toEnderecoResponse(usersRepository.save(usersEntity).getEndereco());
     }
 }

@@ -24,4 +24,8 @@ public class UsersEntity extends AbstractCommonData {
 
     @OneToOne(mappedBy = "users", cascade = CascadeType.ALL)
     private FornecedorEntity fornecedor;
+
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "endereco_id")
+    private EnderecoEntity endereco;
 }

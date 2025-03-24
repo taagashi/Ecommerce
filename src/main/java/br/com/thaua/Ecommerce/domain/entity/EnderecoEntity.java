@@ -18,8 +18,6 @@ public class EnderecoEntity extends AbstractEntity {
     private String cep;
 
     @OneToOne(mappedBy = "endereco")
-    private ClienteEntity cliente;
+    private UsersEntity users;
 
-    @OneToOne(mappedBy = "endereco")
-    private FornecedorEntity fornecedor;
 }

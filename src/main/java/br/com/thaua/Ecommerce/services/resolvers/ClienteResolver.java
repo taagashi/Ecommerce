@@ -25,7 +25,7 @@ public class ClienteResolver extends AbstractResolver<ClienteEntity> implements 
     }
 
     @Override
-    public Object identificarUsers(UsersEntity usersEntity) {
+    public Object trackUserForRegister(UsersEntity usersEntity) {
         ClienteEntity clienteEntity = new ClienteEntity();
         usersEntity.setCliente(clienteEntity);
         setInformationEntity(clienteEntity, usersEntity);

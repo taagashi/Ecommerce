@@ -24,7 +24,7 @@ public class FornecedorResolver extends AbstractResolver<FornecedorEntity> imple
     }
 
     @Override
-    public Object identificarUsers(UsersEntity usersEntity) {
+    public Object trackUserForRegister(UsersEntity usersEntity) {
         FornecedorEntity fornecedorEntity = new FornecedorEntity();
         usersEntity.setFornecedor(fornecedorEntity);
         setInformationEntity(fornecedorEntity, usersEntity);
