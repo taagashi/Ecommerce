@@ -40,4 +40,11 @@ public class FornecedorController {
     public ResponseEntity<List<ProdutoResponse>> exibirProdutos() {
         return ResponseEntity.ok(fornecedorService.exibirProdutos());
     }
+
+//    - `GET /api/v1/funcionarios/produtos/{produtoId}/list - Buscar produto por ID [ROLE: FUNCIONARIO]
+    @Operation(summary = "exibir um produto do fornecedor", description = "Fornecedor pode olhar um produto especifico seu")
+    @GetMapping("/produtos/{produtoId}")
+    public ResponseEntity<ProdutoResponse> buscarProduto(@PathVariable Long produtoId) {
+        return ResponseEntity.ok(fornecedorService.buscarProduto(produtoId));
+    }
 }

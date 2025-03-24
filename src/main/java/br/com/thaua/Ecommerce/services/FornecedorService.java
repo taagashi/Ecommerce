@@ -48,4 +48,11 @@ public class FornecedorService {
         UsersEntity usersEntity = ExtractTypeUserContextHolder.extractUser();
         return produtoMapper.produtoToResponseList(usersEntity.getFornecedor().getProduto());
     }
+
+    public ProdutoResponse buscarProduto(Long produtoId) {
+        UsersEntity usersEntity = ExtractTypeUserContextHolder.extractUser();
+        ProdutoEntity produtoEntity = produtoRepository.findByIdAndFornecedorId(produtoId, usersEntity.getId()).get();
+
+        return produtoMapper.produtoToResponse(produtoEntity);
+    }
 }
