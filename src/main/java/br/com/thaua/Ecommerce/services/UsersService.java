@@ -8,6 +8,7 @@ import br.com.thaua.Ecommerce.dto.users.UsersRequest;
 import br.com.thaua.Ecommerce.dto.users.UsersResponse;
 import br.com.thaua.Ecommerce.mappers.EnderecoMapper;
 import br.com.thaua.Ecommerce.mappers.UserMapper;
+import br.com.thaua.Ecommerce.repositories.EnderecoRepository;
 import br.com.thaua.Ecommerce.repositories.UsersRepository;
 import br.com.thaua.Ecommerce.services.resolvers.ResolverGeralUsers;
 import br.com.thaua.Ecommerce.services.returnTypeUsers.ExtractTypeUserContextHolder;
@@ -30,6 +31,7 @@ public class UsersService {
     private final EmailMessageService emailMessageService;
     private final UserMapper userMapper;
     private final EnderecoMapper enderecoMapper;
+    private final EnderecoRepository enderecoRepository;
 
     public UsersResponse cadastrarUsuario(UsersRequest usuario) {
         usuario.setPassword(passwordEncoder.encode(usuario.getPassword()));
@@ -69,5 +71,21 @@ public class UsersService {
     public EnderecoResponse exibirEndereco() {
         UsersEntity usersEntity = ExtractTypeUserContextHolder.extractUser();
         return enderecoMapper.toEnderecoResponse(usersEntity.getEndereco());
+    }
+
+    public String deletarEndereco() {
+        UsersEntity usersEntity = ExtractTypeUserContextHolder.extractUser();
+
+        if(usersEntity.getEndereco() == null) {
+            throw new RuntimeException(usersEntity.getName() + ", não é possivel limpar um endereço que não existe");
+        }
+
+        EnderecoEntity enderecoEntity = usersEntity.getEndereco();
+        usersEntity.getEndereco().setUsers(null);
+        usersEntity.setEndereco(null);
+
+        usersRepository.save(usersEntity);
+        enderecoRepository.delete(enderecoEntity);
+        return usersEntity.getName() + ", as informacoes do seu endereco foram deletadas com sucesso";
     }
 }

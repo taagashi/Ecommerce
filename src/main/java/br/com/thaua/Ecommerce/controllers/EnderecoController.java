@@ -31,4 +31,11 @@ public class EnderecoController {
     public ResponseEntity<EnderecoResponse> exibirEndereco() {
         return ResponseEntity.ok(usersService.exibirEndereco());
     }
+
+//    DELETE /api/v1/users/enderecos/delete` - Remover endereço do usuario [USUARIO AUTENTICADO]
+    @Operation(summary = "remover endereco", description = "usuario autenticado pode limpar as informacoes de seu endereco")
+    @DeleteMapping("/delete")
+    public ResponseEntity<String> removerEndereco() {
+        return ResponseEntity.ok(usersService.deletarEndereco());
+    }
 }
