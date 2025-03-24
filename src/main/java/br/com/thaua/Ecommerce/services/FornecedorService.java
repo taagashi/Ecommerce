@@ -14,6 +14,8 @@ import br.com.thaua.Ecommerce.services.returnTypeUsers.ExtractTypeUserContextHol
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @RequiredArgsConstructor
 @Service
 public class FornecedorService {
@@ -40,5 +42,10 @@ public class FornecedorService {
         produtoEntity.setFornecedor(usersEntity.getFornecedor());
 
         return produtoMapper.produtoToResponse(produtoRepository.save(produtoEntity));
+    }
+
+    public List<ProdutoResponse> exibirProdutos() {
+        UsersEntity usersEntity = ExtractTypeUserContextHolder.extractUser();
+        return produtoMapper.produtoToResponseList(usersEntity.getFornecedor().getProduto());
     }
 }

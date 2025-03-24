@@ -11,6 +11,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @SecurityRequirement(name = "bearerAuth")
 @RequiredArgsConstructor
 @RestController
@@ -30,5 +32,12 @@ public class FornecedorController {
     @PostMapping("/produtos/register")
     public ResponseEntity<ProdutoResponse> cadastrarProduto(@RequestBody ProdutoRequest produtoRequest) {
         return ResponseEntity.ok(fornecedorService.cadastrarProduto(produtoRequest));
+    }
+
+//    GET /api/v1/funcionarios/produtos/list - Listar produtos (com paginação e filtros) [ROLE: FUNCIONARIO]
+    @Operation(summary = "listar produtos", description = "Fornecedor faz a listagem de todos os produtos que ele cadastrou")
+    @GetMapping("produtos/list")
+    public ResponseEntity<List<ProdutoResponse>> exibirProdutos() {
+        return ResponseEntity.ok(fornecedorService.exibirProdutos());
     }
 }

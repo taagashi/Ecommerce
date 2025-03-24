@@ -20,10 +20,10 @@ public class ProdutoEntity extends AbstractEntity {
     private BigDecimal preco;
     private Integer estoque;
 
-    @ManyToMany(mappedBy = "produtos")
+    @ManyToMany(mappedBy = "produtos", fetch = FetchType.EAGER)
     private List<CategoriaEntity> categorias;
 
-    @OneToMany(mappedBy = "produto")
+    @OneToMany(mappedBy = "produto", fetch = FetchType.EAGER)
     private List<ItemPedidoEntity> itensPedidos;
 
     @ManyToOne

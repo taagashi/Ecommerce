@@ -12,7 +12,7 @@ import java.util.List;
 @Getter
 @Setter
 public class FornecedorEntity extends AbstractDataClientAndSupplier {
-    @CNPJ
+//    @CNPJ
     private String cnpj;
 
     @OneToMany(mappedBy = "fornecedor", fetch = FetchType.EAGER)
