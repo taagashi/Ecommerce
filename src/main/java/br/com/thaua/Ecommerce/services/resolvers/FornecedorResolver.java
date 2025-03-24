@@ -25,15 +25,11 @@ public class FornecedorResolver extends AbstractResolver<FornecedorEntity> imple
 
     @Override
     public Object identificarUsers(UsersEntity usersEntity) {
-        if(usersEntity.getFornecedor() == null) {
-            FornecedorEntity fornecedorEntity = new FornecedorEntity();
-            usersEntity.setFornecedor(fornecedorEntity);
-            setInformationEntity(fornecedorEntity, usersEntity);
+        FornecedorEntity fornecedorEntity = new FornecedorEntity();
+        usersEntity.setFornecedor(fornecedorEntity);
+        setInformationEntity(fornecedorEntity, usersEntity);
 
-            return usersEntity;
-        }
-
-        return usersEntity.getFornecedor();
+        return usersEntity;
     }
 
 }

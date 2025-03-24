@@ -13,6 +13,6 @@ public interface ClienteMapper {
     ClienteResponse toResponse(ClienteEntity clienteEntity);
     List<ClienteResponse> toResponse(List<ClienteEntity> clienteEntities);
 
-    @Mapping(target = "pedidosFeitos", expression = "java(clienteEntity.getPedido().size())")
+    @Mapping(target = "pedidosFeitos", expression = "java(clienteEntity.getPedido() == null ? 0 : clienteEntity.getPedido().size())")
     ClienteComPedidoResponse toResponseComPedido(ClienteEntity clienteEntity);
 }

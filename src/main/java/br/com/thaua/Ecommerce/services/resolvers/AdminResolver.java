@@ -22,15 +22,11 @@ public class AdminResolver extends AbstractResolver<AdminEntity> implements Reso
 
     @Override
     public Object identificarUsers(UsersEntity usersEntity) {
-        if(usersEntity.getAdmin() == null) {
-            AdminEntity adminEntity = new AdminEntity();
-            usersEntity.setAdmin(adminEntity);
-            setInformationEntity(adminEntity, usersEntity);
+        AdminEntity adminEntity = new AdminEntity();
+        usersEntity.setAdmin(adminEntity);
+        setInformationEntity(adminEntity, usersEntity);
 
-            return usersEntity;
-        }
-
-        return usersEntity.getAdmin();
+        return usersEntity;
     }
 
 }

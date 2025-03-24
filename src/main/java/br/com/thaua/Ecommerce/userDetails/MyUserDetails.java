@@ -18,16 +18,13 @@ public class MyUserDetails implements UserDetails {
     private String role;
     @Getter
     private UsersEntity user;
-    @Getter
-    private Object typeUser;
 
-    public MyUserDetails(Long id, String email, String password, String role, UsersEntity user, Object typeUser) {
+    public MyUserDetails(Long id, String email, String password, String role, UsersEntity user) {
         this.id = id;
         this.email = email;
         this.password = password;
         this.role = "ROLE_" + role;
         this.user = user;
-        this.typeUser = typeUser;
     }
 
     @Override

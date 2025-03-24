@@ -24,8 +24,6 @@ public class MyUserDetailsService implements UserDetailsService {
             throw new UsernameNotFoundException("Usuário não encontrado");
         }
 
-        Object typeUser = resolverGeralUsers.returnTypeUsers(usersEntity);
-
-        return new MyUserDetails(usersEntity.getId(), usersEntity.getEmail(), usersEntity.getPassword(), usersEntity.getRole().name(), usersEntity, typeUser);
+        return new MyUserDetails(usersEntity.getId(), usersEntity.getEmail(), usersEntity.getPassword(), usersEntity.getRole().name(), usersEntity);
     }
 }
