@@ -37,16 +37,4 @@ public class ClienteResolver extends AbstractResolver<ClienteEntity> implements 
         return usersEntity.getCliente();
     }
 
-    @Override
-    public String deletarConta() {
-        MyUserDetails myUserDetails = (MyUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        ClienteEntity clienteEntity = (ClienteEntity) myUserDetails.getTypeUser();
-
-        if(!clienteEntity.getPedido().isEmpty()) {
-            throw new RuntimeException(clienteEntity.getName() + " voce nao pode deletar sua conta porque voce ainda tem pedidos pendentes");
-        }
-
-        usersRepository.delete(clienteEntity.getUsers());
-        return clienteEntity.getName() + " sua conta foi deletada com sucesso";
-    }
 }

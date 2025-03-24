@@ -36,20 +36,4 @@ public class FornecedorResolver extends AbstractResolver<FornecedorEntity> imple
         return usersEntity.getFornecedor();
     }
 
-    @Override
-    public String deletarConta() {
-        MyUserDetails myUserDetails = (MyUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        FornecedorEntity fornecedorEntity = (FornecedorEntity) myUserDetails.getTypeUser();
-
-        Boolean temPedidos = fornecedorEntity.getProduto()
-                        .stream()
-                                .anyMatch(produto -> !produto.getItensPedidos().isEmpty());
-
-        if(temPedidos) {
-            throw new RuntimeException(fornecedorEntity.getName() + " nao pode deletar sua conta porque tem pedidos associados aos seus produtos");
-        }
-
-        usersRepository.delete(fornecedorEntity.getUsers());
-        return fornecedorEntity.getName() + " sua conta foi deletada com sucesso";
-    }
 }

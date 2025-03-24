@@ -40,7 +40,7 @@ public class Config {
                                 "/v3/api-docs/**"
                         ).permitAll()
                         .requestMatchers(
-                                "/api/v1/clientes"
+                                "/api/v1/admin/**"
                         ).hasRole("ADMIN")
                         .requestMatchers(
                                 "api/v1/clientes/**"
