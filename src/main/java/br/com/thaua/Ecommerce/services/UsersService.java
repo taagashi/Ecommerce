@@ -70,6 +70,10 @@ public class UsersService {
 
     public EnderecoResponse exibirEndereco() {
         UsersEntity usersEntity = ExtractTypeUserContextHolder.extractUser();
+
+        if(usersEntity.getEndereco() == null) {
+            throw new RuntimeException(usersEntity.getName() + ", você ainda não cadastrou um endereço");
+        }
         return enderecoMapper.toEnderecoResponse(usersEntity.getEndereco());
     }
 
@@ -77,7 +81,7 @@ public class UsersService {
         UsersEntity usersEntity = ExtractTypeUserContextHolder.extractUser();
 
         if(usersEntity.getEndereco() == null) {
-            throw new RuntimeException(usersEntity.getName() + ", não é possivel limpar um endereço que não existe");
+            throw new RuntimeException(usersEntity.getName() + ", não é possivel limpar as informações do seu endereço porque você aida não adicionou um");
         }
 
         EnderecoEntity enderecoEntity = usersEntity.getEndereco();
@@ -87,5 +91,15 @@ public class UsersService {
         usersRepository.save(usersEntity);
         enderecoRepository.delete(enderecoEntity);
         return usersEntity.getName() + ", as informacoes do seu endereco foram deletadas com sucesso";
+    }
+
+    public EnderecoResponse atualizarEndereco(EnderecoRequest enderecoRequest) {
+        UsersEntity usersEntity = ExtractTypeUserContextHolder.extractUser();
+        EnderecoEntity enderecoEntity = enderecoMapper.enderecoRequestToEntity(enderecoRequest);
+        enderecoEntity.setUsers(usersEntity);
+        enderecoEntity.setId(usersEntity.getEndereco().getId());
+        usersEntity.setEndereco(enderecoEntity);
+
+        return enderecoMapper.toEnderecoResponse(usersRepository.save(usersEntity).getEndereco());
     }
 }

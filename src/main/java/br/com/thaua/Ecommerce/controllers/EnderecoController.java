@@ -38,4 +38,11 @@ public class EnderecoController {
     public ResponseEntity<String> removerEndereco() {
         return ResponseEntity.ok(usersService.deletarEndereco());
     }
+
+//    PUT /api/v1/users/enderecos/update - Atualizar endereço do cliente [USUARIO AUTENTICADO]
+    @Operation(summary = "atualizar endereço", description = "usuario atualiza todas as informações do seu endereco")
+    @PutMapping("/update")
+    public ResponseEntity<EnderecoResponse> atualizarEndereco(@RequestBody EnderecoRequest enderecoRequest) {
+        return ResponseEntity.ok(usersService.atualizarEndereco(enderecoRequest));
+    }
 }
