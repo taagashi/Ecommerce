@@ -65,4 +65,9 @@ public class UsersService {
 
         return enderecoMapper.toEnderecoResponse(usersRepository.save(usersEntity).getEndereco());
     }
+
+    public EnderecoResponse exibirEndereco() {
+        UsersEntity usersEntity = ExtractTypeUserContextHolder.extractUser();
+        return enderecoMapper.toEnderecoResponse(usersEntity.getEndereco());
+    }
 }

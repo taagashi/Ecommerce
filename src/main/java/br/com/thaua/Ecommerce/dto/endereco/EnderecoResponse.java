@@ -6,7 +6,7 @@ import lombok.Setter;
 @Getter
 @Setter
 public class EnderecoResponse {
-    private Long id;
+    private Long idEndereco;
     private String nameUser;
     private String rua;
     private String numero;

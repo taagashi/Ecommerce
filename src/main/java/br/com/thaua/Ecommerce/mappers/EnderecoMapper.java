@@ -10,5 +10,6 @@ import org.mapstruct.Mapping;
 public interface EnderecoMapper {
     EnderecoEntity enderecoRequestToEntity(EnderecoRequest enderecoRequest);
     @Mapping(target = "nameUser", expression = "java(enderecoEntity.getUsers().getName())")
+    @Mapping(target = "idEndereco", expression = "java(enderecoEntity.getId())")
     EnderecoResponse toEnderecoResponse(EnderecoEntity enderecoEntity);
 }
