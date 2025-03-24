@@ -18,12 +18,4 @@ public class ResolverGeralUsers {
                 .orElseThrow(() -> new RuntimeException("Role não encontrada"))
                 .identificarUsers(usersEntity);
     }
-
-    public String deleteAccount(UsersEntity usersEntity) {
-        return resolverUsers.stream()
-                .filter(user -> user.roleEsperada(usersEntity.getRole()))
-                .findFirst()
-                .orElseThrow(() -> new RuntimeException("Role não encontada"))
-                .deletarConta();
-    }
 }

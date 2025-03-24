@@ -1,9 +1,8 @@
 package br.com.thaua.Ecommerce.mappers;
 
 import br.com.thaua.Ecommerce.domain.entity.UsersEntity;
-import br.com.thaua.Ecommerce.dto.UsersLoginRequest;
-import br.com.thaua.Ecommerce.dto.UsersRequest;
-import br.com.thaua.Ecommerce.dto.UsersResponse;
+import br.com.thaua.Ecommerce.dto.users.UsersRequest;
+import br.com.thaua.Ecommerce.dto.users.UsersResponse;
 import org.mapstruct.Mapper;
 
 @Mapper(componentModel = "spring")

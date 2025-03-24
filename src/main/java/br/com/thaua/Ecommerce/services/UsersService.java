@@ -1,11 +1,12 @@
 package br.com.thaua.Ecommerce.services;
 
 import br.com.thaua.Ecommerce.domain.entity.UsersEntity;
-import br.com.thaua.Ecommerce.dto.UsersRequest;
-import br.com.thaua.Ecommerce.dto.UsersResponse;
+import br.com.thaua.Ecommerce.dto.users.UsersRequest;
+import br.com.thaua.Ecommerce.dto.users.UsersResponse;
 import br.com.thaua.Ecommerce.mappers.UserMapper;
 import br.com.thaua.Ecommerce.repositories.UsersRepository;
 import br.com.thaua.Ecommerce.services.resolvers.ResolverGeralUsers;
+import br.com.thaua.Ecommerce.services.returnTypeUsers.ExtractTypeUserContextHolder;
 import br.com.thaua.Ecommerce.userDetails.MyUserDetails;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -47,8 +48,8 @@ public class UsersService {
     }
 
     public String deletarConta() {
-        MyUserDetails entity = (MyUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        UsersEntity usersEntity = (UsersEntity) entity.getUser();
-        return resolverGeralUsers.deleteAccount(usersEntity);
+        UsersEntity usersEntity = ExtractTypeUserContextHolder.extractUser();
+        usersRepository.delete(usersEntity);
+        return usersEntity.getName() + " sua conta foi deletada com sucesso";
     }
 }

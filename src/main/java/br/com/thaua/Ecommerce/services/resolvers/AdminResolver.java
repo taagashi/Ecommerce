@@ -33,11 +33,4 @@ public class AdminResolver extends AbstractResolver<AdminEntity> implements Reso
         return usersEntity.getAdmin();
     }
 
-    @Override
-    public String deletarConta() {
-        MyUserDetails myUserDetails = (MyUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        AdminEntity adminEntity = (AdminEntity) myUserDetails.getTypeUser();
-        usersRepository.delete(adminEntity.getUsers());
-        return adminEntity.getName() + " sua conta foi deletada com sucesso";
-    }
 }

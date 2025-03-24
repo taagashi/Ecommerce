@@ -1,9 +1,8 @@
 package br.com.thaua.Ecommerce.controllers;
 
-import br.com.thaua.Ecommerce.dto.UsersLoginRequest;
-import br.com.thaua.Ecommerce.dto.UsersRequest;
-import br.com.thaua.Ecommerce.dto.UsersResponse;
-import br.com.thaua.Ecommerce.services.JWTService;
+import br.com.thaua.Ecommerce.dto.users.UsersLoginRequest;
+import br.com.thaua.Ecommerce.dto.users.UsersRequest;
+import br.com.thaua.Ecommerce.dto.users.UsersResponse;
 import br.com.thaua.Ecommerce.services.UsersService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
