@@ -12,7 +12,10 @@ import java.util.List;
 @Getter
 @Setter
 public class ProdutoEntity extends AbstractEntity {
+    @Column(unique = true)
     private String nome;
+
+    @Column(unique = true)
     private String descricao;
     private BigDecimal preco;
     private Integer estoque;

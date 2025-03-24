@@ -18,8 +18,4 @@ public class ClienteEntity extends AbstractDataClientAndSupplier {
     @OneToMany(mappedBy = "cliente", fetch = FetchType.EAGER)
     private List<PedidoEntity> pedido;
 
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "endereco_id")
-    private EnderecoEntity endereco;
-
 }

@@ -12,12 +12,8 @@ import java.util.List;
 @Getter
 @Setter
 public class FornecedorEntity extends AbstractDataClientAndSupplier {
-//    @CNPJ
+    @CNPJ
     private String cnpj;
-
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "endereco_id")
-    private EnderecoEntity endereco;
 
     @OneToMany(mappedBy = "fornecedor", fetch = FetchType.EAGER)
     private List<ProdutoEntity> produto;
