@@ -47,4 +47,11 @@ public class FornecedorController {
     public ResponseEntity<ProdutoResponse> buscarProduto(@PathVariable Long produtoId) {
         return ResponseEntity.ok(fornecedorService.buscarProduto(produtoId));
     }
+
+//    PUT /api/v1/funcionarios/produtos/{id}/update - Atualizar produto
+    @Operation(summary = "atualizar informacoes de produto", description = "fornecedor pode atualizar as informacoes de um produto especifico")
+    @PutMapping("/produtos/{produtoId}/update")
+    public ResponseEntity<ProdutoResponse> atualizarProduto(@PathVariable Long produtoId, @RequestBody ProdutoRequest produtoRequest) {
+        return ResponseEntity.ok(fornecedorService.atualizarProduto(produtoId, produtoRequest));
+    }
 }

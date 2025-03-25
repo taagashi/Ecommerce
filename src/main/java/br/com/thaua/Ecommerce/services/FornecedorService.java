@@ -55,4 +55,11 @@ public class FornecedorService {
 
         return produtoMapper.produtoToResponse(produtoEntity);
     }
+
+    public ProdutoResponse atualizarProduto(Long produtoid, ProdutoRequest produtoRequest) {
+        UsersEntity usersEntity = ExtractTypeUserContextHolder.extractUser();
+        ProdutoEntity produtoEntity = produtoRepository.findByIdAndFornecedorId(produtoid, usersEntity.getId()).get();
+
+        return null;
+    }
 }
