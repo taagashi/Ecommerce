@@ -17,4 +17,8 @@ public class CategoriaService {
     public List<CategoriaResponse> exibirCategorias() {
         return categoriaMapper.toResponse(categoriaRepository.findAll());
     }
+
+    public CategoriaResponse exibirCategoria(Long categoriaId) {
+        return categoriaMapper.toResponse(categoriaRepository.findById(categoriaId).get());
+    }
 }
