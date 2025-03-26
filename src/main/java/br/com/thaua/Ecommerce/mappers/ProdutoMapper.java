@@ -13,6 +13,7 @@ public interface ProdutoMapper {
     ProdutoEntity produtoRequestToEntity(ProdutoRequest produtoRequest);
     @Mapping(target = "produtoId", source = "id")
     @Mapping(target = "quantidadePedidos", expression = "java(produtoEntity.getItensPedidos() == null ? 0 : produtoEntity.getItensPedidos().size())")
+    @Mapping(target = "numeroCategoria", expression = "java(produtoEntity.getCategorias() == null ? 0 : produtoEntity.getCategorias().size())")
     ProdutoResponse produtoToResponse(ProdutoEntity produtoEntity);
 
     List<ProdutoResponse> produtoToResponseList(List<ProdutoEntity> produtoEntityList);

@@ -14,5 +14,6 @@ public class ProdutoResponse {
     private BigDecimal preco;
     private Integer estoque;
     private Integer quantidadePedidos;
+    private Integer numeroCategoria;
 
 }
