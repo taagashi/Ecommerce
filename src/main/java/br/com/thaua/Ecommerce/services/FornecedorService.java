@@ -66,7 +66,7 @@ public class FornecedorService {
         return null;
     }
 
-    public String adicionarProdutoACategoria(Long categoriaId, Long produtoId) {
+    public ProdutoResponse adicionarProdutoACategoria(Long categoriaId, Long produtoId) {
         UsersEntity usersEntity = ExtractTypeUserContextHolder.extractUser();
         CategoriaEntity categoriaEntity = categoriaRepository.findById(categoriaId).get();
         ProdutoEntity produtoEntity = produtoRepository.findByIdAndFornecedorId(produtoId, usersEntity.getId()).get();
@@ -77,6 +77,6 @@ public class FornecedorService {
         categoriaRepository.save(categoriaEntity);
         produtoRepository.save(produtoEntity);
 
-        return produtoEntity.getNome() + " foi adicionado para a categoria " + categoriaEntity.getNome();
+        return produtoMapper.produtoToResponse(produtoEntity);
     }
 }
