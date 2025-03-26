@@ -1,5 +1,6 @@
 package br.com.thaua.Ecommerce.services;
 
+import br.com.thaua.Ecommerce.domain.entity.CategoriaEntity;
 import br.com.thaua.Ecommerce.domain.entity.ProdutoEntity;
 import br.com.thaua.Ecommerce.domain.entity.UsersEntity;
 import br.com.thaua.Ecommerce.dto.fornecedor.FornecedorCNPJTelefoneRequest;
@@ -8,6 +9,7 @@ import br.com.thaua.Ecommerce.dto.produto.ProdutoRequest;
 import br.com.thaua.Ecommerce.dto.produto.ProdutoResponse;
 import br.com.thaua.Ecommerce.mappers.FornecedorMapper;
 import br.com.thaua.Ecommerce.mappers.ProdutoMapper;
+import br.com.thaua.Ecommerce.repositories.CategoriaRepository;
 import br.com.thaua.Ecommerce.repositories.ProdutoRepository;
 import br.com.thaua.Ecommerce.repositories.UsersRepository;
 import br.com.thaua.Ecommerce.services.returnTypeUsers.ExtractTypeUserContextHolder;
@@ -23,6 +25,7 @@ public class FornecedorService {
     private final FornecedorMapper fornecedorMapper;
     private final ProdutoMapper produtoMapper;
     private final ProdutoRepository produtoRepository;
+    private final CategoriaRepository categoriaRepository;
 
     public FornecedorResponse atualizarCNPJeTelefone(FornecedorCNPJTelefoneRequest fornecedorCNPJTelefoneRequest) {
         UsersEntity usersEntity = ExtractTypeUserContextHolder.extractUser();
@@ -61,5 +64,19 @@ public class FornecedorService {
         ProdutoEntity produtoEntity = produtoRepository.findByIdAndFornecedorId(produtoid, usersEntity.getId()).get();
 
         return null;
+    }
+
+    public String adicionarProdutoACategoria(Long categoriaId, Long produtoId) {
+        UsersEntity usersEntity = ExtractTypeUserContextHolder.extractUser();
+        CategoriaEntity categoriaEntity = categoriaRepository.findById(categoriaId).get();
+        ProdutoEntity produtoEntity = produtoRepository.findByIdAndFornecedorId(produtoId, usersEntity.getId()).get();
+
+        categoriaEntity.getProdutos().add(produtoEntity);
+        produtoEntity.getCategorias().add(categoriaEntity);
+
+        categoriaRepository.save(categoriaEntity);
+        produtoRepository.save(produtoEntity);
+
+        return produtoEntity.getNome() + " foi adicionado para a categoria " + categoriaEntity.getNome();
     }
 }
