@@ -2,6 +2,7 @@ package br.com.thaua.Ecommerce.controllers;
 
 import br.com.thaua.Ecommerce.dto.fornecedor.FornecedorCNPJTelefoneRequest;
 import br.com.thaua.Ecommerce.dto.fornecedor.FornecedorResponse;
+import br.com.thaua.Ecommerce.dto.produto.ProdutoNovoEstoqueRequest;
 import br.com.thaua.Ecommerce.dto.produto.ProdutoRequest;
 import br.com.thaua.Ecommerce.dto.produto.ProdutoResponse;
 import br.com.thaua.Ecommerce.services.FornecedorService;
@@ -62,4 +63,10 @@ public class FornecedorController {
         return ResponseEntity.ok(fornecedorService.adicionarProdutoACategoria(categoriaId, produtoId));
     }
 
+//    PATCH /api/v1/funcionarios/produtos/{id}/estoque/update - Atualizar estoque do produto [ROLE: FUNCIONARIO]
+    @Operation(summary = "atualizar estoque", description = "fornecedor pode atualizar o estoque de um produto especifico")
+    @PatchMapping("/produtos/{id}/estoque/update")
+    public ResponseEntity<ProdutoResponse> atualizarEstoqueProduto(@PathVariable Long id, @RequestBody ProdutoNovoEstoqueRequest produtoNovoEstoqueRequest) {
+        return ResponseEntity.ok(fornecedorService.atualizarEstoqueProduto(id, produtoNovoEstoqueRequest));
+    }
 }

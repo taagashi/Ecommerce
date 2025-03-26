@@ -5,6 +5,7 @@ import br.com.thaua.Ecommerce.domain.entity.ProdutoEntity;
 import br.com.thaua.Ecommerce.domain.entity.UsersEntity;
 import br.com.thaua.Ecommerce.dto.fornecedor.FornecedorCNPJTelefoneRequest;
 import br.com.thaua.Ecommerce.dto.fornecedor.FornecedorResponse;
+import br.com.thaua.Ecommerce.dto.produto.ProdutoNovoEstoqueRequest;
 import br.com.thaua.Ecommerce.dto.produto.ProdutoRequest;
 import br.com.thaua.Ecommerce.dto.produto.ProdutoResponse;
 import br.com.thaua.Ecommerce.mappers.FornecedorMapper;
@@ -78,5 +79,13 @@ public class FornecedorService {
         produtoRepository.save(produtoEntity);
 
         return produtoMapper.produtoToResponse(produtoEntity);
+    }
+
+    public ProdutoResponse atualizarEstoqueProduto(Long produtoId, ProdutoNovoEstoqueRequest produtoNovoEstoqueRequest) {
+        UsersEntity usersEntity = ExtractTypeUserContextHolder.extractUser();
+        ProdutoEntity produtoEntity = produtoRepository.findByIdAndFornecedorId(produtoId, usersEntity.getId()).get();
+        produtoEntity.setEstoque(produtoNovoEstoqueRequest.getNovaQuantidade());
+
+        return produtoMapper.produtoToResponse(produtoRepository.save(produtoEntity));
     }
 }
