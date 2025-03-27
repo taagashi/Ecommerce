@@ -69,4 +69,11 @@ public class FornecedorController {
     public ResponseEntity<ProdutoResponse> atualizarEstoqueProduto(@PathVariable Long id, @RequestBody ProdutoNovoEstoqueRequest produtoNovoEstoqueRequest) {
         return ResponseEntity.ok(fornecedorService.atualizarEstoqueProduto(id, produtoNovoEstoqueRequest));
     }
+
+//    DELETE /api/v1/funcionarios/produtos/{produtoId}/delete - Remover produto [ROLE FUNCIONARIO]
+    @Operation(summary = "remover produto", description = "fornecedor pode remover um de seus produtos")
+    @DeleteMapping("/produtos/{produtoId}/delete")
+    public ResponseEntity<String> removerProduto(@PathVariable Long produtoId) {
+        return ResponseEntity.ok(fornecedorService.removerProduto(produtoId));
+    }
 }

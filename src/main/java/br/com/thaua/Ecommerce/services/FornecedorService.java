@@ -88,4 +88,19 @@ public class FornecedorService {
 
         return produtoMapper.produtoToResponse(produtoRepository.save(produtoEntity));
     }
+
+//    PRECISO DAR UMA REVISADA MELHOR NESSE PARTE DE CODIGO
+    public String removerProduto(Long produtoId) {
+        UsersEntity usersEntity = ExtractTypeUserContextHolder.extractUser();
+        ProdutoEntity produtoEntity = produtoRepository.findByIdAndFornecedorId(produtoId, usersEntity.getId()).get();
+
+        for(CategoriaEntity categoria : produtoEntity.getCategorias()) {
+            categoria.getProdutos().remove(produtoEntity);
+            categoriaRepository.save(categoria);
+        }
+        produtoRepository.save(produtoEntity);
+        produtoRepository.delete(produtoEntity);
+
+        return produtoEntity.getNome() + " foi removido com sucesso, " + usersEntity.getName();
+    }
 }
