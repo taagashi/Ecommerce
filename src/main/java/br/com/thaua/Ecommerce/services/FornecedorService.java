@@ -103,4 +103,17 @@ public class FornecedorService {
 
         return produtoEntity.getNome() + " foi removido com sucesso, " + usersEntity.getName();
     }
+
+    public String removerProdutoDeCategoria(Long categoriaId, Long produtoId) {
+        UsersEntity usersEntity = ExtractTypeUserContextHolder.extractUser();
+        ProdutoEntity produtoEntity = produtoRepository.findByIdAndFornecedorId(produtoId, usersEntity.getId()).get();
+        CategoriaEntity categoriaEntity = categoriaRepository.findById(categoriaId).get();
+
+        categoriaEntity.getProdutos().remove(produtoEntity);
+        produtoEntity.getCategorias().remove(categoriaEntity);
+        categoriaRepository.save(categoriaEntity);
+        produtoRepository.save(produtoEntity);
+
+        return produtoEntity.getNome() + " foi removido com sucesso da categoria" + categoriaEntity.getNome();
+    }
 }
