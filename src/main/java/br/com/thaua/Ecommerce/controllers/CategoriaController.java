@@ -1,5 +1,6 @@
 package br.com.thaua.Ecommerce.controllers;
 
+import br.com.thaua.Ecommerce.dto.categoria.CategoriaProdutosResponse;
 import br.com.thaua.Ecommerce.dto.categoria.CategoriaResponse;
 import br.com.thaua.Ecommerce.services.CategoriaService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -32,5 +33,12 @@ public class CategoriaController {
     @GetMapping("/{categoriaId}/list")
     public ResponseEntity<CategoriaResponse> exibirCategoria(@PathVariable Long categoriaId) {
         return ResponseEntity.ok(categoriaService.exibirCategoria(categoriaId));
+    }
+
+//    GET /api/v1/categorias/{categoriaId}/produtos/list` - Listar produtos por categoria [QUALQUER USUARIO AUTENTICADO]
+    @Operation(summary = "exibir produtos de uma categoria", description = "usuario autenticado pode ver todos os produtos de uma categoria")
+    @GetMapping("/{categoriaId}/produtos/list")
+    public ResponseEntity<CategoriaProdutosResponse> listarProdutosPorCategoria(@PathVariable Long categoriaId) {
+        return ResponseEntity.ok(categoriaService.listarProdutosPorCategoria(categoriaId));
     }
 }

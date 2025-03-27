@@ -49,6 +49,7 @@ public class FornecedorController {
         return ResponseEntity.ok(fornecedorService.buscarProduto(produtoId));
     }
 
+//    PRECISO ARRUMAR ESSA LOGICA AQUI QUE TA LA NO SERVICE
 //    PUT /api/v1/funcionarios/produtos/{id}/update - Atualizar produto
     @Operation(summary = "atualizar informacoes de produto", description = "fornecedor pode atualizar as informacoes de um produto especifico")
     @PutMapping("/produtos/{produtoId}/update")
