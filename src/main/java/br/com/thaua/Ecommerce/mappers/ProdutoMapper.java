@@ -1,9 +1,8 @@
 package br.com.thaua.Ecommerce.mappers;
 
+import br.com.thaua.Ecommerce.domain.entity.CategoriaEntity;
 import br.com.thaua.Ecommerce.domain.entity.ProdutoEntity;
-import br.com.thaua.Ecommerce.dto.produto.ProdutoNovoEstoqueRequest;
-import br.com.thaua.Ecommerce.dto.produto.ProdutoRequest;
-import br.com.thaua.Ecommerce.dto.produto.ProdutoResponse;
+import br.com.thaua.Ecommerce.dto.produto.*;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
@@ -20,4 +19,12 @@ public interface ProdutoMapper {
     ProdutoResponse produtoToResponse(ProdutoEntity produtoEntity);
 
     List<ProdutoResponse> produtoToResponseList(List<ProdutoEntity> produtoEntityList);
+
+    @Mapping(target = "produtoId", source = "id")
+    ProdutoCategoriaResponse toProdutoCategoriaResponse(ProdutoEntity produtoEntity);
+
+    List<CategoriaComponentResponse> toCategoriaComponentResponseList(List<CategoriaEntity> categoriaEntityList);
+
+    @Mapping(target = "categoriaId", source = "id")
+    CategoriaComponentResponse toCategoriaComponentResponse(CategoriaEntity categoria);
 }
