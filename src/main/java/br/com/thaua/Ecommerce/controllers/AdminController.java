@@ -3,6 +3,7 @@ package br.com.thaua.Ecommerce.controllers;
 import br.com.thaua.Ecommerce.dto.categoria.CategoriaRequest;
 import br.com.thaua.Ecommerce.dto.categoria.CategoriaResponse;
 import br.com.thaua.Ecommerce.dto.cliente.ClienteResponse;
+import br.com.thaua.Ecommerce.dto.fornecedor.FornecedorResponse;
 import br.com.thaua.Ecommerce.services.AdminService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
@@ -23,6 +24,12 @@ public class AdminController {
     @GetMapping("/clientes")
     public ResponseEntity<List<ClienteResponse>> listarClientes() {
         return ResponseEntity.ok(adminService.listarClientes());
+    }
+
+    @Operation(summary = "listar fornecedores", description = "lista todos os fornecedores")
+    @GetMapping("/fornecedores")
+    public ResponseEntity<List<FornecedorResponse>> listarFornecedores() {
+        return ResponseEntity.ok(adminService.listarFornecedores());
     }
 
 //    POST /api/v1/categorias/register - Cadastrar nova categoria [ROLE ADMIN]
