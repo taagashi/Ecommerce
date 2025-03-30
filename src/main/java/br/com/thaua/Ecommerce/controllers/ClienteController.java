@@ -4,12 +4,16 @@ import br.com.thaua.Ecommerce.dto.cliente.ClienteComPedidoResponse;
 import br.com.thaua.Ecommerce.dto.cliente.ClienteCpfTelefoneRequest;
 import br.com.thaua.Ecommerce.dto.cliente.ClienteResponse;
 import br.com.thaua.Ecommerce.dto.cliente.ClienteUpdateRequest;
+import br.com.thaua.Ecommerce.dto.itemPedido.ItemPedidoRequest;
+import br.com.thaua.Ecommerce.dto.pedido.PedidoResponse;
 import br.com.thaua.Ecommerce.services.ClienteService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @SecurityRequirement(name = "bearerAuth")
 @RequiredArgsConstructor
@@ -36,5 +40,12 @@ public class ClienteController {
     @PutMapping("/update")
     public ResponseEntity<ClienteResponse> atualizarDados(@RequestBody ClienteUpdateRequest clienteUpdateRequest) {
         return ResponseEntity.ok(clienteService.atualizarDados(clienteUpdateRequest));
+    }
+
+//    POST /api/v1/clientes/pedidos/register - Fazer pedido [ROLE: CLIENTE]
+    @Operation(summary = "fazer pedido", description = "cliente pode diversos pedidos de uma só vez para diferentes produtos")
+    @PostMapping("/pedidos/register")
+    public ResponseEntity<PedidoResponse> fazerPedido(@RequestBody List<ItemPedidoRequest> itemPedidoRequest) {
+        return ResponseEntity.ok(clienteService.fazerPedido(itemPedidoRequest));
     }
 }
