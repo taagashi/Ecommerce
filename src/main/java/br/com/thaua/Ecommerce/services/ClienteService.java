@@ -7,14 +7,12 @@ import br.com.thaua.Ecommerce.dto.cliente.ClienteCpfTelefoneRequest;
 import br.com.thaua.Ecommerce.dto.cliente.ClienteResponse;
 import br.com.thaua.Ecommerce.dto.cliente.ClienteUpdateRequest;
 import br.com.thaua.Ecommerce.dto.itemPedido.ItemPedidoRequest;
+import br.com.thaua.Ecommerce.dto.itemPedido.ItemPedidoResponse;
 import br.com.thaua.Ecommerce.dto.pedido.PedidoResponse;
 import br.com.thaua.Ecommerce.mappers.ClienteMapper;
 import br.com.thaua.Ecommerce.mappers.ItemPedidoMapper;
 import br.com.thaua.Ecommerce.mappers.PedidoMapper;
-import br.com.thaua.Ecommerce.repositories.ClienteRepository;
-import br.com.thaua.Ecommerce.repositories.PedidoRepository;
-import br.com.thaua.Ecommerce.repositories.ProdutoRepository;
-import br.com.thaua.Ecommerce.repositories.UsersRepository;
+import br.com.thaua.Ecommerce.repositories.*;
 import br.com.thaua.Ecommerce.services.returnTypeUsers.ExtractTypeUserContextHolder;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -35,6 +33,7 @@ public class ClienteService {
     private final ItemPedidoMapper itemPedidoMapper;
     private final PedidoRepository pedidoRepository;
     private final PedidoMapper pedidoMapper;
+    private final ItemPedidoRepository itemPedidoRepository;
 
     public ClienteResponse atualizarCpfETelefone(ClienteCpfTelefoneRequest clienteCpfTelefoneRequest) {
         UsersEntity usersEntity = ExtractTypeUserContextHolder.extractUser();
@@ -105,5 +104,10 @@ public class ClienteService {
         UsersEntity usersEntity = ExtractTypeUserContextHolder.extractUser();
 
         return pedidoMapper.toPedidoResponse(pedidoRepository.findByIdAndClienteId(pedidoId, usersEntity.getId()));
+    }
+
+    public ItemPedidoResponse buscarItemPedido(Long itemPedidoId) {
+        UsersEntity usersEntity = ExtractTypeUserContextHolder.extractUser();
+        return itemPedidoMapper.toItemPedidoResponse(itemPedidoRepository.findByIdAndPedidoClienteId(itemPedidoId, usersEntity.getId()));
     }
 }

@@ -5,6 +5,7 @@ import br.com.thaua.Ecommerce.dto.cliente.ClienteCpfTelefoneRequest;
 import br.com.thaua.Ecommerce.dto.cliente.ClienteResponse;
 import br.com.thaua.Ecommerce.dto.cliente.ClienteUpdateRequest;
 import br.com.thaua.Ecommerce.dto.itemPedido.ItemPedidoRequest;
+import br.com.thaua.Ecommerce.dto.itemPedido.ItemPedidoResponse;
 import br.com.thaua.Ecommerce.dto.pedido.PedidoResponse;
 import br.com.thaua.Ecommerce.services.ClienteService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -61,5 +62,11 @@ public class ClienteController {
     @GetMapping("/pedidos/{pedidoId}/list")
     public ResponseEntity<PedidoResponse> buscarPedido(@PathVariable Long pedidoId) {
         return ResponseEntity.ok(clienteService.buscarPedido(pedidoId));
+    }
+
+    @Operation(summary = "buscar item pedido", description = "cliente pode buscar um item pedido especifico atraves do id do item pedido")
+    @GetMapping("/pedidos/itensPedidos/{itemPedidoId}")
+    public ResponseEntity<ItemPedidoResponse> buscarItemPedido(@PathVariable Long itemPedidoId) {
+        return ResponseEntity.ok(clienteService.buscarItemPedido(itemPedidoId));
     }
 }
