@@ -100,4 +100,10 @@ public class ClienteService {
         List<PedidoEntity> pedidoEntity = cliente.getPedido();
         return pedidoMapper.toPedidoResponseList(pedidoEntity);
     }
+
+    public PedidoResponse buscarPedido(Long pedidoId) {
+        UsersEntity usersEntity = ExtractTypeUserContextHolder.extractUser();
+
+        return pedidoMapper.toPedidoResponse(pedidoRepository.findByIdAndClienteId(pedidoId, usersEntity.getId()));
+    }
 }

@@ -55,4 +55,11 @@ public class ClienteController {
     public ResponseEntity<List<PedidoResponse>> listarPedidos() {
         return ResponseEntity.ok(clienteService.listarPedidos());
     }
+
+//    GET /api/v1/clientes/pedidos/{id}/list - Buscar pedido por ID [ROLE: CLIENTES]
+    @Operation(summary = "listar um pedido", description = "cliente pode listar um pedido especifico atraves do id do pedido")
+    @GetMapping("/pedidos/{pedidoId}/list")
+    public ResponseEntity<PedidoResponse> buscarPedido(@PathVariable Long pedidoId) {
+        return ResponseEntity.ok(clienteService.buscarPedido(pedidoId));
+    }
 }
