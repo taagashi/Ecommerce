@@ -33,14 +33,14 @@ public class UsersService {
     private final EnderecoMapper enderecoMapper;
     private final EnderecoRepository enderecoRepository;
 
-    public UsersResponse cadastrarUsuario(UsersRequest usuario) {
+    public String cadastrarUsuario(UsersRequest usuario) {
         usuario.setPassword(passwordEncoder.encode(usuario.getPassword()));
         UsersEntity usersEntity = userMapper.toEntity(usuario);
 
         UsersEntity typeUser = (UsersEntity) resolverGeralUsers.returnTypeUsers(usersEntity);
-
+        UsersEntity saveUser = usersRepository.save(typeUser);
 //        emailMessageService.registroDeUsuario(usuario.getName(), usuario.getEmail());
-        return userMapper.toResponse(usersRepository.save(typeUser));
+        return jwtService.generateToken(new MyUserDetails(saveUser.getId(), saveUser.getEmail(), saveUser.getPassword(), saveUser.getRole().name(), saveUser));
     }
 
     public String login(String email, String password) {

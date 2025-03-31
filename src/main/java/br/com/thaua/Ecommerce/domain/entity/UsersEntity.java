@@ -19,7 +19,7 @@ public class UsersEntity extends AbstractCommonData {
     @OneToOne(mappedBy = "users", cascade = CascadeType.ALL)
     private AdminEntity admin;
 
-    @OneToOne(mappedBy = "users", cascade = CascadeType.ALL)
+    @OneToOne(mappedBy = "users", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private ClienteEntity cliente;
 
     @OneToOne(mappedBy = "users", cascade = CascadeType.ALL)

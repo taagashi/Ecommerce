@@ -48,4 +48,11 @@ public class ClienteController {
     public ResponseEntity<PedidoResponse> fazerPedido(@RequestBody List<ItemPedidoRequest> itemPedidoRequest) {
         return ResponseEntity.ok(clienteService.fazerPedido(itemPedidoRequest));
     }
+
+//    GET /api/v1/clientes/list/pedidos - Listar meus pedidos [ROLE: CLIENTE]
+    @Operation(summary = "listar pedidos", description = "cliente pode listar todos os seus pedidos")
+    @GetMapping("/pedidos/list")
+    public ResponseEntity<List<PedidoResponse>> listarPedidos() {
+        return ResponseEntity.ok(clienteService.listarPedidos());
+    }
 }

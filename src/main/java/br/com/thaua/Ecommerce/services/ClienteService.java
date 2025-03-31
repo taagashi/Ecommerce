@@ -93,4 +93,11 @@ public class ClienteService {
         pedidoRepository.save(pedidoEntity);
         return pedidoMapper.toPedidoResponse(pedidoEntity);
     }
+
+    public List<PedidoResponse> listarPedidos() {
+        UsersEntity usersEntity = ExtractTypeUserContextHolder.extractUser();
+        ClienteEntity cliente = usersEntity.getCliente();
+        List<PedidoEntity> pedidoEntity = cliente.getPedido();
+        return pedidoMapper.toPedidoResponseList(pedidoEntity);
+    }
 }

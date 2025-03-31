@@ -15,6 +15,8 @@ public interface PedidoMapper {
     @Mapping(target = "pedidoId", source = "id")
     PedidoResponse toPedidoResponse(PedidoEntity pedidoEntity);
 
+    List<PedidoResponse> toPedidoResponseList(List<PedidoEntity> pedidoEntityList);
+
     @Mapping(target = "produto", expression = "java(itemPedidoEntity.getProduto().getNome())")
     @Mapping(target = "itemPedidoId", source = "id")
     ItemPedidoResponse toItemPedidoResponse(ItemPedidoEntity itemPedidoEntity);
