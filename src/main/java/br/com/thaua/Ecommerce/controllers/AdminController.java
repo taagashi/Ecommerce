@@ -38,4 +38,11 @@ public class AdminController {
     public ResponseEntity<CategoriaResponse> cadastrarNovaCategoria(@RequestBody CategoriaRequest categoriaRequest) {
         return ResponseEntity.ok(adminService.cadastrarNovaCategoria(categoriaRequest));
     }
+
+//    DELETE /api/v1/clientes/{id} - Remover cliente [ROLE: ADMIN]
+    @Operation(summary = "remover cliente", description = "admin pode remover a conta de um cliente atraves do id do cliente")
+    @DeleteMapping("/clientes/{clienteId}")
+    public ResponseEntity<String> removerCliente(@PathVariable Long clienteId) {
+        return ResponseEntity.ok(adminService.removerCliente(clienteId));
+    }
 }
