@@ -81,4 +81,10 @@ public class AdminService {
 
         return enderecoMapper.toEnderecoResponse(enderecoEntity);
     }
+
+    public EnderecoResponse exibirEnderecoUsuario(Long userId) {
+        UsersEntity usersEntity = usersRepository.findById(userId).get();
+
+        return enderecoMapper.toEnderecoResponse(usersEntity.getEndereco());
+    }
 }

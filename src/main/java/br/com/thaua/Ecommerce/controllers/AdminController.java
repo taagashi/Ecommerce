@@ -11,6 +11,7 @@ import br.com.thaua.Ecommerce.dto.pedido.PedidoResponse;
 import br.com.thaua.Ecommerce.services.AdminService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -69,5 +70,12 @@ public class AdminController {
     @PostMapping("/users/{userId}/enderecos/register")
     public ResponseEntity<EnderecoResponse> cadastrarEnderecoUsuario(@PathVariable Long userId, EnderecoRequest enderecoRequest) {
         return ResponseEntity.ok(adminService.cadastrarEnderecoUsuario(userId, enderecoRequest));
+    }
+
+//    GET /api/v1/users/{userId}/enderecos/list - Exibir endereco do usuario [ROLE: ADMIN]
+    @Operation(summary = "exibir endereco do usuario", description = "admin pode exibir o endereco de um usuario especifico")
+    @GetMapping("/users/{userId}/endereco/list")
+    public ResponseEntity<EnderecoResponse> exibirEnderecoUsuario(@PathVariable Long userId) {
+        return ResponseEntity.ok(adminService.exibirEnderecoUsuario(userId));
     }
 }
