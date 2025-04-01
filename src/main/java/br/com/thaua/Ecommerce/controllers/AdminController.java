@@ -49,6 +49,12 @@ public class AdminController {
         return ResponseEntity.ok(adminService.exibirAdmins());
     }
 
+    @Operation(summary = "buscar admin", description = "admin pode buscar por outro admin especifico")
+    @GetMapping("/{adminId}/list")
+    public ResponseEntity<AdminResponse> buscarAdmin(@PathVariable Long adminId) {
+        return ResponseEntity.ok(adminService.buscarAdmin(adminId));
+    }
+
     @Operation(summary = "listar fornecedores", description = "lista todos os fornecedores")
     @GetMapping("/fornecedores")
     public ResponseEntity<List<FornecedorResponse>> listarFornecedores() {

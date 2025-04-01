@@ -34,6 +34,15 @@ public class AdminService {
     private final EnderecoRepository enderecoRepository;
     private final AdminMapper adminMapper;
     private final AdminRepository adminRepository;
+
+    public List<AdminResponse> exibirAdmins() {
+        return adminMapper.adminEntityToAdminResponseList(adminRepository.findAll());
+    }
+
+    public AdminResponse buscarAdmin(Long adminId) {
+        return adminMapper.adminEntityToAdminResponse(adminRepository.findById(adminId).get());
+    }
+    
     public List<ClienteResponse> listarClientes() {
         return clienteMapper.toResponse(clienteRepository.findAll());
     }
@@ -139,7 +148,5 @@ public class AdminService {
         return "categoria " + categoriaEntity.getNome() + " foi deletada com sucesso";
     }
 
-    public List<AdminResponse> exibirAdmins() {
-        return adminMapper.adminEntityToAdminResponseList(adminRepository.findAll());
-    }
+
 }
