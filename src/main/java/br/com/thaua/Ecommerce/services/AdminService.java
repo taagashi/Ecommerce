@@ -7,9 +7,11 @@ import br.com.thaua.Ecommerce.dto.categoria.CategoriaRequest;
 import br.com.thaua.Ecommerce.dto.categoria.CategoriaResponse;
 import br.com.thaua.Ecommerce.dto.cliente.ClienteResponse;
 import br.com.thaua.Ecommerce.dto.fornecedor.FornecedorResponse;
+import br.com.thaua.Ecommerce.dto.pedido.PedidoResponse;
 import br.com.thaua.Ecommerce.mappers.CategoriaMapper;
 import br.com.thaua.Ecommerce.mappers.ClienteMapper;
 import br.com.thaua.Ecommerce.mappers.FornecedorMapper;
+import br.com.thaua.Ecommerce.mappers.PedidoMapper;
 import br.com.thaua.Ecommerce.repositories.CategoriaRepository;
 import br.com.thaua.Ecommerce.repositories.ClienteRepository;
 import br.com.thaua.Ecommerce.repositories.FornecedorRepository;
@@ -30,6 +32,7 @@ public class AdminService {
     private final CategoriaMapper categoriaMapper;
     private final FornecedorMapper fornecedorMapper;
     private final UsersRepository usersRepository;
+    private final PedidoMapper pedidoMapper;
 
     public List<ClienteResponse> listarClientes() {
         return clienteMapper.toResponse(clienteRepository.findAll());
@@ -57,5 +60,11 @@ public class AdminService {
         usersRepository.save(usersEntity);
 
         return clienteEntity.getName() + " foi removido com sucesso";
+    }
+
+    public List<PedidoResponse> listarPedidosDoCliente(Long clienteId) {
+        ClienteEntity clienteEntity = clienteRepository.findById(clienteId).get();
+
+        return pedidoMapper.toPedidoResponseList(clienteEntity.getPedido());
     }
 }

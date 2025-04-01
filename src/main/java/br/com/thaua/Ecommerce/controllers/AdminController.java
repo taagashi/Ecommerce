@@ -45,4 +45,11 @@ public class AdminController {
     public ResponseEntity<String> removerCliente(@PathVariable Long clienteId) {
         return ResponseEntity.ok(adminService.removerCliente(clienteId));
     }
+
+//   GET /api/v1/clientes/{id}/pedidos - Listar pedidos do cliente [ROLE: ADMIN]
+    @Operation(summary = "listar pedidos de um cliente", description = "admin pode listar os pedidos de um determinado cliente atraves do id do cliente")
+    @GetMapping("/clientes/{clienteId}/pedidos/list")
+    public ResponseEntity<List<PedidoResponse>> listarPedidosDoCliente(@PathVariable Long clienteId) {
+        return ResponseEntity.ok(adminService.listarPedidosDoCliente(clienteId));
+    }
 }
