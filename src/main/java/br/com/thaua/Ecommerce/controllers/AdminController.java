@@ -11,7 +11,6 @@ import br.com.thaua.Ecommerce.dto.pedido.PedidoResponse;
 import br.com.thaua.Ecommerce.services.AdminService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
-import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -29,6 +28,12 @@ public class AdminController {
     @GetMapping("/clientes")
     public ResponseEntity<List<ClienteResponse>> listarClientes() {
         return ResponseEntity.ok(adminService.listarClientes());
+    }
+
+    @Operation(summary = "buscar cliente", description = "admin pode buscar um cliente especifico")
+    @GetMapping("/clientes/{clienteId}/list")
+    public ResponseEntity<ClienteResponse> buscarCliente(@PathVariable Long clienteId) {
+        return ResponseEntity.ok(adminService.buscarCliente(clienteId));
     }
 
     @Operation(summary = "listar fornecedores", description = "lista todos os fornecedores")
