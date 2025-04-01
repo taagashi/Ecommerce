@@ -36,6 +36,12 @@ public class AdminController {
         return ResponseEntity.ok(adminService.buscarCliente(clienteId));
     }
 
+    @Operation(summary = "buscar fornecedor", description = "admin pode buscar um fornecedor especifico")
+    @GetMapping("/fornecedores/{fornecedorId}/list")
+    public ResponseEntity<FornecedorResponse> buscarFornecedor(@PathVariable Long fornecedorId) {
+        return ResponseEntity.ok(adminService.buscarFornecedor((fornecedorId)));
+    }
+
     @Operation(summary = "listar fornecedores", description = "lista todos os fornecedores")
     @GetMapping("/fornecedores")
     public ResponseEntity<List<FornecedorResponse>> listarFornecedores() {

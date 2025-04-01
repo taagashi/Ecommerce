@@ -41,6 +41,9 @@ public class AdminService {
         return clienteMapper.toResponse(clienteRepository.findById(clienteId).get());
     }
 
+    public FornecedorResponse buscarFornecedor(Long fornecedorId) {
+        return fornecedorMapper.FornecedorToResponse(fornecedorRepository.findById(fornecedorId).get());
+    }
     public CategoriaResponse cadastrarNovaCategoria(CategoriaRequest categoriaRequest) {
         CategoriaEntity categoriaEntity = categoriaMapper.toEntity(categoriaRequest);
         return categoriaMapper.toResponse(categoriaRepository.save(categoriaEntity));
