@@ -78,4 +78,11 @@ public class AdminController {
     public ResponseEntity<EnderecoResponse> exibirEnderecoUsuario(@PathVariable Long userId) {
         return ResponseEntity.ok(adminService.exibirEnderecoUsuario(userId));
     }
+
+//    PUT /api/users/{userId}/enderecos/update - Atualizar endereço do usuario [ROLE: ADMIN]
+    @Operation(summary = "atualizar endereco do usuario", description = "admin pode atualizar endereco de um usuario especifico")
+    @PutMapping("users/{userId}/enderecos/update")
+    public ResponseEntity<EnderecoResponse> atualizarEnderecoUsuario(@PathVariable Long userId, @RequestBody EnderecoRequest enderecoRequest) {
+        return ResponseEntity.ok(adminService.atualizarEnderecoUsuario(userId, enderecoRequest));
+    }
 }
