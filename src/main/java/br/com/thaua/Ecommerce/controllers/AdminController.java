@@ -1,5 +1,6 @@
 package br.com.thaua.Ecommerce.controllers;
 
+import br.com.thaua.Ecommerce.dto.admin.AdminResponse;
 import br.com.thaua.Ecommerce.dto.categoria.CategoriaRequest;
 import br.com.thaua.Ecommerce.dto.categoria.CategoriaResponse;
 import br.com.thaua.Ecommerce.dto.cliente.ClienteResponse;
@@ -40,6 +41,12 @@ public class AdminController {
     @GetMapping("/fornecedores/{fornecedorId}/list")
     public ResponseEntity<FornecedorResponse> buscarFornecedor(@PathVariable Long fornecedorId) {
         return ResponseEntity.ok(adminService.buscarFornecedor((fornecedorId)));
+    }
+
+    @Operation(summary = "listar admin's", description = "admin pode ver todos os admin's registrados")
+    @GetMapping("/list")
+    public ResponseEntity<List<AdminResponse>> exibirAdmins() {
+        return ResponseEntity.ok(adminService.exibirAdmins());
     }
 
     @Operation(summary = "listar fornecedores", description = "lista todos os fornecedores")

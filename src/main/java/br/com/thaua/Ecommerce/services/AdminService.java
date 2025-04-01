@@ -1,6 +1,7 @@
 package br.com.thaua.Ecommerce.services;
 
 import br.com.thaua.Ecommerce.domain.entity.*;
+import br.com.thaua.Ecommerce.dto.admin.AdminResponse;
 import br.com.thaua.Ecommerce.dto.categoria.CategoriaRequest;
 import br.com.thaua.Ecommerce.dto.categoria.CategoriaResponse;
 import br.com.thaua.Ecommerce.dto.cliente.ClienteResponse;
@@ -31,7 +32,8 @@ public class AdminService {
     private final PedidoRepository pedidoRepository;
     private final EnderecoMapper enderecoMapper;
     private final EnderecoRepository enderecoRepository;
-
+    private final AdminMapper adminMapper;
+    private final AdminRepository adminRepository;
     public List<ClienteResponse> listarClientes() {
         return clienteMapper.toResponse(clienteRepository.findAll());
     }
@@ -135,5 +137,9 @@ public class AdminService {
         categoriaRepository.delete(categoriaEntity);
 
         return "categoria " + categoriaEntity.getNome() + " foi deletada com sucesso";
+    }
+
+    public List<AdminResponse> exibirAdmins() {
+        return adminMapper.adminEntityToAdminResponseList(adminRepository.findAll());
     }
 }
