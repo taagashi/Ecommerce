@@ -30,6 +30,7 @@ public class AdminService {
     private final PedidoMapper pedidoMapper;
     private final PedidoRepository pedidoRepository;
     private final EnderecoMapper enderecoMapper;
+    private final EnderecoRepository enderecoRepository;
 
     public List<ClienteResponse> listarClientes() {
         return clienteMapper.toResponse(clienteRepository.findAll());
@@ -96,5 +97,18 @@ public class AdminService {
         usersEntity.setEndereco(enderecoEntity);
 
         return enderecoMapper.toEnderecoResponse(enderecoEntity);
+    }
+
+    public String deletarEnderecoUsuario(Long userId) {
+        UsersEntity usersEntity = usersRepository.findById(userId).get();
+        EnderecoEntity enderecoEntity = usersEntity.getEndereco();
+
+        usersEntity.setEndereco(null);
+        enderecoEntity.setUsers(null);
+
+        usersRepository.save(usersEntity);
+        enderecoRepository.delete(enderecoEntity);
+
+        return usersEntity.getName() + " teve seu endereco limpo com sucesso";
     }
 }

@@ -81,8 +81,15 @@ public class AdminController {
 
 //    PUT /api/users/{userId}/enderecos/update - Atualizar endereço do usuario [ROLE: ADMIN]
     @Operation(summary = "atualizar endereco do usuario", description = "admin pode atualizar endereco de um usuario especifico")
-    @PutMapping("users/{userId}/enderecos/update")
+    @PutMapping("/users/{userId}/enderecos/update")
     public ResponseEntity<EnderecoResponse> atualizarEnderecoUsuario(@PathVariable Long userId, @RequestBody EnderecoRequest enderecoRequest) {
         return ResponseEntity.ok(adminService.atualizarEnderecoUsuario(userId, enderecoRequest));
+    }
+
+//    DELETE /api/v1/users/{userId}/enderecos/delete` - Remover endereço do usuario [ROLE: ADMIN]
+    @Operation(summary = "remover endereco do usuario", description = "admin pode remover o endereco de um usuario especifico")
+    @DeleteMapping("/users/{userId}/enderecos/delete")
+    public ResponseEntity<String> deletarEnderecoUsuario(@PathVariable Long userId) {
+        return ResponseEntity.ok(adminService.deletarEnderecoUsuario(userId));
     }
 }
