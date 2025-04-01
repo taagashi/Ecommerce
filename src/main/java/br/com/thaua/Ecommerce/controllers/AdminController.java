@@ -3,6 +3,8 @@ package br.com.thaua.Ecommerce.controllers;
 import br.com.thaua.Ecommerce.dto.categoria.CategoriaRequest;
 import br.com.thaua.Ecommerce.dto.categoria.CategoriaResponse;
 import br.com.thaua.Ecommerce.dto.cliente.ClienteResponse;
+import br.com.thaua.Ecommerce.dto.endereco.EnderecoRequest;
+import br.com.thaua.Ecommerce.dto.endereco.EnderecoResponse;
 import br.com.thaua.Ecommerce.dto.fornecedor.FornecedorResponse;
 import br.com.thaua.Ecommerce.dto.pedido.PedidoPatchRequest;
 import br.com.thaua.Ecommerce.dto.pedido.PedidoResponse;
@@ -60,5 +62,12 @@ public class AdminController {
     @PatchMapping("/pedidos/{pedidoId}/status/update")
     public ResponseEntity<PedidoResponse> atualizarStatusPedido(@PathVariable Long pedidoId, @RequestBody PedidoPatchRequest pedidoPatchRequest) {
         return ResponseEntity.ok(adminService.atualizarStatusPedido(pedidoId, pedidoPatchRequest));
+    }
+
+//    POST /api/v1/users/{userId}/enderecos/register - Cadastrar endereço para Usuarios [ROLE: ADMIN]
+    @Operation(summary = "cadastrar endereco para um usuario", description = "admin pode cadastrar endereco para um usuario especifico")
+    @PostMapping("/users/{userId}/enderecos/register")
+    public ResponseEntity<EnderecoResponse> cadastrarEnderecoUsuario(@PathVariable Long userId, EnderecoRequest enderecoRequest) {
+        return ResponseEntity.ok(adminService.cadastrarEnderecoUsuario(userId, enderecoRequest));
     }
 }

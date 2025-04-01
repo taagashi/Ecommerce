@@ -1,19 +1,15 @@
 package br.com.thaua.Ecommerce.services;
 
-import br.com.thaua.Ecommerce.domain.entity.CategoriaEntity;
-import br.com.thaua.Ecommerce.domain.entity.ClienteEntity;
-import br.com.thaua.Ecommerce.domain.entity.PedidoEntity;
-import br.com.thaua.Ecommerce.domain.entity.UsersEntity;
+import br.com.thaua.Ecommerce.domain.entity.*;
 import br.com.thaua.Ecommerce.dto.categoria.CategoriaRequest;
 import br.com.thaua.Ecommerce.dto.categoria.CategoriaResponse;
 import br.com.thaua.Ecommerce.dto.cliente.ClienteResponse;
+import br.com.thaua.Ecommerce.dto.endereco.EnderecoRequest;
+import br.com.thaua.Ecommerce.dto.endereco.EnderecoResponse;
 import br.com.thaua.Ecommerce.dto.fornecedor.FornecedorResponse;
 import br.com.thaua.Ecommerce.dto.pedido.PedidoPatchRequest;
 import br.com.thaua.Ecommerce.dto.pedido.PedidoResponse;
-import br.com.thaua.Ecommerce.mappers.CategoriaMapper;
-import br.com.thaua.Ecommerce.mappers.ClienteMapper;
-import br.com.thaua.Ecommerce.mappers.FornecedorMapper;
-import br.com.thaua.Ecommerce.mappers.PedidoMapper;
+import br.com.thaua.Ecommerce.mappers.*;
 import br.com.thaua.Ecommerce.repositories.*;
 import br.com.thaua.Ecommerce.services.returnTypeUsers.ExtractTypeUserContextHolder;
 import lombok.RequiredArgsConstructor;
@@ -33,6 +29,7 @@ public class AdminService {
     private final UsersRepository usersRepository;
     private final PedidoMapper pedidoMapper;
     private final PedidoRepository pedidoRepository;
+    private final EnderecoMapper enderecoMapper;
 
     public List<ClienteResponse> listarClientes() {
         return clienteMapper.toResponse(clienteRepository.findAll());
@@ -73,5 +70,15 @@ public class AdminService {
         pedidoEntity.setStatusPedido(pedidoPatchRequest.getStatusPedido());
 
         return pedidoMapper.toPedidoResponse(pedidoRepository.save(pedidoEntity));
+    }
+
+    public EnderecoResponse cadastrarEnderecoUsuario(Long userId, EnderecoRequest enderecoRequest) {
+        UsersEntity usersEntity = usersRepository.findById(userId).get();
+        EnderecoEntity enderecoEntity = enderecoMapper.enderecoRequestToEntity(enderecoRequest);
+        enderecoEntity.setUsers(usersEntity);
+        usersEntity.setEndereco(enderecoEntity);
+        usersRepository.save(usersEntity);
+
+        return enderecoMapper.toEnderecoResponse(enderecoEntity);
     }
 }
