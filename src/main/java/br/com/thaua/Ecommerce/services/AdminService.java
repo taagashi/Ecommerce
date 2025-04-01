@@ -111,4 +111,13 @@ public class AdminService {
 
         return usersEntity.getName() + " teve seu endereco limpo com sucesso";
     }
+
+    public CategoriaResponse atualizarCategoria(Long categoriaId, CategoriaRequest categoriaRequest) {
+        CategoriaEntity categoriaEntity = categoriaRepository.findById(categoriaId).get();
+
+        categoriaEntity.setNome(categoriaRequest.getNome());
+        categoriaEntity.setDescricao(categoriaRequest.getDescricao());
+
+        return categoriaMapper.toResponse(categoriaRepository.save(categoriaEntity));
+    }
 }

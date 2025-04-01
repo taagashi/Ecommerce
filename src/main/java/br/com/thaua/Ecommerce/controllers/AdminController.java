@@ -58,7 +58,7 @@ public class AdminController {
         return ResponseEntity.ok(adminService.listarPedidosDoCliente(clienteId));
     }
 
-//    PATCH /api/v1/pedidos/{id}/status/update - Atualizar status do pedido [ROLE: ADMIN
+//    PATCH /api/v1/pedidos/{id}/status/    update - Atualizar status do pedido [ROLE: ADMIN
     @Operation(summary = "atualizar status do pedido", description = "admin pode atualizar o status de um pedido atraves do id do pedido")
     @PatchMapping("/pedidos/{pedidoId}/status/update")
     public ResponseEntity<PedidoResponse> atualizarStatusPedido(@PathVariable Long pedidoId, @RequestBody PedidoPatchRequest pedidoPatchRequest) {
@@ -91,5 +91,12 @@ public class AdminController {
     @DeleteMapping("/users/{userId}/enderecos/delete")
     public ResponseEntity<String> deletarEnderecoUsuario(@PathVariable Long userId) {
         return ResponseEntity.ok(adminService.deletarEnderecoUsuario(userId));
+    }
+
+//    PUT /api/V1/categorias/update - Atualizar categoria [ROLE ADMIN]
+    @Operation(summary = "atualizar categoria", description = "admin pode atualizar as informacoes de uma categoria especifica")
+    @PutMapping("/categorias/{categoriaId}/update")
+    public ResponseEntity<CategoriaResponse> atualizarCategoria(@PathVariable Long categoriaId, @RequestBody CategoriaRequest categoriaRequest) {
+        return ResponseEntity.ok(adminService.atualizarCategoria(categoriaId, categoriaRequest));
     }
 }
