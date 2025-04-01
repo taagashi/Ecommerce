@@ -120,4 +120,12 @@ public class AdminService {
 
         return categoriaMapper.toResponse(categoriaRepository.save(categoriaEntity));
     }
+
+    public String deletarCategoria(Long categoriaId) {
+        CategoriaEntity categoriaEntity = categoriaRepository.findById(categoriaId).get();
+
+        categoriaRepository.delete(categoriaEntity);
+
+        return "categoria " + categoriaEntity.getNome() + " foi deletada com sucesso";
+    }
 }

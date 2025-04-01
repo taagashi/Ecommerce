@@ -99,4 +99,11 @@ public class AdminController {
     public ResponseEntity<CategoriaResponse> atualizarCategoria(@PathVariable Long categoriaId, @RequestBody CategoriaRequest categoriaRequest) {
         return ResponseEntity.ok(adminService.atualizarCategoria(categoriaId, categoriaRequest));
     }
+
+//    DELETE /api/categorias/{id}/delete` - Remover categoria [ROLE ADMIN]
+    @Operation(summary = "deletar categoria", description = "admin pode deletar uma categoria especifica")
+    @DeleteMapping("/categorias/{categoriaId}/delete")
+    public ResponseEntity<String> deletarCategoria(@PathVariable Long categoriaId) {
+        return ResponseEntity.ok(adminService.deletarCategoria(categoriaId));
+    }
 }
