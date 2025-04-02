@@ -38,7 +38,7 @@ public class ClienteService {
     public ClienteResponse atualizarCpfETelefone(ClienteCpfTelefoneRequest clienteCpfTelefoneRequest) {
         UsersEntity usersEntity = ExtractTypeUserContextHolder.extractUser();
         usersEntity.getCliente().setCpf(clienteCpfTelefoneRequest.getCpf());
-        usersEntity.getCliente().setTelefone(clienteCpfTelefoneRequest.getTelefone());
+        usersEntity.setTelefone(clienteCpfTelefoneRequest.getTelefone());
 
         return clienteMapper.toResponse(usersRepository.save(usersEntity).getCliente());
     }
@@ -53,10 +53,8 @@ public class ClienteService {
         UsersEntity usersEntity = ExtractTypeUserContextHolder.extractUser();
         usersEntity.setName(clienteUpdateRequest.getName());
         usersEntity.setEmail(clienteUpdateRequest.getEmail());
-        usersEntity.getCliente().setName(clienteUpdateRequest.getName());
-        usersEntity.getCliente().setEmail(clienteUpdateRequest.getEmail());
         usersEntity.getCliente().setCpf(clienteUpdateRequest.getCpf());
-        usersEntity.getCliente().setTelefone(clienteUpdateRequest.getTelefone());
+        usersEntity.setTelefone(clienteUpdateRequest.getTelefone());
 
         return clienteMapper.toResponse(usersRepository.save(usersEntity).getCliente());
     }

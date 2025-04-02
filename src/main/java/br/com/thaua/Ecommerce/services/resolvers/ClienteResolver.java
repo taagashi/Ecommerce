@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 
 @RequiredArgsConstructor
 @Component
-public class ClienteResolver extends AbstractResolver<ClienteEntity> implements ResolverUsers{
+public class ClienteResolver implements ResolverUsers{
     private final UsersRepository usersRepository;
 
     @Override
@@ -20,9 +20,8 @@ public class ClienteResolver extends AbstractResolver<ClienteEntity> implements 
     @Override
     public void trackUserForRegister(UsersEntity usersEntity) {
         ClienteEntity clienteEntity = new ClienteEntity();
+        clienteEntity.setUsers(usersEntity);
         usersEntity.setCliente(clienteEntity);
-        setInformationEntity(clienteEntity, usersEntity);
-
     }
 
 }

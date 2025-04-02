@@ -11,7 +11,7 @@ import java.util.List;
 
 @Mapper(componentModel = "spring")
 public interface PedidoMapper {
-    @Mapping(target = "cliente", source = "cliente.name")
+    @Mapping(target = "cliente", source = "cliente.users.name")
     @Mapping(target = "pedidoId", source = "id")
     PedidoResponse toPedidoResponse(PedidoEntity pedidoEntity);
 

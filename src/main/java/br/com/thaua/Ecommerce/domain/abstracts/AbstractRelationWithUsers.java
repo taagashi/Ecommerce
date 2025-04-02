@@ -11,7 +11,7 @@ import lombok.Setter;
 @MappedSuperclass
 @Getter
 @Setter
-public class AbstractRelationWithUsers extends AbstractCommonData {
+public class AbstractRelationWithUsers extends AbstractEntity {
     @MapsId
     @OneToOne
     @JoinColumn(name = "id")

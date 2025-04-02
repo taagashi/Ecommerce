@@ -18,7 +18,7 @@ public class UsersController {
 
     @Operation(summary = "Cadastrar usuario", description = "necessario passar dados como nome, email e senha")
     @PostMapping("/register")
-    public ResponseEntity<String> testeCadastro(@RequestBody UsersRequest usersRequest) {
+    public ResponseEntity<String> cadastro(@RequestBody UsersRequest usersRequest) {
         return ResponseEntity.ok(userService.cadastrarUsuario(usersRequest));
     }
 

@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 
 @RequiredArgsConstructor
 @Component
-public class FornecedorResolver extends AbstractResolver<FornecedorEntity> implements ResolverUsers{
+public class FornecedorResolver implements ResolverUsers{
     private final UsersRepository usersRepository;
 
     @Override
@@ -20,8 +20,8 @@ public class FornecedorResolver extends AbstractResolver<FornecedorEntity> imple
     @Override
     public void trackUserForRegister(UsersEntity usersEntity) {
         FornecedorEntity fornecedorEntity = new FornecedorEntity();
+        fornecedorEntity.setUsers(usersEntity);
         usersEntity.setFornecedor(fornecedorEntity);
-        setInformationEntity(fornecedorEntity, usersEntity);
     }
 
 }

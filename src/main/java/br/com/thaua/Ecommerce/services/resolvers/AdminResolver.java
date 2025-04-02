@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 
 @RequiredArgsConstructor
 @Component
-public class AdminResolver extends AbstractResolver<AdminEntity> implements ResolverUsers {
+public class AdminResolver implements ResolverUsers {
     private final UsersRepository usersRepository;
 
     @Override
@@ -20,8 +20,8 @@ public class AdminResolver extends AbstractResolver<AdminEntity> implements Reso
     @Override
     public void trackUserForRegister(UsersEntity usersEntity) {
         AdminEntity adminEntity = new AdminEntity();
+        adminEntity.setUsers(usersEntity);
         usersEntity.setAdmin(adminEntity);
-        setInformationEntity(adminEntity, usersEntity);
     }
 
 }

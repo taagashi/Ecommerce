@@ -76,7 +76,7 @@ public class AdminService {
         usersEntity.getAdmin().setContasBanidas(usersEntity.getAdmin().getContasBanidas() + 1);
         usersRepository.save(usersEntity);
 
-        return clienteEntity.getName() + " foi removido com sucesso";
+        return clienteEntity.getUsers().getName() + " foi removido com sucesso";
     }
 
     public List<PedidoResponse> listarPedidosDoCliente(Long clienteId) {

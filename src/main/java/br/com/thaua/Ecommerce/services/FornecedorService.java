@@ -31,7 +31,7 @@ public class FornecedorService {
     public FornecedorResponse atualizarCNPJeTelefone(FornecedorCNPJTelefoneRequest fornecedorCNPJTelefoneRequest) {
         UsersEntity usersEntity = ExtractTypeUserContextHolder.extractUser();
         usersEntity.getFornecedor().setCnpj(fornecedorCNPJTelefoneRequest.getCnpj());
-        usersEntity.getFornecedor().setTelefone(fornecedorCNPJTelefoneRequest.getTelefone());
+        usersEntity.setTelefone(fornecedorCNPJTelefoneRequest.getTelefone());
 
         return fornecedorMapper.FornecedorToResponse(usersRepository.save(usersEntity).getFornecedor());
     }
@@ -39,7 +39,7 @@ public class FornecedorService {
     public ProdutoResponse cadastrarProduto(ProdutoRequest produtoRequest) {
         UsersEntity usersEntity = ExtractTypeUserContextHolder.extractUser();
 
-        if(usersEntity.getFornecedor().getCnpj() == null || usersEntity.getEndereco() == null || usersEntity.getFornecedor().getTelefone() == null) {
+        if(usersEntity.getFornecedor().getCnpj() == null || usersEntity.getEndereco() == null || usersEntity.getTelefone() == null) {
             throw new RuntimeException(usersEntity.getName() + ", é necessário que você preencha informações importantes, como CNPJ, endereco e telefone para cadastrar algum produto");
         }
         ProdutoEntity produtoEntity = produtoMapper.produtoRequestToEntity(produtoRequest);
