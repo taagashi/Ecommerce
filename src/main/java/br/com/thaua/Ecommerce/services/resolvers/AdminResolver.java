@@ -18,12 +18,10 @@ public class AdminResolver extends AbstractResolver<AdminEntity> implements Reso
     }
 
     @Override
-    public Object trackUserForRegister(UsersEntity usersEntity) {
+    public void trackUserForRegister(UsersEntity usersEntity) {
         AdminEntity adminEntity = new AdminEntity();
         usersEntity.setAdmin(adminEntity);
         setInformationEntity(adminEntity, usersEntity);
-
-        return usersEntity;
     }
 
 }

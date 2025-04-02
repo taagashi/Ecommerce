@@ -5,7 +5,6 @@ import br.com.thaua.Ecommerce.domain.entity.UsersEntity;
 import br.com.thaua.Ecommerce.dto.endereco.EnderecoRequest;
 import br.com.thaua.Ecommerce.dto.endereco.EnderecoResponse;
 import br.com.thaua.Ecommerce.dto.users.UsersRequest;
-import br.com.thaua.Ecommerce.dto.users.UsersResponse;
 import br.com.thaua.Ecommerce.mappers.EnderecoMapper;
 import br.com.thaua.Ecommerce.mappers.UserMapper;
 import br.com.thaua.Ecommerce.repositories.EnderecoRepository;
@@ -37,8 +36,8 @@ public class UsersService {
         usuario.setPassword(passwordEncoder.encode(usuario.getPassword()));
         UsersEntity usersEntity = userMapper.toEntity(usuario);
 
-        UsersEntity typeUser = (UsersEntity) resolverGeralUsers.returnTypeUsers(usersEntity);
-        UsersEntity saveUser = usersRepository.save(typeUser);
+        resolverGeralUsers.setInformationUsers(usersEntity);
+        UsersEntity saveUser = usersRepository.save(usersEntity);
 //        emailMessageService.registroDeUsuario(usuario.getName(), usuario.getEmail());
         return jwtService.generateToken(new MyUserDetails(saveUser.getId(), saveUser.getEmail(), saveUser.getPassword(), saveUser.getRole().name(), saveUser));
     }

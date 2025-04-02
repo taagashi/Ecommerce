@@ -11,8 +11,8 @@ import java.util.List;
 public class ResolverGeralUsers {
     private final List<ResolverUsers> resolverUsers;
 
-    public Object returnTypeUsers(UsersEntity usersEntity) {
-        return resolverUsers.stream()
+    public void setInformationUsers(UsersEntity usersEntity) {
+        resolverUsers.stream()
                 .filter(user -> user.roleEsperada(usersEntity.getRole()))
                 .findFirst()
                 .orElseThrow(() -> new RuntimeException("Role não encontrada"))

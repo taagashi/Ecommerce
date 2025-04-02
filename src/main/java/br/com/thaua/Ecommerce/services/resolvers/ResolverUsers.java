@@ -7,5 +7,5 @@ import org.springframework.stereotype.Component;
 @Component
 public interface ResolverUsers {
     boolean roleEsperada(Role role);
-    Object trackUserForRegister(UsersEntity users);
+    void trackUserForRegister(UsersEntity users);
 }
