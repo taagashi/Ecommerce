@@ -77,7 +77,7 @@ public class UsersService {
 
     public EnderecoResponse exibirEndereco() {
         UsersEntity usersEntity = ExtractTypeUserContextHolder.extractUser();
-        
+
         validationService.validarExibicaoEndereco(usersEntity);
 
         return enderecoMapper.toEnderecoResponse(usersEntity.getEndereco());
@@ -86,10 +86,8 @@ public class UsersService {
     public String deletarEndereco() {
         UsersEntity usersEntity = ExtractTypeUserContextHolder.extractUser();
 
-        if(usersEntity.getEndereco() == null) {
-            throw new RuntimeException(usersEntity.getName() + ", não é possivel limpar as informações do seu endereço porque você aida não adicionou um");
-        }
-
+        validationService.validarDelecaoEndereco(usersEntity);
+        
         EnderecoEntity enderecoEntity = usersEntity.getEndereco();
         usersEntity.getEndereco().setUsers(null);
         usersEntity.setEndereco(null);
