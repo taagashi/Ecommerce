@@ -1,4 +1,4 @@
-package br.com.thaua.Ecommerce.services;
+package br.com.thaua.Ecommerce.services.validators;
 
 import br.com.thaua.Ecommerce.domain.entity.EnderecoEntity;
 import br.com.thaua.Ecommerce.domain.entity.UsersEntity;
