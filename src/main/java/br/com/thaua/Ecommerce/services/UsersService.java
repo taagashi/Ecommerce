@@ -87,7 +87,7 @@ public class UsersService {
         UsersEntity usersEntity = ExtractTypeUserContextHolder.extractUser();
 
         validationService.validarDelecaoEndereco(usersEntity);
-        
+
         EnderecoEntity enderecoEntity = usersEntity.getEndereco();
         usersEntity.getEndereco().setUsers(null);
         usersEntity.setEndereco(null);
@@ -99,6 +99,10 @@ public class UsersService {
 
     public EnderecoResponse atualizarEndereco(EnderecoRequest enderecoRequest) {
         UsersEntity usersEntity = ExtractTypeUserContextHolder.extractUser();
+
+        validationService.validarAtualizacaoEndereco(usersEntity);
+        validationService.validarSiglaEstado(enderecoMapper, enderecoRequest, usersEntity);
+        
         EnderecoEntity enderecoEntity = enderecoMapper.enderecoRequestToEntity(enderecoRequest);
         enderecoEntity.setUsers(usersEntity);
         enderecoEntity.setId(usersEntity.getEndereco().getId());

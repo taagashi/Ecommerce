@@ -36,4 +36,10 @@ public class ValidationService {
             throw new AddressException(usersEntity.getName() + " você não pode limpar as informações do seu endereco porque ainda não adicionou um", Map.of("endereco", "Endereço não cadastrado"));
         }
     }
+
+    public void validarAtualizacaoEndereco(UsersEntity usersEntity) {
+        if(usersEntity.getEndereco() == null) {
+            throw new AddressException(usersEntity.getName() + " não é possível atualizar seu endereço porque você ainda não tem um", Map.of("endereco", "Endereço não cadastrado"));
+        }
+    }
 }
