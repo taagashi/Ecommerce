@@ -11,5 +11,6 @@ public interface EnderecoMapper {
     EnderecoEntity enderecoRequestToEntity(EnderecoRequest enderecoRequest);
     @Mapping(target = "nameUser", expression = "java(enderecoEntity.getUsers().getName())")
     @Mapping(target = "idEndereco", expression = "java(enderecoEntity.getId())")
+    @Mapping(target = "estado", expression = "java(enderecoEntity.getEstado().getSigla())")
     EnderecoResponse toEnderecoResponse(EnderecoEntity enderecoEntity);
 }
