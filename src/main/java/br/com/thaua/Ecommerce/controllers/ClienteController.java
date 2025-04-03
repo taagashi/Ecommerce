@@ -19,7 +19,7 @@ import java.util.List;
 @SecurityRequirement(name = "bearerAuth")
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("api/v1/clientes")
+@RequestMapping("/api/v1/clientes")
 public class ClienteController {
     private final ClienteService clienteService;
 //    PATCH /api/v1/clientes/cpf-telefone/update - atualizar cpf e telfone [ROLE: CLIENTE]

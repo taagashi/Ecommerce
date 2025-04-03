@@ -5,6 +5,7 @@ import br.com.thaua.Ecommerce.domain.entity.UsersEntity;
 import br.com.thaua.Ecommerce.dto.endereco.EnderecoRequest;
 import br.com.thaua.Ecommerce.dto.endereco.EnderecoResponse;
 import br.com.thaua.Ecommerce.dto.users.UsersRequest;
+import br.com.thaua.Ecommerce.exceptions.AddressException;
 import br.com.thaua.Ecommerce.mappers.EnderecoMapper;
 import br.com.thaua.Ecommerce.mappers.UserMapper;
 import br.com.thaua.Ecommerce.repositories.EnderecoRepository;
@@ -33,6 +34,7 @@ public class UsersService {
     private final EnderecoRepository enderecoRepository;
 
     public String cadastrarUsuario(UsersRequest usuario) {
+//        TALVES CRIAR UMA CLASSE QUE CODIFICA E DECODIFICA UMA SENHA
         usuario.setPassword(passwordEncoder.encode(usuario.getPassword()));
         UsersEntity usersEntity = userMapper.toEntity(usuario);
 
@@ -52,6 +54,7 @@ public class UsersService {
         return jwtService.generateToken((MyUserDetails) authenticateUser.getPrincipal());
     }
 
+//    CRIAR LOGICA DE IMPEDIMENTO DE DELETACAO DE CONTA
     public String deletarConta() {
         UsersEntity usersEntity = ExtractTypeUserContextHolder.extractUser();
         usersRepository.delete(usersEntity);
@@ -60,6 +63,10 @@ public class UsersService {
 
     public EnderecoResponse cadastrarEndereco(EnderecoRequest enderecoRequest) {
         UsersEntity usersEntity = ExtractTypeUserContextHolder.extractUser();
+
+        if(usersEntity.getEndereco() != null) {
+            throw new AddressException(usersEntity.getName() + ", você já tem um endereço cadastrado", null);
+        }
         EnderecoEntity enderecoEntity = enderecoMapper.enderecoRequestToEntity(enderecoRequest);
         enderecoEntity.setUsers(usersEntity);
         usersEntity.setEndereco(enderecoEntity);
