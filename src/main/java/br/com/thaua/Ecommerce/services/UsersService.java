@@ -77,10 +77,9 @@ public class UsersService {
 
     public EnderecoResponse exibirEndereco() {
         UsersEntity usersEntity = ExtractTypeUserContextHolder.extractUser();
+        
+        validationService.validarExibicaoEndereco(usersEntity);
 
-        if(usersEntity.getEndereco() == null) {
-            throw new RuntimeException(usersEntity.getName() + ", você ainda não cadastrou um endereço");
-        }
         return enderecoMapper.toEnderecoResponse(usersEntity.getEndereco());
     }
 

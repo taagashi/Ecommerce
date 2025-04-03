@@ -24,4 +24,10 @@ public class ValidationService {
             throw new AddressException(usersEntity.getName() + " você precisa adicionar uma sigla de estado que seja válida", Map.of("estado", "Estado inválido"));
         }
     }
+
+    public void validarExibicaoEndereco(UsersEntity usersEntity) {
+        if(usersEntity.getEndereco() == null) {
+            throw new AddressException(usersEntity.getName() + ", você ainda não cadastrou um endereço", Map.of("endereco", "Endereço não cadastrado"));
+        }
+    }
 }
