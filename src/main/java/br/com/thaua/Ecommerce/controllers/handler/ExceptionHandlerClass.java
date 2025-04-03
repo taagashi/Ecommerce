@@ -8,16 +8,23 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import java.util.List;
+import java.util.Map;
 
 @RestControllerAdvice
 public class ExceptionHandlerClass {
 
     @ExceptionHandler(AddressException.class)
     public ResponseEntity<ErrorResponse> addressException(AddressException ex) {
-        ErrorResponse errorResponse = ErrorResponse.builder().code(HttpStatus.BAD_REQUEST.value()).message(ex.getMessage()).fieldsErrors(ex.getFields()).build();
+        ErrorResponse errorResponse = createErrorResponse(ex.getMessage(), ex.getFields());
 
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
     }
 
-
+    private ErrorResponse createErrorResponse(String message, Map<String, String> fieldsErrors) {
+        return ErrorResponse.builder()
+                .code(HttpStatus.BAD_REQUEST.value())
+                .message(message)
+                .fieldsErrors(fieldsErrors)
+                .build();
+    }
 }
