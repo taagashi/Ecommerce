@@ -32,6 +32,7 @@ public class UsersService {
     private final UserMapper userMapper;
     private final EnderecoMapper enderecoMapper;
     private final EnderecoRepository enderecoRepository;
+    private final ValidationService validationService;
 
     public String cadastrarUsuario(UsersRequest usuario) {
 //        TALVES CRIAR UMA CLASSE QUE CODIFICA E DECODIFICA UMA SENHA
@@ -64,12 +65,16 @@ public class UsersService {
     public EnderecoResponse cadastrarEndereco(EnderecoRequest enderecoRequest) {
         UsersEntity usersEntity = ExtractTypeUserContextHolder.extractUser();
 
-        if(usersEntity.getEndereco() != null) {
-            throw new AddressException(usersEntity.getName() + ", você já tem um endereço cadastrado", null);
+        validationService.verificarEnderecoExistente(usersEntity);
+
+        try {
+            EnderecoEntity enderecoEntity = enderecoMapper.enderecoRequestToEntity(enderecoRequest);
+            enderecoEntity.setUsers(usersEntity);
+            usersEntity.setEndereco(enderecoEntity);
+        }catch (Exception e) {
+            throw new AddressException(usersEntity.getName() + " você precisa adicionar uma sigla de estado que seja válida");
         }
-        EnderecoEntity enderecoEntity = enderecoMapper.enderecoRequestToEntity(enderecoRequest);
-        enderecoEntity.setUsers(usersEntity);
-        usersEntity.setEndereco(enderecoEntity);
+
 
         return enderecoMapper.toEnderecoResponse(usersRepository.save(usersEntity).getEndereco());
     }

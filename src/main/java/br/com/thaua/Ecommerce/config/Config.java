@@ -43,7 +43,7 @@ public class Config {
                                 "/api/v1/admin/**"
                         ).hasRole("ADMIN")
                         .requestMatchers(
-                                "api/v1/clientes/**"
+                                "/api/v1/clientes/**"
                         ).hasRole("CLIENTE")
                         .requestMatchers(
                                 "/api/v1/fornecedores"
