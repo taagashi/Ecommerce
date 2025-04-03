@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
 import java.util.List;
+import java.util.Map;
 
 @Getter
 @RequiredArgsConstructor
@@ -12,5 +13,5 @@ import java.util.List;
 public class ErrorResponse {
     private final Integer code;
     private final String message;
-    private final List<FieldsError> fieldsErrors;
+    private final Map<String, String> fieldsErrors;
 }

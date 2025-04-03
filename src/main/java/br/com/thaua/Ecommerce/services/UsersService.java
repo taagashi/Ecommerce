@@ -65,16 +65,12 @@ public class UsersService {
     public EnderecoResponse cadastrarEndereco(EnderecoRequest enderecoRequest) {
         UsersEntity usersEntity = ExtractTypeUserContextHolder.extractUser();
 
-        validationService.verificarEnderecoExistente(usersEntity);
+        validationService.validarEnderecoExistente(usersEntity);
+        validationService.validarSiglaEstado(enderecoMapper, enderecoRequest, usersEntity);
 
-        try {
-            EnderecoEntity enderecoEntity = enderecoMapper.enderecoRequestToEntity(enderecoRequest);
-            enderecoEntity.setUsers(usersEntity);
-            usersEntity.setEndereco(enderecoEntity);
-        }catch (Exception e) {
-            throw new AddressException(usersEntity.getName() + " você precisa adicionar uma sigla de estado que seja válida");
-        }
-
+        EnderecoEntity enderecoEntity = enderecoMapper.enderecoRequestToEntity(enderecoRequest);
+        enderecoEntity.setUsers(usersEntity);
+        usersEntity.setEndereco(enderecoEntity);
 
         return enderecoMapper.toEnderecoResponse(usersRepository.save(usersEntity).getEndereco());
     }
