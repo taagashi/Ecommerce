@@ -3,20 +3,18 @@ package br.com.thaua.Ecommerce.services.validators;
 import br.com.thaua.Ecommerce.domain.entity.UsersEntity;
 import br.com.thaua.Ecommerce.domain.enums.Estado;
 import br.com.thaua.Ecommerce.dto.endereco.EnderecoRequest;
-import br.com.thaua.Ecommerce.exceptions.AddressException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.lang.reflect.Constructor;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.Map;
 
 @RequiredArgsConstructor
 @Service
 public class ValidationService {
 
-    public void validarEnderecoExistente(UsersEntity usersEntity, Map<String, String> errors) {
+    public void validarCadastroEndereco(UsersEntity usersEntity, Map<String, String> errors) {
         if (usersEntity.getEndereco() != null) {
             errors.put("Endereço", "Endereço já cadastrado");
         }
@@ -28,7 +26,7 @@ public class ValidationService {
         }
     }
 
-    public void validarExibicaoEndereco(UsersEntity usersEntity, Map<String, String> errors) {
+    public void validarEnderecoNaoExistente(UsersEntity usersEntity, Map<String, String> errors) {
         if(usersEntity.getEndereco() == null) {
             errors.put("Endereço", "Endereço não cadastrado");
         }
@@ -43,7 +41,19 @@ public class ValidationService {
     public void validarAtualizacaoEndereco(UsersEntity usersEntity, Map<String, String> errors) {
         if(usersEntity.getEndereco() == null) {
             errors.put("Endereço", "Endereço não cadastrado");
-            throw new AddressException(usersEntity.getName() + " não é possível atualizar seu endereço porque você ainda não tem um", Map.of("endereco", "Endereço não cadastrado"));
+        }
+    }
+
+
+    public void validarTelefone(UsersEntity usersEntity, Map<String, String> errors) {
+        if (usersEntity.getTelefone() == null) {
+            errors.put("Telefone", "Telefone não cadastrado");
+        }
+    }
+
+    public void validarCNPJ(UsersEntity usersEntity, Map<String, String> errors) {
+        if(usersEntity.getFornecedor().getCnpj() == null) {
+            errors.put("CNPJ", "CNPJ está não cadastrado");
         }
     }
 

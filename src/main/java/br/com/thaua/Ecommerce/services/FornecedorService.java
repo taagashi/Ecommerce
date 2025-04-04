@@ -8,16 +8,19 @@ import br.com.thaua.Ecommerce.dto.fornecedor.FornecedorResponse;
 import br.com.thaua.Ecommerce.dto.produto.ProdutoNovoEstoqueRequest;
 import br.com.thaua.Ecommerce.dto.produto.ProdutoRequest;
 import br.com.thaua.Ecommerce.dto.produto.ProdutoResponse;
+import br.com.thaua.Ecommerce.exceptions.ProdutoException;
 import br.com.thaua.Ecommerce.mappers.FornecedorMapper;
 import br.com.thaua.Ecommerce.mappers.ProdutoMapper;
 import br.com.thaua.Ecommerce.repositories.CategoriaRepository;
 import br.com.thaua.Ecommerce.repositories.ProdutoRepository;
 import br.com.thaua.Ecommerce.repositories.UsersRepository;
 import br.com.thaua.Ecommerce.services.returnTypeUsers.ExtractTypeUserContextHolder;
+import br.com.thaua.Ecommerce.services.validators.ValidationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Map;
 
 @RequiredArgsConstructor
 @Service
@@ -27,6 +30,7 @@ public class FornecedorService {
     private final ProdutoMapper produtoMapper;
     private final ProdutoRepository produtoRepository;
     private final CategoriaRepository categoriaRepository;
+    private final ValidationService validationService;
 
     public FornecedorResponse atualizarCNPJeTelefone(FornecedorCNPJTelefoneRequest fornecedorCNPJTelefoneRequest) {
         UsersEntity usersEntity = ExtractTypeUserContextHolder.extractUser();
@@ -36,12 +40,14 @@ public class FornecedorService {
         return fornecedorMapper.FornecedorToResponse(usersRepository.save(usersEntity).getFornecedor());
     }
 
-    public ProdutoResponse cadastrarProduto(ProdutoRequest produtoRequest) {
+    public ProdutoResponse cadastrarProduto(ProdutoRequest produtoRequest, Map<String, String> errors) {
         UsersEntity usersEntity = ExtractTypeUserContextHolder.extractUser();
 
-        if(usersEntity.getFornecedor().getCnpj() == null || usersEntity.getEndereco() == null || usersEntity.getTelefone() == null) {
-            throw new RuntimeException(usersEntity.getName() + ", é necessário que você preencha informações importantes, como CNPJ, endereco e telefone para cadastrar algum produto");
-        }
+        validationService.validarCNPJ(usersEntity, errors);
+        validationService.validarTelefone(usersEntity, errors);
+        validationService.validarEnderecoNaoExistente(usersEntity, errors);
+        validationService.analisarException(usersEntity.getName() + ", houve um erro ao tentar cadastrar o produto " + produtoRequest.getNome(), ProdutoException.class, errors);
+
         ProdutoEntity produtoEntity = produtoMapper.produtoRequestToEntity(produtoRequest);
         produtoEntity.setFornecedor(usersEntity.getFornecedor());
 

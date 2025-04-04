@@ -21,7 +21,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import br.com.thaua.Ecommerce.services.validators.ValidationService;
 
-import java.util.HashMap;
 import java.util.Map;
 
 @Service
@@ -69,9 +68,8 @@ public class UsersService {
     public EnderecoResponse cadastrarEndereco(EnderecoRequest enderecoRequest, Map<String, String> errors) {
         UsersEntity usersEntity = ExtractTypeUserContextHolder.extractUser();
 
-        validationService.validarEnderecoExistente(usersEntity, errors);
+        validationService.validarCadastroEndereco(usersEntity, errors);
         validationService.validarSiglaEstado(enderecoRequest, errors);
-
         validationService.analisarException(usersEntity.getName() + ", houve um erro no cadastrado do endereco", AddressException.class, errors);
 
         EnderecoEntity enderecoEntity = enderecoMapper.enderecoRequestToEntity(enderecoRequest);
@@ -84,8 +82,7 @@ public class UsersService {
     public EnderecoResponse exibirEndereco(Map<String, String> errors) {
         UsersEntity usersEntity = ExtractTypeUserContextHolder.extractUser();
 
-        validationService.validarExibicaoEndereco(usersEntity, errors);
-
+        validationService.validarEnderecoNaoExistente(usersEntity, errors);
         validationService.analisarException(usersEntity.getName() + ", houve um erro durante a exibição do seu endereço", AddressException.class, errors);
 
         return enderecoMapper.toEnderecoResponse(usersEntity.getEndereco());

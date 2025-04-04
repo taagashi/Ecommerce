@@ -1,5 +1,6 @@
 package br.com.thaua.Ecommerce.controllers;
 
+import br.com.thaua.Ecommerce.controllers.handler.ConstructorErrors;
 import br.com.thaua.Ecommerce.dto.fornecedor.FornecedorCNPJTelefoneRequest;
 import br.com.thaua.Ecommerce.dto.fornecedor.FornecedorResponse;
 import br.com.thaua.Ecommerce.dto.produto.ProdutoNovoEstoqueRequest;
@@ -11,7 +12,7 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
+import br.com.thaua.Ecommerce.controllers.handler.ConstructorErrors;
 import java.util.List;
 
 @SecurityRequirement(name = "bearerAuth")
@@ -32,7 +33,7 @@ public class FornecedorController {
     @Operation(summary = "cadastrar produto", description = "fornecedor só pode cadastrar produtos se tiver com CNPJ, telefone e endereço cadastrados")
     @PostMapping("/produtos/register")
     public ResponseEntity<ProdutoResponse> cadastrarProduto(@RequestBody ProdutoRequest produtoRequest) {
-        return ResponseEntity.ok(fornecedorService.cadastrarProduto(produtoRequest));
+        return ResponseEntity.ok(fornecedorService.cadastrarProduto(produtoRequest, ConstructorErrors.returnMapErrors()));
     }
 
 //    GET /api/v1/funcionarios/produtos/list - Listar produtos (com paginação e filtros) [ROLE: FUNCIONARIO]
