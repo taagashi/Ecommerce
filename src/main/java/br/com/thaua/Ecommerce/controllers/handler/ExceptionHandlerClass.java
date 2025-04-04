@@ -8,7 +8,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-import java.util.List;
 import java.util.Map;
 
 @RestControllerAdvice
@@ -23,7 +22,7 @@ public class ExceptionHandlerClass {
 
     @ExceptionHandler(ProdutoException.class)
     public ResponseEntity<ErrorResponse> produtoException(ProdutoException ex) {
-        ErrorResponse errorResponse = createErrorResponse(ex.getMessage(), ex.getErrors());
+        ErrorResponse errorResponse = createErrorResponse(ex.getMessage(), ex.getFields());
 
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
     }

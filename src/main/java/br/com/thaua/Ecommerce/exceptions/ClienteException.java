@@ -5,11 +5,8 @@ import lombok.Getter;
 import java.util.Map;
 
 @Getter
-public class ClienteException extends RuntimeException{
-    private final Map<String, String> errors;
-
+public class ClienteException extends AbstractException{
     public ClienteException(String message, Map<String, String> errors) {
-        super(message);
-        this.errors = errors;
+        super(message, errors);
     }
 }
