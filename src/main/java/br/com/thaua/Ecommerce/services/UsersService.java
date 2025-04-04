@@ -21,6 +21,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import br.com.thaua.Ecommerce.services.validators.ValidationService;
 
+import java.util.HashMap;
+import java.util.Map;
+
 @Service
 @RequiredArgsConstructor
 public class UsersService {
@@ -63,11 +66,13 @@ public class UsersService {
         return usersEntity.getName() + " sua conta foi deletada com sucesso";
     }
 
-    public EnderecoResponse cadastrarEndereco(EnderecoRequest enderecoRequest) {
+    public EnderecoResponse cadastrarEndereco(EnderecoRequest enderecoRequest, Map<String, String> errors) {
         UsersEntity usersEntity = ExtractTypeUserContextHolder.extractUser();
 
-        validationService.validarEnderecoExistente(usersEntity);
-        validationService.validarSiglaEstado(enderecoMapper, enderecoRequest, usersEntity);
+        validationService.validarEnderecoExistente(usersEntity, errors);
+        validationService.validarSiglaEstado(enderecoRequest, errors);
+
+        validationService.analisarException(usersEntity.getName() + ", houve um erro no cadastrado do endereco", AddressException.class, errors);
 
         EnderecoEntity enderecoEntity = enderecoMapper.enderecoRequestToEntity(enderecoRequest);
         enderecoEntity.setUsers(usersEntity);
@@ -76,18 +81,21 @@ public class UsersService {
         return enderecoMapper.toEnderecoResponse(usersRepository.save(usersEntity).getEndereco());
     }
 
-    public EnderecoResponse exibirEndereco() {
+    public EnderecoResponse exibirEndereco(Map<String, String> errors) {
         UsersEntity usersEntity = ExtractTypeUserContextHolder.extractUser();
 
-        validationService.validarExibicaoEndereco(usersEntity);
+        validationService.validarExibicaoEndereco(usersEntity, errors);
+
+        validationService.analisarException(usersEntity.getName() + ", houve um erro durante a exibição do seu endereço", AddressException.class, errors);
 
         return enderecoMapper.toEnderecoResponse(usersEntity.getEndereco());
     }
 
-    public String deletarEndereco() {
+    public String deletarEndereco(Map<String, String> errors) {
         UsersEntity usersEntity = ExtractTypeUserContextHolder.extractUser();
 
-        validationService.validarDelecaoEndereco(usersEntity);
+        validationService.validarDelecaoEndereco(usersEntity, errors);
+        validationService.analisarException(usersEntity.getName() + " você não pode limpar as informações do seu endereco porque ainda não adicionou um", AddressException.class, errors);
 
         EnderecoEntity enderecoEntity = usersEntity.getEndereco();
         usersEntity.getEndereco().setUsers(null);
@@ -98,12 +106,13 @@ public class UsersService {
         return usersEntity.getName() + ", as informacoes do seu endereco foram deletadas com sucesso";
     }
 
-    public EnderecoResponse atualizarEndereco(EnderecoRequest enderecoRequest) {
+    public EnderecoResponse atualizarEndereco(EnderecoRequest enderecoRequest, Map<String, String> errors) {
         UsersEntity usersEntity = ExtractTypeUserContextHolder.extractUser();
 
-        validationService.validarAtualizacaoEndereco(usersEntity);
-        validationService.validarSiglaEstado(enderecoMapper, enderecoRequest, usersEntity);
-        
+        validationService.validarAtualizacaoEndereco(usersEntity, errors);
+        validationService.validarSiglaEstado(enderecoRequest, errors);
+        validationService.analisarException(usersEntity.getName() + ", houve um erro na atualização do seu endereço", AddressException.class, errors);
+
         EnderecoEntity enderecoEntity = enderecoMapper.enderecoRequestToEntity(enderecoRequest);
         enderecoEntity.setUsers(usersEntity);
         enderecoEntity.setId(usersEntity.getEndereco().getId());

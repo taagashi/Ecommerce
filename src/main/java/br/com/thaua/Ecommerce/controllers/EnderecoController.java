@@ -1,5 +1,6 @@
 package br.com.thaua.Ecommerce.controllers;
 
+import br.com.thaua.Ecommerce.controllers.handler.ConstructorErrors;
 import br.com.thaua.Ecommerce.dto.endereco.EnderecoRequest;
 import br.com.thaua.Ecommerce.dto.endereco.EnderecoResponse;
 import br.com.thaua.Ecommerce.mappers.EnderecoMapper;
@@ -22,27 +23,27 @@ public class EnderecoController {
     @Operation(summary = "cadastrar endereco", description = "o usuario autenticado pode cadastrar um endereco para si")
     @PostMapping("/register")
     public ResponseEntity<EnderecoResponse> cadastrarEndereco(@RequestBody EnderecoRequest enderecoRequest) {
-        return ResponseEntity.ok(usersService.cadastrarEndereco(enderecoRequest));
+        return ResponseEntity.ok(usersService.cadastrarEndereco(enderecoRequest, ConstructorErrors.returnMapErrors()));
     }
 
 //    GET /api/v1/users/enderecos/list - Exibir meu endereco [USUARIO AUTENTICADO]
     @Operation(summary = "Exibir endereco", description = "usuario cadastrado pode ver o seu endereco completo")
     @GetMapping("/list")
     public ResponseEntity<EnderecoResponse> exibirEndereco() {
-        return ResponseEntity.ok(usersService.exibirEndereco());
+        return ResponseEntity.ok(usersService.exibirEndereco(ConstructorErrors.returnMapErrors()));
     }
 
 //    DELETE /api/v1/users/enderecos/delete` - Remover endereço do usuario [USUARIO AUTENTICADO]
     @Operation(summary = "remover endereco", description = "usuario autenticado pode limpar as informacoes de seu endereco")
     @DeleteMapping("/delete")
     public ResponseEntity<String> removerEndereco() {
-        return ResponseEntity.ok(usersService.deletarEndereco());
+        return ResponseEntity.ok(usersService.deletarEndereco(ConstructorErrors.returnMapErrors()));
     }
 
 //    PUT /api/v1/users/enderecos/update - Atualizar endereço do cliente [USUARIO AUTENTICADO]
     @Operation(summary = "atualizar endereço", description = "usuario atualiza todas as informações do seu endereco")
     @PutMapping("/update")
     public ResponseEntity<EnderecoResponse> atualizarEndereco(@RequestBody EnderecoRequest enderecoRequest) {
-        return ResponseEntity.ok(usersService.atualizarEndereco(enderecoRequest));
+        return ResponseEntity.ok(usersService.atualizarEndereco(enderecoRequest, ConstructorErrors.returnMapErrors()));
     }
 }
