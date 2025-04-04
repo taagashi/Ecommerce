@@ -46,6 +46,8 @@ public class FornecedorService {
         validationService.validarCNPJ(usersEntity, errors);
         validationService.validarTelefone(usersEntity, errors);
         validationService.validarEnderecoNaoExistente(usersEntity, errors);
+        validationService.validarEstoque(produtoRequest, errors);
+        validationService.validarPreco(produtoRequest, errors);
         validationService.analisarException(usersEntity.getName() + ", houve um erro ao tentar cadastrar o produto " + produtoRequest.getNome(), ProdutoException.class, errors);
 
         ProdutoEntity produtoEntity = produtoMapper.produtoRequestToEntity(produtoRequest);
