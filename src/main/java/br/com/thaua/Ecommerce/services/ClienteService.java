@@ -9,11 +9,13 @@ import br.com.thaua.Ecommerce.dto.cliente.ClienteUpdateRequest;
 import br.com.thaua.Ecommerce.dto.itemPedido.ItemPedidoRequest;
 import br.com.thaua.Ecommerce.dto.itemPedido.ItemPedidoResponse;
 import br.com.thaua.Ecommerce.dto.pedido.PedidoResponse;
+import br.com.thaua.Ecommerce.exceptions.ClienteException;
 import br.com.thaua.Ecommerce.mappers.ClienteMapper;
 import br.com.thaua.Ecommerce.mappers.ItemPedidoMapper;
 import br.com.thaua.Ecommerce.mappers.PedidoMapper;
 import br.com.thaua.Ecommerce.repositories.*;
 import br.com.thaua.Ecommerce.services.returnTypeUsers.ExtractTypeUserContextHolder;
+import br.com.thaua.Ecommerce.services.validators.ValidationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -34,6 +36,7 @@ public class ClienteService {
     private final PedidoRepository pedidoRepository;
     private final PedidoMapper pedidoMapper;
     private final ItemPedidoRepository itemPedidoRepository;
+    private final ValidationService validationService;
 
     public ClienteResponse atualizarCpfETelefone(ClienteCpfTelefoneRequest clienteCpfTelefoneRequest) {
         UsersEntity usersEntity = ExtractTypeUserContextHolder.extractUser();
@@ -59,8 +62,13 @@ public class ClienteService {
         return clienteMapper.toResponse(usersRepository.save(usersEntity).getCliente());
     }
 
-    public PedidoResponse fazerPedido(List<ItemPedidoRequest> itemPedidoRequest) {
+    public PedidoResponse fazerPedido(List<ItemPedidoRequest> itemPedidoRequest, Map<String, String> errors) {
        UsersEntity usersEntity = ExtractTypeUserContextHolder.extractUser();
+
+        validationService.validarEnderecoNaoExistente(usersEntity, errors);
+        validationService.validarTelefone(usersEntity, errors);
+        validationService.validarQuantidadePedido(itemPedidoRequest, errors);
+        validationService.analisarException(usersEntity.getName() + ", houve um erro na hora de fazer um pedido", ClienteException.class, errors);
 
         List<ItemPedidoEntity> itemPedidoEntityList = itemPedidoMapper.toItemPedidoEntityList(itemPedidoRequest);
 

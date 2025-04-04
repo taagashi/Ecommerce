@@ -4,6 +4,7 @@ import br.com.thaua.Ecommerce.domain.entity.ProdutoEntity;
 import br.com.thaua.Ecommerce.domain.entity.UsersEntity;
 import br.com.thaua.Ecommerce.domain.enums.Estado;
 import br.com.thaua.Ecommerce.dto.endereco.EnderecoRequest;
+import br.com.thaua.Ecommerce.dto.itemPedido.ItemPedidoRequest;
 import br.com.thaua.Ecommerce.dto.produto.ProdutoRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.User;
@@ -11,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import java.lang.reflect.Constructor;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 
 @RequiredArgsConstructor
@@ -80,6 +82,12 @@ public class ValidationService {
             }catch (ReflectiveOperationException e) {
                 throw new RuntimeException("Erro ao lançar exceção personalizada", e);
             }
+        }
+    }
+
+    public void validarQuantidadePedido(List<ItemPedidoRequest> itemPedidoRequest, Map<String, String> errors) {
+        if(itemPedidoRequest.stream().anyMatch(itemPedido -> itemPedido.getQuantidade() <= 0)) {
+            errors.put("Quantidade", "Quandiade inválida");
         }
     }
 }

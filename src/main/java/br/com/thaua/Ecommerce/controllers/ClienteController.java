@@ -1,5 +1,6 @@
 package br.com.thaua.Ecommerce.controllers;
 
+import br.com.thaua.Ecommerce.controllers.handler.ConstructorErrors;
 import br.com.thaua.Ecommerce.dto.cliente.ClienteComPedidoResponse;
 import br.com.thaua.Ecommerce.dto.cliente.ClienteCpfTelefoneRequest;
 import br.com.thaua.Ecommerce.dto.cliente.ClienteResponse;
@@ -47,7 +48,7 @@ public class ClienteController {
     @Operation(summary = "fazer pedido", description = "cliente pode diversos pedidos de uma só vez para diferentes produtos")
     @PostMapping("/pedidos/register")
     public ResponseEntity<PedidoResponse> fazerPedido(@RequestBody List<ItemPedidoRequest> itemPedidoRequest) {
-        return ResponseEntity.ok(clienteService.fazerPedido(itemPedidoRequest));
+        return ResponseEntity.ok(clienteService.fazerPedido(itemPedidoRequest, ConstructorErrors.returnMapErrors()));
     }
 
 //    GET /api/v1/clientes/list/pedidos - Listar meus pedidos [ROLE: CLIENTE]
