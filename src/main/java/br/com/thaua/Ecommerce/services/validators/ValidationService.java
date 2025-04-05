@@ -90,4 +90,10 @@ public class ValidationService {
             errors.put("Quantidade", "Quandiade inválida");
         }
     }
+
+    public void validarCpf(UsersEntity usersEntity, Map<String, String> errors) {
+        if(usersEntity.getCliente().getCpf() == null) {
+            errors.put("CPF", "CPF não cadastrado");
+        }
+    }
 }

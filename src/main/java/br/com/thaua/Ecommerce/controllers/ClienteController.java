@@ -27,7 +27,7 @@ public class ClienteController {
     @Operation(summary = "atualizar cpf e telefone", description = "o cliente autenticado adiciona/atualiza seu numero e cpf para pode realizar acoes mais ativas na aplicacao")
     @PatchMapping("cpf-telefone/update")
     public ResponseEntity<ClienteResponse> atualizarCpfETelefone(@RequestBody ClienteCpfTelefoneRequest clienteCpfTelefoneRequest) {
-        return ResponseEntity.ok(clienteService.atualizarCpfETelefone(clienteCpfTelefoneRequest));
+        return ResponseEntity.ok(clienteService.atualizarCpfETelefone(clienteCpfTelefoneRequest, ConstructorErrors.returnMapErrors()));
     }
 
 //    GET /api/v1/clientes/view-profile - Exibir meu perfl [ROLE: CLIENTE]
