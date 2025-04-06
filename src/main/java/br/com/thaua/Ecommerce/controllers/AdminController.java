@@ -1,5 +1,6 @@
 package br.com.thaua.Ecommerce.controllers;
 
+import br.com.thaua.Ecommerce.domain.entity.FornecedorEntity;
 import br.com.thaua.Ecommerce.dto.admin.AdminResponse;
 import br.com.thaua.Ecommerce.dto.categoria.CategoriaRequest;
 import br.com.thaua.Ecommerce.dto.categoria.CategoriaResponse;
@@ -13,6 +14,8 @@ import br.com.thaua.Ecommerce.services.AdminService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -57,8 +60,8 @@ public class AdminController {
 
     @Operation(summary = "listar fornecedores", description = "lista todos os fornecedores")
     @GetMapping("/fornecedores")
-    public ResponseEntity<List<FornecedorResponse>> listarFornecedores() {
-        return ResponseEntity.ok(adminService.listarFornecedores());
+    public ResponseEntity<Page<FornecedorResponse>> listarFornecedores(Pageable pageable) {
+        return ResponseEntity.ok(adminService.listarFornecedores(pageable));
     }
 
 //    POST /api/v1/categorias/register - Cadastrar nova categoria [ROLE ADMIN]

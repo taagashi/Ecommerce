@@ -14,6 +14,9 @@ import br.com.thaua.Ecommerce.mappers.*;
 import br.com.thaua.Ecommerce.repositories.*;
 import br.com.thaua.Ecommerce.services.returnTypeUsers.ExtractTypeUserContextHolder;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -60,8 +63,8 @@ public class AdminService {
         return categoriaMapper.toResponse(categoriaRepository.save(categoriaEntity));
     }
 
-    public List<FornecedorResponse> listarFornecedores() {
-        return fornecedorMapper.toFornecedorResponseListResponse(fornecedorRepository.findAll());
+    public Page<FornecedorResponse> listarFornecedores(@PageableDefault(size = 2) Pageable pageable) {
+        return fornecedorRepository.findAll(pageable).map(fornecedorMapper::FornecedorToResponse);
     }
 
     public String removerCliente(Long clienteId) {
