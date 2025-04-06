@@ -48,8 +48,9 @@ public class AdminService {
         return adminMapper.adminEntityToAdminResponse(adminRepository.findById(adminId).get());
     }
     
-    public List<ClienteResponse> listarClientes() {
-        return clienteMapper.toResponse(clienteRepository.findAll());
+    public Pagina<ClienteResponse> listarClientes(Pageable pageable) {
+        Page<ClienteResponse> page = clienteRepository.findAll(pageable).map(clienteMapper::toResponse);
+        return GerarPaginacao.gerarPaginacao(page);
     }
 
 

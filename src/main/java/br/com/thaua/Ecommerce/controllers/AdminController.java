@@ -31,8 +31,8 @@ public class AdminController {
 
     @Operation(summary = "Listar clientes", description = "Lista todos os clientes")
     @GetMapping("/clientes")
-    public ResponseEntity<List<ClienteResponse>> listarClientes() {
-        return ResponseEntity.ok(adminService.listarClientes());
+    public ResponseEntity<Pagina<ClienteResponse>> listarClientes(Pageable pageable) {
+        return ResponseEntity.ok(adminService.listarClientes(pageable));
     }
 
     @Operation(summary = "buscar cliente", description = "admin pode buscar um cliente especifico")
