@@ -40,8 +40,9 @@ public class AdminService {
     private final AdminMapper adminMapper;
     private final AdminRepository adminRepository;
 
-    public List<AdminResponse> exibirAdmins() {
-        return adminMapper.adminEntityToAdminResponseList(adminRepository.findAll());
+    public Pagina<AdminResponse> listarAdmins(Pageable pageable) {
+        Page<AdminResponse> page = adminRepository.findAll(pageable).map(adminMapper::adminEntityToAdminResponse);
+        return GerarPaginacao.gerarPaginacao(page);
     }
 
     public AdminResponse buscarAdmin(Long adminId) {

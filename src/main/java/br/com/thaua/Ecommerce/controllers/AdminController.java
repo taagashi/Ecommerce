@@ -49,8 +49,8 @@ public class AdminController {
 
     @Operation(summary = "listar admin's", description = "admin pode ver todos os admin's registrados")
     @GetMapping("/list")
-    public ResponseEntity<List<AdminResponse>> exibirAdmins() {
-        return ResponseEntity.ok(adminService.exibirAdmins());
+    public ResponseEntity<Pagina<AdminResponse>> listarAdmins(Pageable pageable) {
+        return ResponseEntity.ok(adminService.listarAdmins(pageable));
     }
 
     @Operation(summary = "buscar admin", description = "admin pode buscar por outro admin especifico")
