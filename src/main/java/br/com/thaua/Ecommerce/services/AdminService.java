@@ -8,6 +8,8 @@ import br.com.thaua.Ecommerce.dto.cliente.ClienteResponse;
 import br.com.thaua.Ecommerce.dto.endereco.EnderecoRequest;
 import br.com.thaua.Ecommerce.dto.endereco.EnderecoResponse;
 import br.com.thaua.Ecommerce.dto.fornecedor.FornecedorResponse;
+import br.com.thaua.Ecommerce.dto.pagina.GerarPaginacao;
+import br.com.thaua.Ecommerce.dto.pagina.Pagina;
 import br.com.thaua.Ecommerce.dto.pedido.PedidoPatchRequest;
 import br.com.thaua.Ecommerce.dto.pedido.PedidoResponse;
 import br.com.thaua.Ecommerce.mappers.*;
@@ -63,8 +65,10 @@ public class AdminService {
         return categoriaMapper.toResponse(categoriaRepository.save(categoriaEntity));
     }
 
-    public Page<FornecedorResponse> listarFornecedores(@PageableDefault(size = 2) Pageable pageable) {
-        return fornecedorRepository.findAll(pageable).map(fornecedorMapper::FornecedorToResponse);
+    public Pagina<FornecedorResponse> listarFornecedores(@PageableDefault(size = 2) Pageable pageable) {
+        Page<FornecedorResponse> page = fornecedorRepository.findAll(pageable).map(fornecedorMapper::FornecedorToResponse);
+
+        return GerarPaginacao.gerarPaginacao(page);
     }
 
     public String removerCliente(Long clienteId) {

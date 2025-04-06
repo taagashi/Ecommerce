@@ -8,6 +8,7 @@ import br.com.thaua.Ecommerce.dto.cliente.ClienteResponse;
 import br.com.thaua.Ecommerce.dto.endereco.EnderecoRequest;
 import br.com.thaua.Ecommerce.dto.endereco.EnderecoResponse;
 import br.com.thaua.Ecommerce.dto.fornecedor.FornecedorResponse;
+import br.com.thaua.Ecommerce.dto.pagina.Pagina;
 import br.com.thaua.Ecommerce.dto.pedido.PedidoPatchRequest;
 import br.com.thaua.Ecommerce.dto.pedido.PedidoResponse;
 import br.com.thaua.Ecommerce.services.AdminService;
@@ -60,7 +61,7 @@ public class AdminController {
 
     @Operation(summary = "listar fornecedores", description = "lista todos os fornecedores")
     @GetMapping("/fornecedores")
-    public ResponseEntity<Page<FornecedorResponse>> listarFornecedores(Pageable pageable) {
+    public ResponseEntity<Pagina<FornecedorResponse>> listarFornecedores(Pageable pageable) {
         return ResponseEntity.ok(adminService.listarFornecedores(pageable));
     }
 
