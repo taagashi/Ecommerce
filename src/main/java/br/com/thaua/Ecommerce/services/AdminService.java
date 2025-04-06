@@ -17,6 +17,7 @@ import br.com.thaua.Ecommerce.repositories.*;
 import br.com.thaua.Ecommerce.services.returnTypeUsers.ExtractTypeUserContextHolder;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Service;
@@ -41,8 +42,8 @@ public class AdminService {
     private final AdminRepository adminRepository;
 
     public Pagina<AdminResponse> listarAdmins(Pageable pageable) {
-        Page<AdminResponse> page = adminRepository.findAll(pageable).map(adminMapper::adminEntityToAdminResponse);
-        return GerarPaginacao.gerarPaginacao(page);
+        Page<AdminResponse> pageAdmins = adminRepository.findAll(pageable).map(adminMapper::adminEntityToAdminResponse);
+        return GerarPaginacao.gerarPaginacao(pageAdmins);
     }
 
     public AdminResponse buscarAdmin(Long adminId) {
@@ -50,8 +51,8 @@ public class AdminService {
     }
     
     public Pagina<ClienteResponse> listarClientes(Pageable pageable) {
-        Page<ClienteResponse> page = clienteRepository.findAll(pageable).map(clienteMapper::toResponse);
-        return GerarPaginacao.gerarPaginacao(page);
+        Page<ClienteResponse> pageClientes = clienteRepository.findAll(pageable).map(clienteMapper::toResponse);
+        return GerarPaginacao.gerarPaginacao(pageClientes);
     }
 
 
@@ -68,9 +69,9 @@ public class AdminService {
     }
 
     public Pagina<FornecedorResponse> listarFornecedores(@PageableDefault(size = 2) Pageable pageable) {
-        Page<FornecedorResponse> page = fornecedorRepository.findAll(pageable).map(fornecedorMapper::FornecedorToResponse);
+        Page<FornecedorResponse> pageFornecedores = fornecedorRepository.findAll(pageable).map(fornecedorMapper::FornecedorToResponse);
 
-        return GerarPaginacao.gerarPaginacao(page);
+        return GerarPaginacao.gerarPaginacao(pageFornecedores);
     }
 
     public String removerCliente(Long clienteId) {
@@ -88,10 +89,14 @@ public class AdminService {
         return clienteEntity.getUsers().getName() + " foi removido com sucesso";
     }
 
-    public List<PedidoResponse> listarPedidosDoCliente(Long clienteId) {
+    public Pagina<PedidoResponse> listarPedidosDoCliente(Long clienteId, Pageable pageable) {
         ClienteEntity clienteEntity = clienteRepository.findById(clienteId).get();
 
-        return pedidoMapper.toPedidoResponseList(clienteEntity.getPedido());
+        List<PedidoResponse> pedidoResponses = clienteEntity.getPedido().stream().map(pedidoMapper::toPedidoResponse).toList();
+
+        Page<PedidoResponse> pagePedidos = new PageImpl<>(pedidoResponses, pageable, pedidoResponses.size());
+
+        return GerarPaginacao.gerarPaginacao(pagePedidos);
     }
 
     public PedidoResponse atualizarStatusPedido(Long pedidoId, PedidoPatchRequest pedidoPatchRequest) {

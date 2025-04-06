@@ -82,8 +82,8 @@ public class AdminController {
 //   GET /api/v1/clientes/{id}/pedidos - Listar pedidos do cliente [ROLE: ADMIN]
     @Operation(summary = "listar pedidos de um cliente", description = "admin pode listar os pedidos de um determinado cliente atraves do id do cliente")
     @GetMapping("/clientes/{clienteId}/pedidos/list")
-    public ResponseEntity<List<PedidoResponse>> listarPedidosDoCliente(@PathVariable Long clienteId) {
-        return ResponseEntity.ok(adminService.listarPedidosDoCliente(clienteId));
+    public ResponseEntity<Pagina<PedidoResponse>> listarPedidosDoCliente(@PathVariable Long clienteId, Pageable pageable) {
+        return ResponseEntity.ok(adminService.listarPedidosDoCliente(clienteId, pageable));
     }
 
 //    PATCH /api/v1/pedidos/{id}/status/    update - Atualizar status do pedido [ROLE: ADMIN
