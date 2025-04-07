@@ -8,6 +8,8 @@ import br.com.thaua.Ecommerce.dto.cliente.ClienteResponse;
 import br.com.thaua.Ecommerce.dto.cliente.ClienteUpdateRequest;
 import br.com.thaua.Ecommerce.dto.itemPedido.ItemPedidoRequest;
 import br.com.thaua.Ecommerce.dto.itemPedido.ItemPedidoResponse;
+import br.com.thaua.Ecommerce.dto.pagina.GerarPaginacao;
+import br.com.thaua.Ecommerce.dto.pagina.Pagina;
 import br.com.thaua.Ecommerce.dto.pedido.PedidoResponse;
 import br.com.thaua.Ecommerce.exceptions.ClienteException;
 import br.com.thaua.Ecommerce.mappers.ClienteMapper;
@@ -17,6 +19,9 @@ import br.com.thaua.Ecommerce.repositories.*;
 import br.com.thaua.Ecommerce.services.returnTypeUsers.ExtractTypeUserContextHolder;
 import br.com.thaua.Ecommerce.services.validators.ValidationService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -104,11 +109,12 @@ public class ClienteService {
         return pedidoMapper.toPedidoResponse(pedidoEntity);
     }
 
-    public List<PedidoResponse> listarPedidos() {
+    public Pagina<PedidoResponse> listarPedidos(Pageable pageable) {
         UsersEntity usersEntity = ExtractTypeUserContextHolder.extractUser();
         ClienteEntity cliente = usersEntity.getCliente();
-        List<PedidoEntity> pedidoEntity = cliente.getPedido();
-        return pedidoMapper.toPedidoResponseList(pedidoEntity);
+        List<PedidoResponse> pedidoResponse = pedidoMapper.toPedidoResponseList(cliente.getPedido());
+
+        return GerarPaginacao.gerarPaginacao(new PageImpl<>((pedidoResponse, pageable, pedidoResponse.size()));
     }
 
     public PedidoResponse buscarPedido(Long pedidoId) {

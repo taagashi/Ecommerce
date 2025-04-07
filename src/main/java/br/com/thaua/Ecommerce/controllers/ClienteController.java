@@ -7,11 +7,13 @@ import br.com.thaua.Ecommerce.dto.cliente.ClienteResponse;
 import br.com.thaua.Ecommerce.dto.cliente.ClienteUpdateRequest;
 import br.com.thaua.Ecommerce.dto.itemPedido.ItemPedidoRequest;
 import br.com.thaua.Ecommerce.dto.itemPedido.ItemPedidoResponse;
+import br.com.thaua.Ecommerce.dto.pagina.Pagina;
 import br.com.thaua.Ecommerce.dto.pedido.PedidoResponse;
 import br.com.thaua.Ecommerce.services.ClienteService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -54,8 +56,8 @@ public class ClienteController {
 //    GET /api/v1/clientes/list/pedidos - Listar meus pedidos [ROLE: CLIENTE]
     @Operation(summary = "listar pedidos", description = "cliente pode listar todos os seus pedidos")
     @GetMapping("/pedidos/list")
-    public ResponseEntity<List<PedidoResponse>> listarPedidos() {
-        return ResponseEntity.ok(clienteService.listarPedidos());
+    public ResponseEntity<Pagina<PedidoResponse>> listarPedidos(Pageable pageable) {
+        return ResponseEntity.ok(clienteService.listarPedidos(pageable));
     }
 
 //    GET /api/v1/clientes/pedidos/{id}/list - Buscar pedido por ID [ROLE: CLIENTES]
