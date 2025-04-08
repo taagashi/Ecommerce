@@ -2,10 +2,12 @@ package br.com.thaua.Ecommerce.controllers;
 
 import br.com.thaua.Ecommerce.dto.categoria.CategoriaProdutosResponse;
 import br.com.thaua.Ecommerce.dto.categoria.CategoriaResponse;
+import br.com.thaua.Ecommerce.dto.pagina.Pagina;
 import br.com.thaua.Ecommerce.services.CategoriaService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -24,8 +26,8 @@ public class CategoriaController {
 //    GET /api/v1/categorias/list - Listar todas as categorias [QUALQUER USUARIO AUTENTICADO]
     @Operation(summary = "exibir categorias", description = "usuario autenticado pode ver todas as categorias cadastradas")
     @GetMapping("/list")
-    public ResponseEntity<List<CategoriaResponse>> exibirCategorias() {
-        return ResponseEntity.ok(categoriaService.exibirCategorias());
+    public ResponseEntity<Pagina<CategoriaResponse>> exibirCategorias(Pageable pageable) {
+        return ResponseEntity.ok(categoriaService.exibirCategorias(pageable));
     }
 
 //    GET /api/v1/categorias/{categoriaId}/list - Buscar categoria por ID [QUALQUER USUARIO AUTENTICADO]
