@@ -3,6 +3,7 @@ package br.com.thaua.Ecommerce.controllers;
 import br.com.thaua.Ecommerce.controllers.handler.ConstructorErrors;
 import br.com.thaua.Ecommerce.dto.fornecedor.FornecedorCNPJTelefoneRequest;
 import br.com.thaua.Ecommerce.dto.fornecedor.FornecedorResponse;
+import br.com.thaua.Ecommerce.dto.pagina.Pagina;
 import br.com.thaua.Ecommerce.dto.produto.ProdutoNovoEstoqueRequest;
 import br.com.thaua.Ecommerce.dto.produto.ProdutoRequest;
 import br.com.thaua.Ecommerce.dto.produto.ProdutoResponse;
@@ -10,6 +11,7 @@ import br.com.thaua.Ecommerce.services.FornecedorService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import br.com.thaua.Ecommerce.controllers.handler.ConstructorErrors;
@@ -39,8 +41,8 @@ public class FornecedorController {
 //    GET /api/v1/funcionarios/produtos/list - Listar produtos (com paginação e filtros) [ROLE: FUNCIONARIO]
     @Operation(summary = "listar produtos", description = "Fornecedor faz a listagem de todos os produtos que ele cadastrou")
     @GetMapping("produtos/list")
-    public ResponseEntity<List<ProdutoResponse>> exibirProdutos() {
-        return ResponseEntity.ok(fornecedorService.exibirProdutos());
+    public ResponseEntity<Pagina<ProdutoResponse>> exibirProdutos(Pageable pageable) {
+        return ResponseEntity.ok(fornecedorService.exibirProdutos(pageable));
     }
 
 //    - `GET /api/v1/funcionarios/produtos/{produtoId}/list - Buscar produto por ID [ROLE: FUNCIONARIO]

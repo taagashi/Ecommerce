@@ -5,6 +5,8 @@ import br.com.thaua.Ecommerce.domain.entity.ProdutoEntity;
 import br.com.thaua.Ecommerce.domain.entity.UsersEntity;
 import br.com.thaua.Ecommerce.dto.fornecedor.FornecedorCNPJTelefoneRequest;
 import br.com.thaua.Ecommerce.dto.fornecedor.FornecedorResponse;
+import br.com.thaua.Ecommerce.dto.pagina.GerarPaginacao;
+import br.com.thaua.Ecommerce.dto.pagina.Pagina;
 import br.com.thaua.Ecommerce.dto.produto.ProdutoNovoEstoqueRequest;
 import br.com.thaua.Ecommerce.dto.produto.ProdutoRequest;
 import br.com.thaua.Ecommerce.dto.produto.ProdutoResponse;
@@ -17,6 +19,8 @@ import br.com.thaua.Ecommerce.repositories.UsersRepository;
 import br.com.thaua.Ecommerce.services.returnTypeUsers.ExtractTypeUserContextHolder;
 import br.com.thaua.Ecommerce.services.validators.ValidationService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -56,9 +60,9 @@ public class FornecedorService {
         return produtoMapper.produtoToResponse(produtoRepository.save(produtoEntity));
     }
 
-    public List<ProdutoResponse> exibirProdutos() {
+    public Pagina<ProdutoResponse> exibirProdutos(Pageable pageable) {
         UsersEntity usersEntity = ExtractTypeUserContextHolder.extractUser();
-        return produtoMapper.produtoToResponseList(usersEntity.getFornecedor().getProduto());
+        return GerarPaginacao.gerarPaginacao(produtoRepository.findAllByFornecedorId(usersEntity.getId(), pageable).map(produtoMapper::produtoToResponse));
     }
 
     public ProdutoResponse buscarProduto(Long produtoId) {

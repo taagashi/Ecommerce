@@ -60,7 +60,7 @@ public class AdminController {
     }
 
     @Operation(summary = "listar fornecedores", description = "lista todos os fornecedores")
-    @GetMapping("/fornecedores")
+    @GetMapping("/fornecedores/list")
     public ResponseEntity<Pagina<FornecedorResponse>> listarFornecedores(Pageable pageable) {
         return ResponseEntity.ok(adminService.listarFornecedores(pageable));
     }

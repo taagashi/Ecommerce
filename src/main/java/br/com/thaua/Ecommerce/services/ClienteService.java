@@ -111,10 +111,8 @@ public class ClienteService {
 
     public Pagina<PedidoResponse> listarPedidos(Pageable pageable) {
         UsersEntity usersEntity = ExtractTypeUserContextHolder.extractUser();
-        ClienteEntity cliente = usersEntity.getCliente();
-        List<PedidoResponse> pedidoResponse = pedidoMapper.toPedidoResponseList(cliente.getPedido());
 
-        return GerarPaginacao.gerarPaginacao(new PageImpl<>((pedidoResponse, pageable, pedidoResponse.size()));
+        return GerarPaginacao.gerarPaginacao(pedidoRepository.findAllByClienteId(usersEntity.getId(), pageable).map(pedidoMapper::toPedidoResponse));
     }
 
     public PedidoResponse buscarPedido(Long pedidoId) {

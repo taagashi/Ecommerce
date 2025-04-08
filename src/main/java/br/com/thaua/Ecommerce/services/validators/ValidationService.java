@@ -69,7 +69,9 @@ public class ValidationService {
     }
 
     public void validarPreco(ProdutoRequest produtoRequest, Map<String, String> errors) {
-        errors.put("Preço", "Não é possivel cadastrar um produto com preço zerado ou inferior");
+        if (produtoRequest.getPreco().floatValue() <= 0) {
+            errors.put("Preço", "Não é possivel cadastrar um produto com preço zerado ou inferior");
+        }
     }
 
     public void analisarException(String message, Class<? extends RuntimeException> typeException, Map<String, String> errors) {

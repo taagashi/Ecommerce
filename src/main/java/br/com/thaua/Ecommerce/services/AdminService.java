@@ -92,11 +92,7 @@ public class AdminService {
     public Pagina<PedidoResponse> listarPedidosDoCliente(Long clienteId, Pageable pageable) {
         ClienteEntity clienteEntity = clienteRepository.findById(clienteId).get();
 
-        List<PedidoResponse> pedidoResponses = clienteEntity.getPedido().stream().map(pedidoMapper::toPedidoResponse).toList();
-
-        Page<PedidoResponse> pagePedidos = new PageImpl<>(pedidoResponses, pageable, pedidoResponses.size());
-
-        return GerarPaginacao.gerarPaginacao(pagePedidos);
+        return GerarPaginacao.gerarPaginacao(pedidoRepository.findAllByClienteId(clienteId, pageable).map(pedidoMapper::toPedidoResponse));
     }
 
     public PedidoResponse atualizarStatusPedido(Long pedidoId, PedidoPatchRequest pedidoPatchRequest) {
