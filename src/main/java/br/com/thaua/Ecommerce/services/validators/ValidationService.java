@@ -74,18 +74,6 @@ public class ValidationService {
         }
     }
 
-    public void analisarException(String message, Class<? extends RuntimeException> typeException, Map<String, String> errors) {
-        if(!errors.isEmpty()) {
-            try {
-                Constructor<? extends RuntimeException> constructor = typeException.getConstructor(String.class, Map.class);
-
-                throw constructor.newInstance(message, errors);
-
-            }catch (ReflectiveOperationException e) {
-                throw new RuntimeException("Erro ao lançar exceção personalizada", e);
-            }
-        }
-    }
 
     public void validarQuantidadePedido(List<ItemPedidoRequest> itemPedidoRequest, Map<String, String> errors) {
         if(itemPedidoRequest.stream().anyMatch(itemPedido -> itemPedido.getQuantidade() <= 0)) {
@@ -96,6 +84,25 @@ public class ValidationService {
     public void validarCpf(UsersEntity usersEntity, Map<String, String> errors) {
         if(usersEntity.getCliente().getCpf() == null) {
             errors.put("CPF", "CPF não cadastrado");
+        }
+    }
+
+    public void validarExistenciaUsuario(UsersEntity usersEntity, Map<String, String> errors) {
+        if(usersEntity == null) {
+            errors.put("Usuário", "Usuário não encontrado");
+        }
+    }
+
+    public void analisarException(String message, Class<? extends RuntimeException> typeException, Map<String, String> errors) {
+        if(!errors.isEmpty()) {
+            try {
+                Constructor<? extends RuntimeException> constructor = typeException.getConstructor(String.class, Map.class);
+
+                throw constructor.newInstance(message, errors);
+
+            }catch (ReflectiveOperationException e) {
+                throw new RuntimeException("Erro ao lançar exceção personalizada", e);
+            }
         }
     }
 }
