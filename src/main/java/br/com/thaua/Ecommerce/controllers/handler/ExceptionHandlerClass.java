@@ -1,9 +1,8 @@
 package br.com.thaua.Ecommerce.controllers.handler;
 
-import br.com.thaua.Ecommerce.exceptions.AddressException;
-import br.com.thaua.Ecommerce.exceptions.ErrorResponse;
-import br.com.thaua.Ecommerce.exceptions.ProdutoException;
-import br.com.thaua.Ecommerce.exceptions.UserNotFoundException;
+import br.com.thaua.Ecommerce.exceptions.*;
+import jakarta.validation.ConstraintViolation;
+import jakarta.validation.ConstraintViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -13,7 +12,12 @@ import java.util.Map;
 
 @RestControllerAdvice
 public class ExceptionHandlerClass {
+    @ExceptionHandler
+    public ResponseEntity<ErrorResponse> clienteException(ClienteException ex) {
+        ErrorResponse errorResponse = createErrorResponse(ex.getMessage(), ex.getFields());
 
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
+    }
     @ExceptionHandler
     public ResponseEntity<ErrorResponse> addressException(AddressException ex) {
         ErrorResponse errorResponse = createErrorResponse(ex.getMessage(), ex.getFields());
@@ -31,6 +35,17 @@ public class ExceptionHandlerClass {
     @ExceptionHandler
     public ResponseEntity<ErrorResponse> userNotFoundException(UserNotFoundException ex) {
         ErrorResponse errorResponse = createErrorResponse(ex.getMessage(), ex.getFields());
+
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
+    }
+
+    @ExceptionHandler
+    public ResponseEntity<ErrorResponse> constraintViolationException(ConstraintViolationException ex) {
+        ErrorResponse errorResponse = createErrorResponse("Erro de validação", ConstructorErrors.returnMapErrors());
+
+        for(ConstraintViolation violation : ex.getConstraintViolations()) {
+                    errorResponse.getFieldsErrors().put(violation.getMessage(), violation.getInvalidValue().toString());
+        }
 
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
     }

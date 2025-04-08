@@ -3,6 +3,7 @@ package br.com.thaua.Ecommerce.domain.entity;
 import br.com.thaua.Ecommerce.domain.abstracts.AbstractEntity;
 import br.com.thaua.Ecommerce.domain.enums.Role;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Email;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -11,6 +12,8 @@ import lombok.Setter;
 @Setter
 public class UsersEntity extends AbstractEntity {
     private String name;
+
+    @Email(message = "Email inválido")
     private String email;
     private String telefone;
     private String password;

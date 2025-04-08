@@ -46,10 +46,6 @@ public class ClienteService {
     public ClienteResponse atualizarCpfETelefone(ClienteCpfTelefoneRequest clienteCpfTelefoneRequest, Map<String, String> errors) {
         UsersEntity usersEntity = ExtractTypeUserContextHolder.extractUser();
 
-        validationService.validarTelefone(usersEntity, errors);
-        validationService.validarCpf(usersEntity, errors);
-        validationService.analisarException(usersEntity.getName() + ",  houve um problema na hora de atualizar seu CPF e telefone", ClienteException.class, errors);
-        
         usersEntity.getCliente().setCpf(clienteCpfTelefoneRequest.getCpf());
         usersEntity.setTelefone(clienteCpfTelefoneRequest.getTelefone());
 
