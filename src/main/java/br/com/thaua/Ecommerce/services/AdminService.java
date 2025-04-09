@@ -11,6 +11,7 @@ import br.com.thaua.Ecommerce.dto.fornecedor.FornecedorResponse;
 import br.com.thaua.Ecommerce.dto.pagina.Pagina;
 import br.com.thaua.Ecommerce.dto.pedido.PedidoPatchRequest;
 import br.com.thaua.Ecommerce.dto.pedido.PedidoResponse;
+import br.com.thaua.Ecommerce.exceptions.AddressException;
 import br.com.thaua.Ecommerce.exceptions.UserNotFoundException;
 import br.com.thaua.Ecommerce.mappers.*;
 import br.com.thaua.Ecommerce.repositories.*;
@@ -152,12 +153,16 @@ public class AdminService {
         return enderecoMapper.toEnderecoResponse(usersEntity.get().getEndereco());
     }
 
-    public EnderecoResponse atualizarEnderecoUsuario(Long userId, EnderecoRequest enderecoRequest) {
-        UsersEntity usersEntity = usersRepository.findById(userId).get();
+    public EnderecoResponse atualizarEnderecoUsuario(Long userId, EnderecoRequest enderecoRequest, Map<String, String> errors) {
+        Optional<UsersEntity> usersEntity = usersRepository.findById(userId);
+
+        validationService.validarExistenciaUsuario(usersEntity.orElse(null), errors);
+        validationService.analisarException("Houve um erro ao tentar atualizar endereco de usuario", AddressException.class, errors);
+
         EnderecoEntity enderecoEntity = enderecoMapper.enderecoRequestToEntity(enderecoRequest);
-        enderecoEntity.setId(usersEntity.getEndereco().getId());
-        enderecoEntity.setUsers(usersEntity);
-        usersEntity.setEndereco(enderecoEntity);
+        enderecoEntity.setId(usersEntity.get().getEndereco().getId());
+        enderecoEntity.setUsers(usersEntity.get());
+        usersEntity.get().setEndereco(enderecoEntity);
 
         return enderecoMapper.toEnderecoResponse(enderecoEntity);
     }
