@@ -91,23 +91,23 @@ public class AdminService {
         return paginaMapper.toPagina(pageFornecedores);
     }
 
-    public String removerCliente(Long clienteId, Map<String, String> errors) {
+    public String removerUsuario(Long userId, Map<String, String> errors) {
         UsersEntity usersEntity = ExtractTypeUserContextHolder.extractUser();
 
         if(usersEntity.getAdmin().getContasBanidas() == null) {
             usersEntity.getAdmin().setContasBanidas(0);
         }
 
-        Optional<ClienteEntity> clienteEntity = clienteRepository.findById(clienteId);
+        Optional<UsersEntity> userDeletar = usersRepository.findById(userId);
 
-        validationService.validarExistenciaUsuario(clienteEntity.orElse(null), errors);
+        validationService.validarExistenciaUsuario(userDeletar.orElse(null), errors);
         validationService.analisarException(usersEntity.getName() + " houve um erro para remover conta de cliente", UserNotFoundException.class, errors);
 
-        usersRepository.delete(clienteEntity.get().getUsers());
+        usersRepository.delete(userDeletar.get());
         usersEntity.getAdmin().setContasBanidas(usersEntity.getAdmin().getContasBanidas() + 1);
         usersRepository.save(usersEntity);
 
-        return clienteEntity.get().getUsers().getName() + " foi removido com sucesso";
+        return userDeletar.get().getName() + " foi removido com sucesso";
     }
 
     public Pagina<PedidoResponse> listarPedidosDoCliente(Long clienteId, Pageable pageable, Map<String, String> errors) {

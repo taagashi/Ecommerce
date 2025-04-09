@@ -1,7 +1,6 @@
 package br.com.thaua.Ecommerce.controllers;
 
 import br.com.thaua.Ecommerce.controllers.handler.ConstructorErrors;
-import br.com.thaua.Ecommerce.domain.entity.FornecedorEntity;
 import br.com.thaua.Ecommerce.dto.admin.AdminResponse;
 import br.com.thaua.Ecommerce.dto.categoria.CategoriaRequest;
 import br.com.thaua.Ecommerce.dto.categoria.CategoriaResponse;
@@ -16,13 +15,9 @@ import br.com.thaua.Ecommerce.services.AdminService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
-import java.util.Map;
 
 @SecurityRequirement(name = "bearerAuth")
 @RequiredArgsConstructor
@@ -76,9 +71,9 @@ public class AdminController {
 
 //    DELETE /api/v1/clientes/{id} - Remover cliente [ROLE: ADMIN]
     @Operation(summary = "remover cliente", description = "admin pode remover a conta de um cliente atraves do id do cliente")
-    @DeleteMapping("/clientes/{clienteId}")
-    public ResponseEntity<String> removerCliente(@PathVariable Long clienteId) {
-        return ResponseEntity.ok(adminService.removerCliente(clienteId, ConstructorErrors.returnMapErrors()));
+    @DeleteMapping("/users/{userId}/delete")
+    public ResponseEntity<String> removerCliente(@PathVariable Long userId) {
+        return ResponseEntity.ok(adminService.removerUsuario(userId, ConstructorErrors.returnMapErrors()));
     }
 
 //   GET /api/v1/clientes/{id}/pedidos - Listar pedidos do cliente [ROLE: ADMIN]
