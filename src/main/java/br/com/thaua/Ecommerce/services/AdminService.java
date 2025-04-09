@@ -123,6 +123,7 @@ public class AdminService {
 
         validationService.validarExistenciaUsuario(pedidoEntity.orElse(null), errors);
         validationService.analisarException("Houve um erro ao atualizar pedido", UserNotFoundException.class, errors);
+
         pedidoEntity.get().setStatusPedido(pedidoPatchRequest.getStatusPedido());
 
         return pedidoMapper.toPedidoResponse(pedidoRepository.save(pedidoEntity.get()));
@@ -142,10 +143,13 @@ public class AdminService {
         return enderecoMapper.toEnderecoResponse(enderecoEntity);
     }
 
-    public EnderecoResponse exibirEnderecoUsuario(Long userId) {
-        UsersEntity usersEntity = usersRepository.findById(userId).get();
+    public EnderecoResponse exibirEnderecoUsuario(Long userId, Map<String, String> errors) {
+        Optional<UsersEntity> usersEntity = usersRepository.findById(userId);
 
-        return enderecoMapper.toEnderecoResponse(usersEntity.getEndereco());
+        validationService.validarExistenciaUsuario(usersEntity.orElse(null), errors);
+        validationService.analisarException("Houve um erro ao exibir endereco de usuario", UserNotFoundException.class, errors);
+
+        return enderecoMapper.toEnderecoResponse(usersEntity.get().getEndereco());
     }
 
     public EnderecoResponse atualizarEnderecoUsuario(Long userId, EnderecoRequest enderecoRequest) {

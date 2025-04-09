@@ -106,7 +106,7 @@ public class AdminController {
     @Operation(summary = "exibir endereco do usuario", description = "admin pode exibir o endereco de um usuario especifico")
     @GetMapping("/users/{userId}/endereco/list")
     public ResponseEntity<EnderecoResponse> exibirEnderecoUsuario(@PathVariable Long userId) {
-        return ResponseEntity.ok(adminService.exibirEnderecoUsuario(userId));
+        return ResponseEntity.ok(adminService.exibirEnderecoUsuario(userId, ConstructorErrors.returnMapErrors()));
     }
 
 //    PUT /api/users/{userId}/enderecos/update - Atualizar endereço do usuario [ROLE: ADMIN]
