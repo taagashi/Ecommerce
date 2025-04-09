@@ -49,7 +49,11 @@ public class AdminService {
         return paginaMapper.toPagina(pageAdmins);
     }
 
-    public AdminResponse buscarAdmin(Long adminId) {
+    public AdminResponse buscarAdmin(Long adminId, Map<String, String> errors) {
+        Optional<AdminEntity> adminEntity = adminRepository.findById(adminId);
+        validationService.validarExistenciaUsuario(adminEntity.orElse(null), errors);
+        validationService.analisarException("Houve um erro na hora de buscar admin", UserNotFoundException.class, errors);
+
         return adminMapper.adminEntityToAdminResponse(adminRepository.findById(adminId).get());
     }
     
@@ -59,7 +63,7 @@ public class AdminService {
     }
 
 
-        public ClienteResponse buscarCliente(Long clienteId) {
+    public ClienteResponse buscarCliente(Long clienteId) {
         return clienteMapper.toResponse(clienteRepository.findById(clienteId).get());
     }
 
