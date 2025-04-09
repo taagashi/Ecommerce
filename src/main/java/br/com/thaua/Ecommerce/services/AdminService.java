@@ -184,13 +184,16 @@ public class AdminService {
         return usersEntity.get().getName() + " teve seu endereco limpo com sucesso";
     }
 
-    public CategoriaResponse atualizarCategoria(Long categoriaId, CategoriaRequest categoriaRequest) {
-        CategoriaEntity categoriaEntity = categoriaRepository.findById(categoriaId).get();
+    public CategoriaResponse atualizarCategoria(Long categoriaId, CategoriaRequest categoriaRequest, Map<String, String> errors) {
+        Optional<CategoriaEntity> categoriaEntity = categoriaRepository.findById(categoriaId);
 
-        categoriaEntity.setNome(categoriaRequest.getNome());
-        categoriaEntity.setDescricao(categoriaRequest.getDescricao());
+        validationService.validarExistenciaUsuario(categoriaEntity, errors);
+        validationService.analisarException("Houve um erro ao tentar atualizar categoria", UserNotFoundException.class, errors);
 
-        return categoriaMapper.toResponse(categoriaRepository.save(categoriaEntity));
+        categoriaEntity.get().setNome(categoriaRequest.getNome());
+        categoriaEntity.get().setDescricao(categoriaRequest.getDescricao());
+
+        return categoriaMapper.toResponse(categoriaRepository.save(categoriaEntity.get()));
     }
 
     public String deletarCategoria(Long categoriaId) {

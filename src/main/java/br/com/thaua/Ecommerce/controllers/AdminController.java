@@ -127,7 +127,7 @@ public class AdminController {
     @Operation(summary = "atualizar categoria", description = "admin pode atualizar as informacoes de uma categoria especifica")
     @PutMapping("/categorias/{categoriaId}/update")
     public ResponseEntity<CategoriaResponse> atualizarCategoria(@PathVariable Long categoriaId, @RequestBody CategoriaRequest categoriaRequest) {
-        return ResponseEntity.ok(adminService.atualizarCategoria(categoriaId, categoriaRequest));
+        return ResponseEntity.ok(adminService.atualizarCategoria(categoriaId, categoriaRequest, ConstructorErrors.returnMapErrors()));
     }
 
 //    DELETE /api/categorias/{id}/delete` - Remover categoria [ROLE ADMIN]
