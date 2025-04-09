@@ -40,7 +40,7 @@ public class AdminController {
     @Operation(summary = "buscar cliente", description = "admin pode buscar um cliente especifico")
     @GetMapping("/clientes/{clienteId}/list")
     public ResponseEntity<ClienteResponse> buscarCliente(@PathVariable Long clienteId) {
-        return ResponseEntity.ok(adminService.buscarCliente(clienteId));
+        return ResponseEntity.ok(adminService.buscarCliente(clienteId, ConstructorErrors.returnMapErrors()));
     }
 
     @Operation(summary = "buscar fornecedor", description = "admin pode buscar um fornecedor especifico")

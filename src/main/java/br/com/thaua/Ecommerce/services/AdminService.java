@@ -63,7 +63,11 @@ public class AdminService {
     }
 
 
-    public ClienteResponse buscarCliente(Long clienteId) {
+    public ClienteResponse buscarCliente(Long clienteId, Map<String, String> errors) {
+        Optional<ClienteEntity> clienteEntity = clienteRepository.findById(clienteId);
+        validationService.validarExistenciaUsuario(clienteEntity.orElse(null), errors);
+        validationService.analisarException("Houve um erro na hora de buscar o cliente", UserNotFoundException.class, errors);
+
         return clienteMapper.toResponse(clienteRepository.findById(clienteId).get());
     }
 
