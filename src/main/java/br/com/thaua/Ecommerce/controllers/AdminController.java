@@ -120,7 +120,7 @@ public class AdminController {
     @Operation(summary = "remover endereco do usuario", description = "admin pode remover o endereco de um usuario especifico")
     @DeleteMapping("/users/{userId}/enderecos/delete")
     public ResponseEntity<String> deletarEnderecoUsuario(@PathVariable Long userId) {
-        return ResponseEntity.ok(adminService.deletarEnderecoUsuario(userId));
+        return ResponseEntity.ok(adminService.deletarEnderecoUsuario(userId, ConstructorErrors.returnMapErrors()));
     }
 
 //    PUT /api/V1/categorias/update - Atualizar categoria [ROLE ADMIN]

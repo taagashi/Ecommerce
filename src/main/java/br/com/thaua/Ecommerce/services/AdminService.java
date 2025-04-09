@@ -167,17 +167,21 @@ public class AdminService {
         return enderecoMapper.toEnderecoResponse(enderecoEntity);
     }
 
-    public String deletarEnderecoUsuario(Long userId) {
-        UsersEntity usersEntity = usersRepository.findById(userId).get();
-        EnderecoEntity enderecoEntity = usersEntity.getEndereco();
+    public String deletarEnderecoUsuario(Long userId, Map<String, String> errors) {
+        Optional<UsersEntity> usersEntity = usersRepository.findById(userId);
 
-        usersEntity.setEndereco(null);
+        validationService.validarExistenciaUsuario(usersEntity.orElse(null), errors);
+        validationService.analisarException("Houve um erro ao tentar deletar endereco de usuario", AddressException.class, errors);
+
+        EnderecoEntity enderecoEntity = usersEntity.get().getEndereco();
+
+        usersEntity.get().setEndereco(null);
         enderecoEntity.setUsers(null);
 
-        usersRepository.save(usersEntity);
+        usersRepository.save(usersEntity.get());
         enderecoRepository.delete(enderecoEntity);
 
-        return usersEntity.getName() + " teve seu endereco limpo com sucesso";
+        return usersEntity.get().getName() + " teve seu endereco limpo com sucesso";
     }
 
     public CategoriaResponse atualizarCategoria(Long categoriaId, CategoriaRequest categoriaRequest) {
