@@ -118,11 +118,14 @@ public class AdminService {
         return paginaMapper.toPagina(pedidoRepository.findAllByClienteId(clienteId, pageable).map(pedidoMapper::toPedidoResponse));
     }
 
-    public PedidoResponse atualizarStatusPedido(Long pedidoId, PedidoPatchRequest pedidoPatchRequest) {
-        PedidoEntity pedidoEntity = pedidoRepository.findById(pedidoId).get();
-        pedidoEntity.setStatusPedido(pedidoPatchRequest.getStatusPedido());
+    public PedidoResponse atualizarStatusPedido(Long pedidoId, PedidoPatchRequest pedidoPatchRequest, Map<String, String> errors) {
+        Optional<PedidoEntity> pedidoEntity = pedidoRepository.findById(pedidoId);
 
-        return pedidoMapper.toPedidoResponse(pedidoRepository.save(pedidoEntity));
+        validationService.validarExistenciaUsuario(pedidoEntity.orElse(null), errors);
+        validationService.analisarException("Houve um erro ao atualizar pedido", UserNotFoundException.class, errors);
+        pedidoEntity.get().setStatusPedido(pedidoPatchRequest.getStatusPedido());
+
+        return pedidoMapper.toPedidoResponse(pedidoRepository.save(pedidoEntity.get()));
     }
 
     public EnderecoResponse cadastrarEnderecoUsuario(Long userId, EnderecoRequest enderecoRequest) {

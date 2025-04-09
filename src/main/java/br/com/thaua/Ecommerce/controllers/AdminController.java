@@ -92,7 +92,7 @@ public class AdminController {
     @Operation(summary = "atualizar status do pedido", description = "admin pode atualizar o status de um pedido atraves do id do pedido")
     @PatchMapping("/pedidos/{pedidoId}/status/update")
     public ResponseEntity<PedidoResponse> atualizarStatusPedido(@PathVariable Long pedidoId, @RequestBody PedidoPatchRequest pedidoPatchRequest) {
-        return ResponseEntity.ok(adminService.atualizarStatusPedido(pedidoId, pedidoPatchRequest));
+        return ResponseEntity.ok(adminService.atualizarStatusPedido(pedidoId, pedidoPatchRequest, ConstructorErrors.returnMapErrors()));
     }
 
 //    POST /api/v1/users/{userId}/enderecos/register - Cadastrar endereço para Usuarios [ROLE: ADMIN]
