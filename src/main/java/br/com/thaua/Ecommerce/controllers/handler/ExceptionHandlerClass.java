@@ -44,7 +44,7 @@ public class ExceptionHandlerClass {
         ErrorResponse errorResponse = createErrorResponse("Erro de validação", ConstructorErrors.returnMapErrors());
 
         for(ConstraintViolation violation : ex.getConstraintViolations()) {
-                    errorResponse.getFieldsErrors().put(violation.getMessage(), violation.getInvalidValue().toString());
+                    errorResponse.getFieldsErrors().put("Erro de validação: ", violation.getMessage());
         }
 
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
