@@ -11,14 +11,19 @@ import br.com.thaua.Ecommerce.dto.fornecedor.FornecedorResponse;
 import br.com.thaua.Ecommerce.dto.pagina.Pagina;
 import br.com.thaua.Ecommerce.dto.pedido.PedidoPatchRequest;
 import br.com.thaua.Ecommerce.dto.pedido.PedidoResponse;
+import br.com.thaua.Ecommerce.exceptions.UserNotFoundException;
 import br.com.thaua.Ecommerce.mappers.*;
 import br.com.thaua.Ecommerce.repositories.*;
 import br.com.thaua.Ecommerce.services.returnTypeUsers.ExtractTypeUserContextHolder;
+import br.com.thaua.Ecommerce.services.validators.ValidationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Service;
+
+import java.util.Map;
+import java.util.Optional;
 
 @RequiredArgsConstructor
 @Service
@@ -37,6 +42,7 @@ public class AdminService {
     private final AdminMapper adminMapper;
     private final AdminRepository adminRepository;
     private final PaginaMapper paginaMapper;
+    private final ValidationService validationService;
 
     public Pagina<AdminResponse> listarAdmins(Pageable pageable) {
         Page<AdminResponse> pageAdmins = adminRepository.findAll(pageable).map(adminMapper::adminEntityToAdminResponse);
@@ -53,12 +59,16 @@ public class AdminService {
     }
 
 
-    public ClienteResponse buscarCliente(Long clienteId) {
+        public ClienteResponse buscarCliente(Long clienteId) {
         return clienteMapper.toResponse(clienteRepository.findById(clienteId).get());
     }
 
-    public FornecedorResponse buscarFornecedor(Long fornecedorId) {
-        return fornecedorMapper.FornecedorToResponse(fornecedorRepository.findById(fornecedorId).get());
+    public FornecedorResponse buscarFornecedor(Long fornecedorId, Map<String, String> errors) {
+        Optional<FornecedorEntity> fornecedorEntity = fornecedorRepository.findById(fornecedorId);
+        validationService.validarExistenciaUsuario(fornecedorEntity.orElse(null), errors);
+        validationService.analisarException("Houve um erro na hora de buscar o fornecedor", UserNotFoundException.class, errors);
+
+        return fornecedorMapper.FornecedorToResponse(fornecedorEntity.get());
     }
     public CategoriaResponse cadastrarNovaCategoria(CategoriaRequest categoriaRequest) {
         CategoriaEntity categoriaEntity = categoriaMapper.toEntity(categoriaRequest);

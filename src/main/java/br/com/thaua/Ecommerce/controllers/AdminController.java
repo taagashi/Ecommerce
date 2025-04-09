@@ -1,5 +1,6 @@
 package br.com.thaua.Ecommerce.controllers;
 
+import br.com.thaua.Ecommerce.controllers.handler.ConstructorErrors;
 import br.com.thaua.Ecommerce.domain.entity.FornecedorEntity;
 import br.com.thaua.Ecommerce.dto.admin.AdminResponse;
 import br.com.thaua.Ecommerce.dto.categoria.CategoriaRequest;
@@ -21,6 +22,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @SecurityRequirement(name = "bearerAuth")
 @RequiredArgsConstructor
@@ -44,7 +46,7 @@ public class AdminController {
     @Operation(summary = "buscar fornecedor", description = "admin pode buscar um fornecedor especifico")
     @GetMapping("/fornecedores/{fornecedorId}/list")
     public ResponseEntity<FornecedorResponse> buscarFornecedor(@PathVariable Long fornecedorId) {
-        return ResponseEntity.ok(adminService.buscarFornecedor((fornecedorId)));
+        return ResponseEntity.ok(adminService.buscarFornecedor(fornecedorId, ConstructorErrors.returnMapErrors()));
     }
 
     @Operation(summary = "listar admin's", description = "admin pode ver todos os admin's registrados")

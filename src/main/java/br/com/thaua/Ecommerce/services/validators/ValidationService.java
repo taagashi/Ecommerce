@@ -87,8 +87,8 @@ public class ValidationService {
         }
     }
 
-    public void validarExistenciaUsuario(UsersEntity usersEntity, Map<String, String> errors) {
-        if(usersEntity == null) {
+    public void validarExistenciaUsuario(Object object, Map<String, String> errors) {
+        if(object == null) {
             errors.put("Usuário", "Usuário não encontrado");
         }
     }
