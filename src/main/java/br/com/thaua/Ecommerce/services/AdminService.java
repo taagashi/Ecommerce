@@ -11,8 +11,7 @@ import br.com.thaua.Ecommerce.dto.fornecedor.FornecedorResponse;
 import br.com.thaua.Ecommerce.dto.pagina.Pagina;
 import br.com.thaua.Ecommerce.dto.pedido.PedidoPatchRequest;
 import br.com.thaua.Ecommerce.dto.pedido.PedidoResponse;
-import br.com.thaua.Ecommerce.exceptions.AddressException;
-import br.com.thaua.Ecommerce.exceptions.UserNotFoundException;
+import br.com.thaua.Ecommerce.exceptions.*;
 import br.com.thaua.Ecommerce.mappers.*;
 import br.com.thaua.Ecommerce.repositories.*;
 import br.com.thaua.Ecommerce.services.returnTypeUsers.ExtractTypeUserContextHolder;
@@ -114,7 +113,7 @@ public class AdminService {
         Optional<ClienteEntity> clienteEntity = clienteRepository.findById(clienteId);
 
         validationService.validarExistenciaUsuario(clienteEntity.orElse(null), errors);
-        validationService.analisarException("Houve um erro na hora de buscar os pedidos do cliente", UserNotFoundException.class, errors);
+        validationService.analisarException("Houve um erro na hora de buscar os pedidos do cliente", PedidoNotFoundException.class, errors);
 
         return paginaMapper.toPagina(pedidoRepository.findAllByClienteId(clienteId, pageable).map(pedidoMapper::toPedidoResponse));
     }
@@ -123,7 +122,7 @@ public class AdminService {
         Optional<PedidoEntity> pedidoEntity = pedidoRepository.findById(pedidoId);
 
         validationService.validarExistenciaUsuario(pedidoEntity.orElse(null), errors);
-        validationService.analisarException("Houve um erro ao atualizar pedido", UserNotFoundException.class, errors);
+        validationService.analisarException("Houve um erro ao atualizar pedido", PedidoNotFoundException.class, errors);
 
         pedidoEntity.get().setStatusPedido(pedidoPatchRequest.getStatusPedido());
 
@@ -134,7 +133,7 @@ public class AdminService {
         Optional<UsersEntity> usersEntity = usersRepository.findById(userId);
 
         validationService.validarExistenciaUsuario(usersEntity.orElse(null), errors);
-        validationService.analisarException("Houve um erro ao cadastrar endereco para usuario", UserNotFoundException.class, errors);
+        validationService.analisarException("Houve um erro ao cadastrar endereco para usuario", AddressNotFoundException.class, errors);
 
         EnderecoEntity enderecoEntity = enderecoMapper.enderecoRequestToEntity(enderecoRequest);
         enderecoEntity.setUsers(usersEntity.get());
@@ -148,7 +147,7 @@ public class AdminService {
         Optional<UsersEntity> usersEntity = usersRepository.findById(userId);
 
         validationService.validarExistenciaUsuario(usersEntity.orElse(null), errors);
-        validationService.analisarException("Houve um erro ao exibir endereco de usuario", UserNotFoundException.class, errors);
+        validationService.analisarException("Houve um erro ao exibir endereco de usuario", AddressNotFoundException.class, errors);
 
         return enderecoMapper.toEnderecoResponse(usersEntity.get().getEndereco());
     }
@@ -157,7 +156,7 @@ public class AdminService {
         Optional<UsersEntity> usersEntity = usersRepository.findById(userId);
 
         validationService.validarExistenciaUsuario(usersEntity.orElse(null), errors);
-        validationService.analisarException("Houve um erro ao tentar atualizar endereco de usuario", AddressException.class, errors);
+        validationService.analisarException("Houve um erro ao tentar atualizar endereco de usuario", AddressNotFoundException.class, errors);
 
         EnderecoEntity enderecoEntity = enderecoMapper.enderecoRequestToEntity(enderecoRequest);
         enderecoEntity.setId(usersEntity.get().getEndereco().getId());
@@ -171,7 +170,7 @@ public class AdminService {
         Optional<UsersEntity> usersEntity = usersRepository.findById(userId);
 
         validationService.validarExistenciaUsuario(usersEntity.orElse(null), errors);
-        validationService.analisarException("Houve um erro ao tentar deletar endereco de usuario", AddressException.class, errors);
+        validationService.analisarException("Houve um erro ao tentar deletar endereco de usuario", AddressNotFoundException.class, errors);
 
         EnderecoEntity enderecoEntity = usersEntity.get().getEndereco();
 
@@ -188,7 +187,7 @@ public class AdminService {
         Optional<CategoriaEntity> categoriaEntity = categoriaRepository.findById(categoriaId);
 
         validationService.validarExistenciaUsuario(categoriaEntity.orElse(null), errors);
-        validationService.analisarException("Houve um erro ao tentar atualizar categoria", UserNotFoundException.class, errors);
+        validationService.analisarException("Houve um erro ao tentar atualizar categoria", CategoriaNotFoundException.class, errors);
 
         categoriaEntity.get().setNome(categoriaRequest.getNome());
         categoriaEntity.get().setDescricao(categoriaRequest.getDescricao());
@@ -200,7 +199,7 @@ public class AdminService {
         Optional<CategoriaEntity> categoriaEntity = categoriaRepository.findById(categoriaId);
 
         validationService.validarExistenciaUsuario(categoriaEntity.orElse(null), errors);
-        validationService.analisarException("Houve um erro ao tentar deletar categoria", UserNotFoundException.class, errors);
+        validationService.analisarException("Houve um erro ao tentar deletar categoria", CategoriaNotFoundException.class, errors);
 
         categoriaRepository.delete(categoriaEntity.get());
 

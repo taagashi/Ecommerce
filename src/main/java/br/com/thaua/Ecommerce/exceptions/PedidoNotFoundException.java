@@ -1,7 +1,9 @@
 package br.com.thaua.Ecommerce.exceptions;
 
-public class PedidoNotFoundException extends RuntimeException {
-    public PedidoNotFoundException(String message) {
-        super(message);
+import java.util.Map;
+
+public class PedidoNotFoundException extends AbstractException {
+    public PedidoNotFoundException(String message, Map<String, String> errors) {
+        super(message, errors);
     }
 }
