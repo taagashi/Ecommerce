@@ -134,6 +134,6 @@ public class AdminController {
     @Operation(summary = "deletar categoria", description = "admin pode deletar uma categoria especifica")
     @DeleteMapping("/categorias/{categoriaId}/delete")
     public ResponseEntity<String> deletarCategoria(@PathVariable Long categoriaId) {
-        return ResponseEntity.ok(adminService.deletarCategoria(categoriaId));
+        return ResponseEntity.ok(adminService.deletarCategoria(categoriaId, ConstructorErrors.returnMapErrors()));
     }
 }

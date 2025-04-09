@@ -187,7 +187,7 @@ public class AdminService {
     public CategoriaResponse atualizarCategoria(Long categoriaId, CategoriaRequest categoriaRequest, Map<String, String> errors) {
         Optional<CategoriaEntity> categoriaEntity = categoriaRepository.findById(categoriaId);
 
-        validationService.validarExistenciaUsuario(categoriaEntity, errors);
+        validationService.validarExistenciaUsuario(categoriaEntity.orElse(null), errors);
         validationService.analisarException("Houve um erro ao tentar atualizar categoria", UserNotFoundException.class, errors);
 
         categoriaEntity.get().setNome(categoriaRequest.getNome());
@@ -196,12 +196,15 @@ public class AdminService {
         return categoriaMapper.toResponse(categoriaRepository.save(categoriaEntity.get()));
     }
 
-    public String deletarCategoria(Long categoriaId) {
-        CategoriaEntity categoriaEntity = categoriaRepository.findById(categoriaId).get();
+    public String deletarCategoria(Long categoriaId, Map<String, String> errors) {
+        Optional<CategoriaEntity> categoriaEntity = categoriaRepository.findById(categoriaId);
 
-        categoriaRepository.delete(categoriaEntity);
+        validationService.validarExistenciaUsuario(categoriaEntity.orElse(null), errors);
+        validationService.analisarException("Houve um erro ao tentar deletar categoria", UserNotFoundException.class, errors);
 
-        return "categoria " + categoriaEntity.getNome() + " foi deletada com sucesso";
+        categoriaRepository.delete(categoriaEntity.get());
+
+        return "categoria " + categoriaEntity.get().getNome() + " foi deletada com sucesso";
     }
 
 
