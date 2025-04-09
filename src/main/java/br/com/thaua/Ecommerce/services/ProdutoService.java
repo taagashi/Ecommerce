@@ -7,6 +7,7 @@ import br.com.thaua.Ecommerce.dto.produto.ProdutoCategoriaResponse;
 import br.com.thaua.Ecommerce.dto.produto.ProdutoResponse;
 import br.com.thaua.Ecommerce.mappers.ProdutoMapper;
 import br.com.thaua.Ecommerce.repositories.ProdutoRepository;
+import br.com.thaua.Ecommerce.repositories.specifications.ProdutoSpecifications;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -19,6 +20,7 @@ import java.math.BigDecimal;
 public class ProdutoService {
     private final ProdutoRepository produtoRepository;
     private final ProdutoMapper produtoMapper;
+    private final ProdutoSpecifications produtoSpecifications;
 
     public ProdutoCategoriaResponse exibirCategoriasDeProduto(Long produtoId) {
         ProdutoEntity produtoEntity = produtoRepository.findById(produtoId).get();
@@ -27,14 +29,6 @@ public class ProdutoService {
     }
 
     public Pagina<ProdutoResponse> exibirProdutos(Pageable pageable, BigDecimal min, BigDecimal max) {
-        if(min != null && max != null) {
-            return GerarPaginacao.gerarPaginacao(produtoRepository.findAllByPrecoBetween(min, max, pageable).map(produtoMapper::produtoToResponse));
-        } else if(min != null) {
-            return GerarPaginacao.gerarPaginacao(produtoRepository.findAllByPrecoGreaterThanEquals(min, pageable).map(produtoMapper::produtoToResponse));
-        } else if(max != null) {
-            return GerarPaginacao.gerarPaginacao(produtoRepository.findAllByPrecoLessThanEquals(max, pageable).map(produtoMapper::produtoToResponse));
-        } else {
-            return GerarPaginacao.gerarPaginacao(produtoRepository.findAll(pageable).map(produtoMapper::produtoToResponse));
-        }
+        return GerarPaginacao.gerarPaginacao(produtoSpecifications.buscarComFiltros(min, max, pageable).map(produtoMapper::produtoToResponse));
     }
 }

@@ -28,7 +28,7 @@ public class ProdutoController {
     }
 
     @Operation(summary = "Lista todos os produtos com filtrando os precos", description = "lista todos os produtos usando um filtro de precos para o usuario poder ver qual eh o produto mais barato e afins")
-    @GetMapping("/{produtoId}/precos/list")
+    @GetMapping("/list")
     public ResponseEntity<Pagina<ProdutoResponse>> exibirProdutos(
             Pageable pageable,
 
