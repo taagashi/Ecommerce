@@ -109,8 +109,11 @@ public class AdminService {
         return clienteEntity.get().getUsers().getName() + " foi removido com sucesso";
     }
 
-    public Pagina<PedidoResponse> listarPedidosDoCliente(Long clienteId, Pageable pageable) {
-        ClienteEntity clienteEntity = clienteRepository.findById(clienteId).get();
+    public Pagina<PedidoResponse> listarPedidosDoCliente(Long clienteId, Pageable pageable, Map<String, String> errors) {
+        Optional<ClienteEntity> clienteEntity = clienteRepository.findById(clienteId);
+
+        validationService.validarExistenciaUsuario(clienteEntity.orElse(null), errors);
+        validationService.analisarException("Houve um erro na hora de buscar os pedidos do cliente", UserNotFoundException.class, errors);
 
         return paginaMapper.toPagina(pedidoRepository.findAllByClienteId(clienteId, pageable).map(pedidoMapper::toPedidoResponse));
     }
