@@ -78,6 +78,7 @@ public class AdminService {
 
         return fornecedorMapper.FornecedorToResponse(fornecedorEntity.get());
     }
+
     public CategoriaResponse cadastrarNovaCategoria(CategoriaRequest categoriaRequest) {
         CategoriaEntity categoriaEntity = categoriaMapper.toEntity(categoriaRequest);
         return categoriaMapper.toResponse(categoriaRepository.save(categoriaEntity));
@@ -89,19 +90,23 @@ public class AdminService {
         return paginaMapper.toPagina(pageFornecedores);
     }
 
-    public String removerCliente(Long clienteId) {
+    public String removerCliente(Long clienteId, Map<String, String> errors) {
         UsersEntity usersEntity = ExtractTypeUserContextHolder.extractUser();
 
         if(usersEntity.getAdmin().getContasBanidas() == null) {
             usersEntity.getAdmin().setContasBanidas(0);
         }
 
-        ClienteEntity clienteEntity = clienteRepository.findById(clienteId).get();
-        usersRepository.delete(clienteEntity.getUsers());
+        Optional<ClienteEntity> clienteEntity = clienteRepository.findById(clienteId);
+
+        validationService.validarExistenciaUsuario(clienteEntity.orElse(null), errors);
+        validationService.analisarException(usersEntity.getName() + " houve um erro para remover conta de cliente", UserNotFoundException.class, errors);
+
+        usersRepository.delete(clienteEntity.get().getUsers());
         usersEntity.getAdmin().setContasBanidas(usersEntity.getAdmin().getContasBanidas() + 1);
         usersRepository.save(usersEntity);
 
-        return clienteEntity.getUsers().getName() + " foi removido com sucesso";
+        return clienteEntity.get().getUsers().getName() + " foi removido com sucesso";
     }
 
     public Pagina<PedidoResponse> listarPedidosDoCliente(Long clienteId, Pageable pageable) {

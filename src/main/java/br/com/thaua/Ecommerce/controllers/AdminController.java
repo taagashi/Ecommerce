@@ -78,7 +78,7 @@ public class AdminController {
     @Operation(summary = "remover cliente", description = "admin pode remover a conta de um cliente atraves do id do cliente")
     @DeleteMapping("/clientes/{clienteId}")
     public ResponseEntity<String> removerCliente(@PathVariable Long clienteId) {
-        return ResponseEntity.ok(adminService.removerCliente(clienteId));
+        return ResponseEntity.ok(adminService.removerCliente(clienteId, ConstructorErrors.returnMapErrors()));
     }
 
 //   GET /api/v1/clientes/{id}/pedidos - Listar pedidos do cliente [ROLE: ADMIN]
