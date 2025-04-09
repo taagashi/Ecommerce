@@ -5,13 +5,13 @@ import br.com.thaua.Ecommerce.domain.entity.ProdutoEntity;
 import br.com.thaua.Ecommerce.domain.entity.UsersEntity;
 import br.com.thaua.Ecommerce.dto.fornecedor.FornecedorCNPJTelefoneRequest;
 import br.com.thaua.Ecommerce.dto.fornecedor.FornecedorResponse;
-import br.com.thaua.Ecommerce.dto.pagina.GerarPaginacao;
 import br.com.thaua.Ecommerce.dto.pagina.Pagina;
 import br.com.thaua.Ecommerce.dto.produto.ProdutoNovoEstoqueRequest;
 import br.com.thaua.Ecommerce.dto.produto.ProdutoRequest;
 import br.com.thaua.Ecommerce.dto.produto.ProdutoResponse;
 import br.com.thaua.Ecommerce.exceptions.ProdutoException;
 import br.com.thaua.Ecommerce.mappers.FornecedorMapper;
+import br.com.thaua.Ecommerce.mappers.PaginaMapper;
 import br.com.thaua.Ecommerce.mappers.ProdutoMapper;
 import br.com.thaua.Ecommerce.repositories.CategoriaRepository;
 import br.com.thaua.Ecommerce.repositories.ProdutoRepository;
@@ -19,11 +19,9 @@ import br.com.thaua.Ecommerce.repositories.UsersRepository;
 import br.com.thaua.Ecommerce.services.returnTypeUsers.ExtractTypeUserContextHolder;
 import br.com.thaua.Ecommerce.services.validators.ValidationService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 import java.util.Map;
 
 @RequiredArgsConstructor
@@ -35,6 +33,7 @@ public class FornecedorService {
     private final ProdutoRepository produtoRepository;
     private final CategoriaRepository categoriaRepository;
     private final ValidationService validationService;
+    private final PaginaMapper paginaMapper;
 
     public FornecedorResponse atualizarCNPJeTelefone(FornecedorCNPJTelefoneRequest fornecedorCNPJTelefoneRequest) {
         UsersEntity usersEntity = ExtractTypeUserContextHolder.extractUser();
@@ -62,7 +61,7 @@ public class FornecedorService {
 
     public Pagina<ProdutoResponse> exibirProdutos(Pageable pageable) {
         UsersEntity usersEntity = ExtractTypeUserContextHolder.extractUser();
-        return GerarPaginacao.gerarPaginacao(produtoRepository.findAllByFornecedorId(usersEntity.getId(), pageable).map(produtoMapper::produtoToResponse));
+        return paginaMapper.toPagina(produtoRepository.findAllByFornecedorId(usersEntity.getId(), pageable).map(produtoMapper::produtoToResponse));
     }
 
     public ProdutoResponse buscarProduto(Long produtoId) {

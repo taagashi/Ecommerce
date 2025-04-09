@@ -1,8 +1,6 @@
 package br.com.thaua.Ecommerce.repositories.specifications;
 
 import br.com.thaua.Ecommerce.domain.entity.ProdutoEntity;
-import br.com.thaua.Ecommerce.dto.pagina.GerarPaginacao;
-import br.com.thaua.Ecommerce.dto.pagina.Pagina;
 import br.com.thaua.Ecommerce.mappers.ProdutoMapper;
 import br.com.thaua.Ecommerce.repositories.ProdutoRepository;
 import lombok.RequiredArgsConstructor;
@@ -22,9 +20,9 @@ public class ProdutoSpecifications {
         if(min != null && max != null) {
             return produtoRepository.findAllByPrecoBetween(min, max, pageable);
         } else if(min != null) {
-            return produtoRepository.findAllByPrecoGreaterThanEquals(min, pageable);
+            return produtoRepository.findAllByPrecoGreaterThan(min, pageable);
         } else if(max != null) {
-            return produtoRepository.findAllByPrecoLessThanEquals(max, pageable);
+            return produtoRepository.findAllByPrecoLessThan(max, pageable);
         } else {
             return produtoRepository.findAll(pageable);
         }

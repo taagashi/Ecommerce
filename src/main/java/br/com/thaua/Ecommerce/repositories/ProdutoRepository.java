@@ -13,7 +13,7 @@ import java.util.Optional;
 public interface ProdutoRepository extends JpaRepository<ProdutoEntity, Long> {
     Optional<ProdutoEntity> findByIdAndFornecedorId(Long idProduto, Long idFornecedor);
     Page<ProdutoEntity> findAllByFornecedorId(Long fornecedorId, Pageable pageable);
-    Page<ProdutoEntity> findAllByPrecoGreaterThanEquals(BigDecimal min, Pageable pageable);
-    Page<ProdutoEntity> findAllByPrecoLessThanEquals(BigDecimal max, Pageable pageable);
+    Page<ProdutoEntity> findAllByPrecoGreaterThan(BigDecimal min, Pageable pageable);
+    Page<ProdutoEntity> findAllByPrecoLessThan(BigDecimal max, Pageable pageable);
     Page<ProdutoEntity> findAllByPrecoBetween(BigDecimal min, BigDecimal max, Pageable pageable);
 }
