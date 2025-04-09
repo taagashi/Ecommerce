@@ -1,15 +1,18 @@
 package br.com.thaua.Ecommerce.controllers;
 
+import br.com.thaua.Ecommerce.dto.pagina.Pagina;
 import br.com.thaua.Ecommerce.dto.produto.ProdutoCategoriaResponse;
+import br.com.thaua.Ecommerce.dto.produto.ProdutoResponse;
 import br.com.thaua.Ecommerce.services.ProdutoService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.math.BigDecimal;
 
 @RequiredArgsConstructor
 @SecurityRequirement(name = "bearerAuth")
@@ -22,5 +25,19 @@ public class ProdutoController {
     @GetMapping("/{produtoId}/categorias/list")
     public ResponseEntity<ProdutoCategoriaResponse> exibirCategoriasDeProduto(@PathVariable Long produtoId) {
         return ResponseEntity.ok(produtoService.exibirCategoriasDeProduto(produtoId));
+    }
+
+    @Operation(summary = "Lista todos os produtos com filtrando os precos", description = "lista todos os produtos usando um filtro de precos para o usuario poder ver qual eh o produto mais barato e afins")
+    @GetMapping("/{produtoId}/precos/list")
+    public ResponseEntity<Pagina<ProdutoResponse>> exibirProdutos(
+            Pageable pageable,
+
+            @Parameter(description = "preco minimo")
+            @RequestParam(required = false) BigDecimal min,
+
+            @Parameter(description = "preco maximo")
+            @RequestParam(required = false) BigDecimal max
+    ) {
+        return ResponseEntity.ok(produtoService.exibirProdutos(pageable, min, max));
     }
 }
