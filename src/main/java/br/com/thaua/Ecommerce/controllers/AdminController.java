@@ -99,7 +99,7 @@ public class AdminController {
     @Operation(summary = "cadastrar endereco para um usuario", description = "admin pode cadastrar endereco para um usuario especifico")
     @PostMapping("/users/{userId}/enderecos/register")
     public ResponseEntity<EnderecoResponse> cadastrarEnderecoUsuario(@PathVariable Long userId, EnderecoRequest enderecoRequest) {
-        return ResponseEntity.ok(adminService.cadastrarEnderecoUsuario(userId, enderecoRequest));
+        return ResponseEntity.ok(adminService.cadastrarEnderecoUsuario(userId, enderecoRequest, ConstructorErrors.returnMapErrors()));
     }
 
 //    GET /api/v1/users/{userId}/enderecos/list - Exibir endereco do usuario [ROLE: ADMIN]

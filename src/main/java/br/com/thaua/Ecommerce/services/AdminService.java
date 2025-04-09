@@ -128,12 +128,16 @@ public class AdminService {
         return pedidoMapper.toPedidoResponse(pedidoRepository.save(pedidoEntity.get()));
     }
 
-    public EnderecoResponse cadastrarEnderecoUsuario(Long userId, EnderecoRequest enderecoRequest) {
-        UsersEntity usersEntity = usersRepository.findById(userId).get();
+    public EnderecoResponse cadastrarEnderecoUsuario(Long userId, EnderecoRequest enderecoRequest, Map<String, String> errors) {
+        Optional<UsersEntity> usersEntity = usersRepository.findById(userId);
+
+        validationService.validarExistenciaUsuario(usersEntity.orElse(null), errors);
+        validationService.analisarException("Houve um erro ao cadastrar endereco para usuario", UserNotFoundException.class, errors);
+
         EnderecoEntity enderecoEntity = enderecoMapper.enderecoRequestToEntity(enderecoRequest);
-        enderecoEntity.setUsers(usersEntity);
-        usersEntity.setEndereco(enderecoEntity);
-        usersRepository.save(usersEntity);
+        enderecoEntity.setUsers(usersEntity.get());
+        usersEntity.get().setEndereco(enderecoEntity);
+        usersRepository.save(usersEntity.get());
 
         return enderecoMapper.toEnderecoResponse(enderecoEntity);
     }
