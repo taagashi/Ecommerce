@@ -95,6 +95,8 @@ public class ClienteService {
         for(int i=0 ; i<itemPedidoEntityList.size() ; i++) {
             Long produtoId = produtosIds.get(i);
             ProdutoEntity produtoEntity = produtoEntityMap.get(produtoId);
+            produtoEntity.setEstoque(produtoEntity.getEstoque() - itemPedidoEntityList.get(i).getQuantidade());
+            produtoRepository.save(produtoEntity);
             itemPedidoEntityList.get(i).setProduto(produtoEntity);
             itemPedidoEntityList.get(i).setValorTotal(produtoEntity.getPreco().multiply(BigDecimal.valueOf(itemPedidoEntityList.get(i).getQuantidade())));
             itemPedidoEntityList.get(i).setPedido(pedidoEntity);
@@ -104,7 +106,7 @@ public class ClienteService {
 
         pedidoEntity.setItensPedidos(itemPedidoEntityList);
         pedidoRepository.save(pedidoEntity);
-        return pedidoMapper.toPedidoResponse(pedidoEntity);
+            return pedidoMapper.toPedidoResponse(pedidoEntity);
     }
 
     public Pagina<PedidoResponse> listarPedidos(Pageable pageable) {
