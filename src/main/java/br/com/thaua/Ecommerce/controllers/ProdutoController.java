@@ -1,5 +1,6 @@
 package br.com.thaua.Ecommerce.controllers;
 
+import br.com.thaua.Ecommerce.controllers.handler.ConstructorErrors;
 import br.com.thaua.Ecommerce.dto.pagina.Pagina;
 import br.com.thaua.Ecommerce.dto.produto.ProdutoCategoriaResponse;
 import br.com.thaua.Ecommerce.dto.produto.ProdutoResponse;
@@ -24,7 +25,7 @@ public class ProdutoController {
     @Operation(summary = "Lista todas as categorias de um determinado produto", description = "faz a listagem de categorias de um produto atraves de seu id")
     @GetMapping("/{produtoId}/categorias/list")
     public ResponseEntity<ProdutoCategoriaResponse> exibirCategoriasDeProduto(@PathVariable Long produtoId) {
-        return ResponseEntity.ok(produtoService.exibirCategoriasDeProduto(produtoId));
+        return ResponseEntity.ok(produtoService.exibirCategoriasDeProduto(produtoId, ConstructorErrors.returnMapErrors()));
     }
 
     @Operation(summary = "Lista todos os produtos com filtrando os precos", description = "lista todos os produtos usando um filtro de precos para o usuario poder ver qual eh o produto mais barato e afins")
