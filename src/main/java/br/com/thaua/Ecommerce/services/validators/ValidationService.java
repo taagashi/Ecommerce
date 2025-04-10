@@ -1,13 +1,11 @@
 package br.com.thaua.Ecommerce.services.validators;
 
-import br.com.thaua.Ecommerce.domain.entity.ProdutoEntity;
 import br.com.thaua.Ecommerce.domain.entity.UsersEntity;
 import br.com.thaua.Ecommerce.domain.enums.Estado;
 import br.com.thaua.Ecommerce.dto.endereco.EnderecoRequest;
 import br.com.thaua.Ecommerce.dto.itemPedido.ItemPedidoRequest;
 import br.com.thaua.Ecommerce.dto.produto.ProdutoRequest;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Service;
 
 import java.lang.reflect.Constructor;
@@ -87,9 +85,9 @@ public class ValidationService {
         }
     }
 
-    public void validarExistenciaUsuario(Object object, Map<String, String> errors) {
+    public void validarExistenciaEntidade(Object object, Map<String, String> errors) {
         if(object == null) {
-            errors.put("Usuário", "Usuário não encontrado");
+            errors.put("Falha de busca", "Item não encontrado");
         }
     }
 

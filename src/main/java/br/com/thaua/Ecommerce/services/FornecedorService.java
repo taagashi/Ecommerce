@@ -68,7 +68,7 @@ public class FornecedorService {
         UsersEntity usersEntity = ExtractTypeUserContextHolder.extractUser();
         Optional<ProdutoEntity> produtoEntity = produtoRepository.findByIdAndFornecedorId(produtoId, usersEntity.getId());
 
-        validationService.validarExistenciaUsuario(produtoEntity.orElse(null), errors);
+        validationService.validarExistenciaEntidade(produtoEntity.orElse(null), errors);
         validationService.analisarException(usersEntity.getName() + " houve um erro ao buscar produto", ProdutoNotFoundException.class, errors);
 
         return produtoMapper.produtoToResponse(produtoEntity.get());
