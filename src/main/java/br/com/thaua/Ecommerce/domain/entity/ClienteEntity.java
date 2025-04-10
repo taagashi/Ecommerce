@@ -12,7 +12,8 @@ import java.util.List;
 @Getter
 @Setter
 public class ClienteEntity extends AbstractRelationWithUsers {
-    @CPF
+//    @CPF(message = "CPF invalido")
+//    @Column(unique = true)
     private String cpf;
 
 //    TALVEZ ACRESCENTAR UM VALOR PARA MOSTRAR QUANTOS PEDIDOS ESSE USUARIO JA FEZ
