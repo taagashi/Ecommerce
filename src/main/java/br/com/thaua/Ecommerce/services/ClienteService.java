@@ -11,6 +11,7 @@ import br.com.thaua.Ecommerce.dto.itemPedido.ItemPedidoResponse;
 import br.com.thaua.Ecommerce.dto.pagina.Pagina;
 import br.com.thaua.Ecommerce.dto.pedido.PedidoResponse;
 import br.com.thaua.Ecommerce.exceptions.ClienteException;
+import br.com.thaua.Ecommerce.exceptions.PedidoNotFoundException;
 import br.com.thaua.Ecommerce.mappers.ClienteMapper;
 import br.com.thaua.Ecommerce.mappers.ItemPedidoMapper;
 import br.com.thaua.Ecommerce.mappers.PaginaMapper;
@@ -26,6 +27,7 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
@@ -110,10 +112,14 @@ public class ClienteService {
         return paginaMapper.toPagina(pedidoRepository.findAllByClienteId(usersEntity.getId(), pageable).map(pedidoMapper::toPedidoResponse));
     }
 
-    public PedidoResponse buscarPedido(Long pedidoId) {
+    public PedidoResponse buscarPedido(Long pedidoId, Map<String, String> errors) {
         UsersEntity usersEntity = ExtractTypeUserContextHolder.extractUser();
+        Optional<PedidoEntity> pedidoEntity = pedidoRepository.findByIdAndClienteId(pedidoId, usersEntity.getId());
 
-        return pedidoMapper.toPedidoResponse(pedidoRepository.findByIdAndClienteId(pedidoId, usersEntity.getId()));
+        validationService.validarExistenciaEntidade(pedidoEntity.orElse(null), errors);
+        validationService.analisarException(usersEntity.getName() + " houve um erro ao tentar buscar pedido", PedidoNotFoundException.class, errors);
+
+        return pedidoMapper.toPedidoResponse(pedidoEntity.get());
     }
 
     public ItemPedidoResponse buscarItemPedido(Long itemPedidoId) {
