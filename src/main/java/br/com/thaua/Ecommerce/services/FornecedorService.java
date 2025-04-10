@@ -121,18 +121,21 @@ public class FornecedorService {
     }
 
 //    PRECISO DAR UMA REVISADA MELHOR NESSE PARTE DE CODIGO
-    public String removerProduto(Long produtoId) {
+    public String removerProduto(Long produtoId, Map<String, String> errors) {
         UsersEntity usersEntity = ExtractTypeUserContextHolder.extractUser();
-        ProdutoEntity produtoEntity = produtoRepository.findByIdAndFornecedorId(produtoId, usersEntity.getId()).get();
+        Optional<ProdutoEntity> produtoEntity = produtoRepository.findByIdAndFornecedorId(produtoId, usersEntity.getId());
 
-        for(CategoriaEntity categoria : produtoEntity.getCategorias()) {
+        validationService.validarExistenciaEntidade(produtoEntity.orElse(null), errors);
+        validationService.analisarException(usersEntity.getName() + " houve um erro ao tentar remover produto", ProdutoNotFoundException.class, errors);
+
+        for(CategoriaEntity categoria : produtoEntity.get().getCategorias()) {
             categoria.getProdutos().remove(produtoEntity);
             categoriaRepository.save(categoria);
         }
-        produtoRepository.save(produtoEntity);
-        produtoRepository.delete(produtoEntity);
+        produtoRepository.save(produtoEntity.get());
+        produtoRepository.delete(produtoEntity.get());
 
-        return produtoEntity.getNome() + " foi removido com sucesso, " + usersEntity.getName();
+        return produtoEntity.get().getNome() + " foi removido com sucesso, " + usersEntity.getName();
     }
 
     public String removerProdutoDeCategoria(Long categoriaId, Long produtoId) {
