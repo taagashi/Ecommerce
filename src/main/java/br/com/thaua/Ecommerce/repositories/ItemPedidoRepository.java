@@ -4,7 +4,9 @@ import br.com.thaua.Ecommerce.domain.entity.ItemPedidoEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.Optional;
+
 @Repository
 public interface ItemPedidoRepository extends JpaRepository<ItemPedidoEntity, Long> {
-    ItemPedidoEntity findByIdAndPedidoClienteId(Long itemPedidoId, Long clienteId);
+    Optional<ItemPedidoEntity> findByIdAndPedidoClienteId(Long itemPedidoId, Long clienteId);
 }

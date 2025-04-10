@@ -70,6 +70,6 @@ public class ClienteController {
     @Operation(summary = "buscar item pedido", description = "cliente pode buscar um item pedido especifico atraves do id do item pedido")
     @GetMapping("/pedidos/itensPedidos/{itemPedidoId}")
     public ResponseEntity<ItemPedidoResponse> buscarItemPedido(@PathVariable Long itemPedidoId) {
-        return ResponseEntity.ok(clienteService.buscarItemPedido(itemPedidoId));
+        return ResponseEntity.ok(clienteService.buscarItemPedido(itemPedidoId, ConstructorErrors.returnMapErrors()));
     }
 }
