@@ -74,15 +74,19 @@ public class FornecedorService {
         return produtoMapper.produtoToResponse(produtoEntity.get());
     }
 
-    public ProdutoResponse atualizarProduto(Long produtoid, ProdutoRequest produtoRequest) {
+    public ProdutoResponse atualizarProduto(Long produtoid, ProdutoRequest produtoRequest, Map<String, String> errors) {
         UsersEntity usersEntity = ExtractTypeUserContextHolder.extractUser();
-        ProdutoEntity produtoEntity = produtoRepository.findByIdAndFornecedorId(produtoid, usersEntity.getId()).get();
-        produtoEntity.setNome(produtoRequest.getNome());
-        produtoEntity.setPreco(produtoRequest.getPreco());
-        produtoEntity.setDescricao(produtoRequest.getDescricao());
-        produtoEntity.setEstoque(produtoRequest.getEstoque());
+        Optional<ProdutoEntity> produtoEntity = produtoRepository.findByIdAndFornecedorId(produtoid, usersEntity.getId());
 
-        return produtoMapper.produtoToResponse(produtoRepository.save(produtoEntity));
+        validationService.validarExistenciaEntidade(produtoEntity.orElse(null), errors);
+        validationService.analisarException(usersEntity.getName() + " houve um erro ao tentar atualizar produto", ProdutoNotFoundException.class, errors);
+
+        produtoEntity.get().setNome(produtoRequest.getNome());
+        produtoEntity.get().setPreco(produtoRequest.getPreco());
+        produtoEntity.get().setDescricao(produtoRequest.getDescricao());
+        produtoEntity.get().setEstoque(produtoRequest.getEstoque());
+
+        return produtoMapper.produtoToResponse(produtoRepository.save(produtoEntity.get()));
     }
 
     public ProdutoResponse adicionarProdutoACategoria(Long categoriaId, Long produtoId) {

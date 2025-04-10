@@ -57,7 +57,7 @@ public class FornecedorController {
     @Operation(summary = "atualizar informacoes de produto", description = "fornecedor pode atualizar as informacoes de um produto especifico")
     @PutMapping("/produtos/{produtoId}/update")
     public ResponseEntity<ProdutoResponse> atualizarProduto(@PathVariable Long produtoId, @RequestBody ProdutoRequest produtoRequest) {
-        return ResponseEntity.ok(fornecedorService.atualizarProduto(produtoId, produtoRequest));
+        return ResponseEntity.ok(fornecedorService.atualizarProduto(produtoId, produtoRequest, ConstructorErrors.returnMapErrors()));
     }
 
 //    POST /api/v1/funcionarios/categorias/{categoriaId}/produtos/{produtoId}` - Associar produto à categoria [ROLE: FUNCIONARIO]
