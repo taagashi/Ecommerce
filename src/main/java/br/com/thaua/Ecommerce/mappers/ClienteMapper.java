@@ -16,6 +16,9 @@ public interface ClienteMapper {
     ClienteResponse toResponse(ClienteEntity clienteEntity);
     List<ClienteResponse> toResponse(List<ClienteEntity> clienteEntities);
 
+    @Mapping(target = "name", source = "users.name")
+    @Mapping(target = "email", source = "users.email")
+    @Mapping(target = "telefone", source = "users.telefone")
     @Mapping(target = "pedidosFeitos", expression = "java(clienteEntity.getPedido() == null ? 0 : clienteEntity.getPedido().size())")
     ClienteComPedidoResponse toResponseComPedido(ClienteEntity clienteEntity);
 }
