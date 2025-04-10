@@ -89,18 +89,23 @@ public class FornecedorService {
         return produtoMapper.produtoToResponse(produtoRepository.save(produtoEntity.get()));
     }
 
-    public ProdutoResponse adicionarProdutoACategoria(Long categoriaId, Long produtoId) {
+    public ProdutoResponse adicionarProdutoACategoria(Long categoriaId, Long produtoId, Map<String, String> errors) {
         UsersEntity usersEntity = ExtractTypeUserContextHolder.extractUser();
-        CategoriaEntity categoriaEntity = categoriaRepository.findById(categoriaId).get();
-        ProdutoEntity produtoEntity = produtoRepository.findByIdAndFornecedorId(produtoId, usersEntity.getId()).get();
+        Optional<CategoriaEntity> categoriaEntity = categoriaRepository.findById(categoriaId);
+        Optional<ProdutoEntity> produtoEntity = produtoRepository.findByIdAndFornecedorId(produtoId, usersEntity.getId());
 
-        categoriaEntity.getProdutos().add(produtoEntity);
-        produtoEntity.getCategorias().add(categoriaEntity);
+        validationService.validarExistenciaEntidade(categoriaEntity.orElse(null), errors);
+        validationService.validarExistenciaEntidade(produtoEntity.orElse(null), errors);
 
-        categoriaRepository.save(categoriaEntity);
-        produtoRepository.save(produtoEntity);
+        validationService.analisarException(usersEntity.getName() + " houve um erro ao tentar adicionar produto na categoria", ProdutoNotFoundException.class, errors);
 
-        return produtoMapper.produtoToResponse(produtoEntity);
+        categoriaEntity.get().getProdutos().add(produtoEntity.get());
+        produtoEntity.get().getCategorias().add(categoriaEntity.get());
+
+        categoriaRepository.save(categoriaEntity.get());
+        produtoRepository.save(produtoEntity.get());
+
+        return produtoMapper.produtoToResponse(produtoEntity.get());
     }
 
     public ProdutoResponse atualizarEstoqueProduto(Long produtoId, ProdutoNovoEstoqueRequest produtoNovoEstoqueRequest) {
