@@ -1,5 +1,6 @@
 package br.com.thaua.Ecommerce.controllers;
 
+import br.com.thaua.Ecommerce.controllers.handler.ConstructorErrors;
 import br.com.thaua.Ecommerce.dto.categoria.CategoriaProdutosResponse;
 import br.com.thaua.Ecommerce.dto.categoria.CategoriaResponse;
 import br.com.thaua.Ecommerce.dto.pagina.Pagina;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+import java.util.concurrent.ConcurrentSkipListMap;
 
 @SecurityRequirement(name = "bearerAuth")
 @RequiredArgsConstructor
@@ -34,7 +36,7 @@ public class CategoriaController {
     @Operation(summary = "exibir categoria", description = "usuario atutenticado pode ver uma categoria especifica procurando pelo id da categoria")
     @GetMapping("/{categoriaId}/list")
     public ResponseEntity<CategoriaResponse> exibirCategoria(@PathVariable Long categoriaId) {
-        return ResponseEntity.ok(categoriaService.exibirCategoria(categoriaId));
+        return ResponseEntity.ok(categoriaService.exibirCategoria(categoriaId, ConstructorErrors.returnMapErrors()));
     }
 
 //    GET /api/v1/categorias/{categoriaId}/produtos/list` - Listar produtos por categoria [QUALQUER USUARIO AUTENTICADO]
