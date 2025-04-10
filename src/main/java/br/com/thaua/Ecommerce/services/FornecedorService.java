@@ -49,8 +49,6 @@ public class FornecedorService {
         validationService.validarCNPJ(usersEntity, errors);
         validationService.validarTelefone(usersEntity, errors);
         validationService.validarEnderecoNaoExistente(usersEntity, errors);
-        validationService.validarEstoque(produtoRequest, errors);
-        validationService.validarPreco(produtoRequest, errors);
         validationService.analisarException(usersEntity.getName() + ", houve um erro ao tentar cadastrar o produto " + produtoRequest.getNome(), ProdutoException.class, errors);
 
         ProdutoEntity produtoEntity = produtoMapper.produtoRequestToEntity(produtoRequest);
@@ -74,8 +72,12 @@ public class FornecedorService {
     public ProdutoResponse atualizarProduto(Long produtoid, ProdutoRequest produtoRequest) {
         UsersEntity usersEntity = ExtractTypeUserContextHolder.extractUser();
         ProdutoEntity produtoEntity = produtoRepository.findByIdAndFornecedorId(produtoid, usersEntity.getId()).get();
+        produtoEntity.setNome(produtoRequest.getNome());
+        produtoEntity.setPreco(produtoRequest.getPreco());
+        produtoEntity.setDescricao(produtoRequest.getDescricao());
+        produtoEntity.setEstoque(produtoRequest.getEstoque());
 
-        return null;
+        return produtoMapper.produtoToResponse(produtoRepository.save(produtoEntity));
     }
 
     public ProdutoResponse adicionarProdutoACategoria(Long categoriaId, Long produtoId) {
