@@ -15,6 +15,7 @@ import br.com.thaua.Ecommerce.services.AdminService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -26,6 +27,7 @@ import org.springframework.web.bind.annotation.*;
 public class AdminController {
     private final AdminService adminService;
 
+    @Cacheable("clientes")
     @Operation(summary = "Listar clientes", description = "Lista todos os clientes")
     @GetMapping("/clientes")
     public ResponseEntity<Pagina<ClienteResponse>> listarClientes(Pageable pageable) {

@@ -7,7 +7,9 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.security.SecurityScheme;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.cache.annotation.EnableCaching;
 
+@EnableCaching
 @SpringBootApplication
 @OpenAPIDefinition(info = @Info(
 		title = "Ecommerce API", version = "1.0",
