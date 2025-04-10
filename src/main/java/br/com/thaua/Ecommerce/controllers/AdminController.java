@@ -59,6 +59,7 @@ public class AdminController {
         return ResponseEntity.ok(adminService.buscarAdmin(adminId, ConstructorErrors.returnMapErrors()));
     }
 
+    @Cacheable("fornecedores")
     @Operation(summary = "listar fornecedores", description = "lista todos os fornecedores")
     @GetMapping("/fornecedores/list")
     public ResponseEntity<Pagina<FornecedorResponse>> listarFornecedores(Pageable pageable) {
