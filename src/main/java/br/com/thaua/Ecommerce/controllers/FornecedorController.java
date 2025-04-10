@@ -71,7 +71,7 @@ public class FornecedorController {
     @Operation(summary = "atualizar estoque", description = "fornecedor pode atualizar o estoque de um produto especifico")
     @PatchMapping("/produtos/{id}/estoque/update")
     public ResponseEntity<ProdutoResponse> atualizarEstoqueProduto(@PathVariable Long id, @RequestBody ProdutoNovoEstoqueRequest produtoNovoEstoqueRequest) {
-        return ResponseEntity.ok(fornecedorService.atualizarEstoqueProduto(id, produtoNovoEstoqueRequest));
+        return ResponseEntity.ok(fornecedorService.atualizarEstoqueProduto(id, produtoNovoEstoqueRequest, ConstructorErrors.returnMapErrors()));
     }
 
 //    DELETE /api/v1/funcionarios/produtos/{produtoId}/delete - Remover produto [ROLE FUNCIONARIO]

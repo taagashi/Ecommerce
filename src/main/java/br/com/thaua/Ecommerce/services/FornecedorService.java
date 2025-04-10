@@ -108,12 +108,16 @@ public class FornecedorService {
         return produtoMapper.produtoToResponse(produtoEntity.get());
     }
 
-    public ProdutoResponse atualizarEstoqueProduto(Long produtoId, ProdutoNovoEstoqueRequest produtoNovoEstoqueRequest) {
+    public ProdutoResponse atualizarEstoqueProduto(Long produtoId, ProdutoNovoEstoqueRequest produtoNovoEstoqueRequest, Map<String, String> errors) {
         UsersEntity usersEntity = ExtractTypeUserContextHolder.extractUser();
-        ProdutoEntity produtoEntity = produtoRepository.findByIdAndFornecedorId(produtoId, usersEntity.getId()).get();
-        produtoEntity.setEstoque(produtoNovoEstoqueRequest.getNovaQuantidade());
+        Optional<ProdutoEntity> produtoEntity = produtoRepository.findByIdAndFornecedorId(produtoId, usersEntity.getId());
 
-        return produtoMapper.produtoToResponse(produtoRepository.save(produtoEntity));
+        validationService.validarExistenciaEntidade(produtoEntity.orElse(null), errors);
+        validationService.analisarException(usersEntity.getName() + " houve um erro ao atualizar estoque do produto", ProdutoNotFoundException.class, errors);
+
+        produtoEntity.get().setEstoque(produtoNovoEstoqueRequest.getNovaQuantidade());
+
+        return produtoMapper.produtoToResponse(produtoRepository.save(produtoEntity.get()));
     }
 
 //    PRECISO DAR UMA REVISADA MELHOR NESSE PARTE DE CODIGO
