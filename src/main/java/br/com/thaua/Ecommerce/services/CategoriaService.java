@@ -37,9 +37,12 @@ public class CategoriaService {
         return categoriaMapper.toResponse(categoriaEntity.get());
     }
 
-    public CategoriaProdutosResponse listarProdutosPorCategoria(Long categoriaId) {
-        CategoriaEntity categoriaEntity = categoriaRepository.findById(categoriaId).get();
+    public CategoriaProdutosResponse listarProdutosPorCategoria(Long categoriaId, Map<String, String> errors) {
+        Optional<CategoriaEntity> categoriaEntity = categoriaRepository.findById(categoriaId);
 
-        return categoriaMapper.toCategoriaProdutosResponse(categoriaEntity);
+        validationService.validarExistenciaEntidade(categoriaEntity.orElse(null), errors);
+        validationService.analisarException("Houve um erro ao tentar listar produtos de uma categoria", CategoriaNotFoundException.class, errors);
+
+        return categoriaMapper.toCategoriaProdutosResponse(categoriaEntity.get());
     }
 }

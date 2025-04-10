@@ -43,6 +43,6 @@ public class CategoriaController {
     @Operation(summary = "exibir produtos de uma categoria", description = "usuario autenticado pode ver todos os produtos de uma categoria")
     @GetMapping("/{categoriaId}/produtos/list")
     public ResponseEntity<CategoriaProdutosResponse> listarProdutosPorCategoria(@PathVariable Long categoriaId) {
-        return ResponseEntity.ok(categoriaService.listarProdutosPorCategoria(categoriaId));
+        return ResponseEntity.ok(categoriaService.listarProdutosPorCategoria(categoriaId, ConstructorErrors.returnMapErrors()));
     }
 }
