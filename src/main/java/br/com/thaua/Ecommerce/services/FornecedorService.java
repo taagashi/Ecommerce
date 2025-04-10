@@ -138,16 +138,20 @@ public class FornecedorService {
         return produtoEntity.get().getNome() + " foi removido com sucesso, " + usersEntity.getName();
     }
 
-    public String removerProdutoDeCategoria(Long categoriaId, Long produtoId) {
+    public String removerProdutoDeCategoria(Long categoriaId, Long produtoId, Map<String, String> errors) {
         UsersEntity usersEntity = ExtractTypeUserContextHolder.extractUser();
-        ProdutoEntity produtoEntity = produtoRepository.findByIdAndFornecedorId(produtoId, usersEntity.getId()).get();
-        CategoriaEntity categoriaEntity = categoriaRepository.findById(categoriaId).get();
+        Optional<ProdutoEntity> produtoEntity = produtoRepository.findByIdAndFornecedorId(produtoId, usersEntity.getId());
+        Optional<CategoriaEntity> categoriaEntity = categoriaRepository.findById(categoriaId);
 
-        categoriaEntity.getProdutos().remove(produtoEntity);
-        produtoEntity.getCategorias().remove(categoriaEntity);
-        categoriaRepository.save(categoriaEntity);
-        produtoRepository.save(produtoEntity);
+        validationService.validarExistenciaEntidade(produtoEntity.orElse(null), errors);
+        validationService.validarExistenciaEntidade(categoriaEntity.orElse(null), errors);
+        validationService.analisarException(usersEntity.getName() + " houve um erro ao tentar remover produto de categoria", ProdutoNotFoundException.class, errors);
 
-        return produtoEntity.getNome() + " foi removido com sucesso da categoria" + categoriaEntity.getNome();
+        categoriaEntity.get().getProdutos().remove(produtoEntity.get());
+        produtoEntity.get().getCategorias().remove(categoriaEntity.get());
+        categoriaRepository.save(categoriaEntity.get());
+        produtoRepository.save(produtoEntity.get());
+
+        return produtoEntity.get().getNome() + " foi removido com sucesso da categoria" + categoriaEntity.get().getNome();
     }
 }

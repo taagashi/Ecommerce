@@ -85,6 +85,6 @@ public class FornecedorController {
     @Operation(summary = "remover produto de uma categoria", description = "fornecedor pode remover um de seus produtos de uma categoria")
     @DeleteMapping("/categorias/{categoriaId}/produtos/{produtoId}/delete")
     public ResponseEntity<String> removerProdutoDeCategoria(@PathVariable Long categoriaId, @PathVariable Long produtoId) {
-        return ResponseEntity.ok(fornecedorService.removerProdutoDeCategoria(categoriaId, produtoId));
+        return ResponseEntity.ok(fornecedorService.removerProdutoDeCategoria(categoriaId, produtoId, ConstructorErrors.returnMapErrors()));
     }
 }
