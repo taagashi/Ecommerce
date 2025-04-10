@@ -49,7 +49,7 @@ public class FornecedorController {
     @Operation(summary = "exibir um produto do fornecedor", description = "Fornecedor pode olhar um produto especifico seu")
     @GetMapping("/produtos/{produtoId}")
     public ResponseEntity<ProdutoResponse> buscarProduto(@PathVariable Long produtoId) {
-        return ResponseEntity.ok(fornecedorService.buscarProduto(produtoId));
+        return ResponseEntity.ok(fornecedorService.buscarProduto(produtoId, ConstructorErrors.returnMapErrors()));
     }
 
 //    PRECISO ARRUMAR ESSA LOGICA AQUI QUE TA LA NO SERVICE

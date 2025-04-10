@@ -10,6 +10,7 @@ import br.com.thaua.Ecommerce.dto.produto.ProdutoNovoEstoqueRequest;
 import br.com.thaua.Ecommerce.dto.produto.ProdutoRequest;
 import br.com.thaua.Ecommerce.dto.produto.ProdutoResponse;
 import br.com.thaua.Ecommerce.exceptions.ProdutoException;
+import br.com.thaua.Ecommerce.exceptions.ProdutoNotFoundException;
 import br.com.thaua.Ecommerce.mappers.FornecedorMapper;
 import br.com.thaua.Ecommerce.mappers.PaginaMapper;
 import br.com.thaua.Ecommerce.mappers.ProdutoMapper;
@@ -23,6 +24,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.Map;
+import java.util.Optional;
 
 @RequiredArgsConstructor
 @Service
@@ -62,11 +64,14 @@ public class FornecedorService {
         return paginaMapper.toPagina(produtoRepository.findAllByFornecedorId(usersEntity.getId(), pageable).map(produtoMapper::produtoToResponse));
     }
 
-    public ProdutoResponse buscarProduto(Long produtoId) {
+    public ProdutoResponse buscarProduto(Long produtoId, Map<String, String> errors) {
         UsersEntity usersEntity = ExtractTypeUserContextHolder.extractUser();
-        ProdutoEntity produtoEntity = produtoRepository.findByIdAndFornecedorId(produtoId, usersEntity.getId()).get();
+        Optional<ProdutoEntity> produtoEntity = produtoRepository.findByIdAndFornecedorId(produtoId, usersEntity.getId());
 
-        return produtoMapper.produtoToResponse(produtoEntity);
+        validationService.validarExistenciaUsuario(produtoEntity.orElse(null), errors);
+        validationService.analisarException(usersEntity.getName() + " houve um erro ao buscar produto", ProdutoNotFoundException.class, errors);
+
+        return produtoMapper.produtoToResponse(produtoEntity.get());
     }
 
     public ProdutoResponse atualizarProduto(Long produtoid, ProdutoRequest produtoRequest) {
