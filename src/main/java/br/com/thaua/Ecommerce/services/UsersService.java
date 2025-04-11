@@ -65,6 +65,9 @@ public class UsersService {
     public String deletarConta() {
         UsersEntity usersEntity = ExtractTypeUserContextHolder.extractUser();
         usersRepository.delete(usersEntity);
+
+        resolverGeralUsers.clearCache(usersEntity);
+
         return usersEntity.getName() + " sua conta foi deletada com sucesso";
     }
 
