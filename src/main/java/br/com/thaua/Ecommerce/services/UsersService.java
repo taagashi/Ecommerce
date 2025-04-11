@@ -53,12 +53,11 @@ public class UsersService {
 
     public String login(String email, String password) {
         Authentication authenticateUser = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(email, password));
+        MyUserDetails myUserDetails = (MyUserDetails) authenticateUser.getPrincipal();
 
-        if(authenticateUser == null) {
-            throw new RuntimeException("Erro de autenticação");
-        }
+        resolverGeralUsers.clearCache(myUserDetails.getUser());
 
-        return jwtService.generateToken((MyUserDetails) authenticateUser.getPrincipal());
+        return jwtService.generateToken(myUserDetails);
     }
 
 //    CRIAR LOGICA DE IMPEDIMENTO DE DELETACAO DE CONTA

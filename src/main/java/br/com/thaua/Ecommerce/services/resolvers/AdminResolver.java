@@ -33,7 +33,7 @@ public class AdminResolver implements ResolverUsers {
     @Override
     public void clearCache() {
         Objects.requireNonNull(cacheManager.getCache("admins")).clear();
-        log.info("Cache de admins foi limpo");
+        log.info("CACHE ADMINS LIMPO");
     }
 
 }

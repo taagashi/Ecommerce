@@ -33,7 +33,7 @@ public class FornecedorResolver implements ResolverUsers{
     @Override
     public void clearCache() {
         Objects.requireNonNull(cacheManager.getCache("fornecedores")).clear();
-        log.info("Cache de fornecedores foi limpo");
+        log.info("CACHE FORNECEDORES LIMPO");
     }
 
 }

@@ -33,7 +33,7 @@ public class ClienteResolver implements ResolverUsers{
     @Override
     public void clearCache() {
         Objects.requireNonNull(cacheManager.getCache("clientes")).clear();
-        log.info("Cache de clientes foi limpo");
+        log.info("CACHE CLIENTES LIMPO");
     }
 
 }
