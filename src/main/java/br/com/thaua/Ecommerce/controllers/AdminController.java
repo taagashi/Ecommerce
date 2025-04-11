@@ -80,7 +80,7 @@ public class AdminController {
     }
 
 //    POST /api/v1/categorias/register - Cadastrar nova categoria [ROLE ADMIN]
-    @CachePut("categorias")
+    @CacheEvict(value = "categorias", allEntries = true)
     @Operation(summary = "cadastrar nova categoria", description = "admin pode cadastrar novas categorias para produtos")
     @PostMapping("/categorias/register")
     public ResponseEntity<CategoriaResponse> cadastrarNovaCategoria(@RequestBody CategoriaRequest categoriaRequest) {

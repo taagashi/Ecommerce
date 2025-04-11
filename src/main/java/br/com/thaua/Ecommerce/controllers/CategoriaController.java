@@ -8,6 +8,9 @@ import br.com.thaua.Ecommerce.services.CategoriaService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.hibernate.annotations.Cache;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,6 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 import java.util.concurrent.ConcurrentSkipListMap;
 
+@Slf4j
 @SecurityRequirement(name = "bearerAuth")
 @RequiredArgsConstructor
 @RestController
@@ -26,16 +30,20 @@ public class CategoriaController {
     private final CategoriaService categoriaService;
 
 //    GET /api/v1/categorias/list - Listar todas as categorias [QUALQUER USUARIO AUTENTICADO]
+    @Cacheable("categorias")
     @Operation(summary = "exibir categorias", description = "usuario autenticado pode ver todas as categorias cadastradas")
     @GetMapping("/list")
     public ResponseEntity<Pagina<CategoriaResponse>> exibirCategorias(Pageable pageable) {
+        log.info("Exibindo categorias");
         return ResponseEntity.ok(categoriaService.exibirCategorias(pageable));
     }
 
 //    GET /api/v1/categorias/{categoriaId}/list - Buscar categoria por ID [QUALQUER USUARIO AUTENTICADO]
+    @Cacheable("categorias")
     @Operation(summary = "exibir categoria", description = "usuario atutenticado pode ver uma categoria especifica procurando pelo id da categoria")
     @GetMapping("/{categoriaId}/list")
     public ResponseEntity<CategoriaResponse> exibirCategoria(@PathVariable Long categoriaId) {
+        log.info("Exibindo categoria");
         return ResponseEntity.ok(categoriaService.exibirCategoria(categoriaId, ConstructorErrors.returnMapErrors()));
     }
 
