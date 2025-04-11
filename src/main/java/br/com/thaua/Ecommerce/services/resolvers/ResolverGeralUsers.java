@@ -19,4 +19,11 @@ public class ResolverGeralUsers {
                 .trackUserForRegister(usersEntity);
     }
 
+    public void clearCache(UsersEntity usersEntity) {
+        resolverUsers.stream().filter(user -> user.roleEsperada(usersEntity.getRole()))
+                .findFirst()
+                .orElseThrow(() -> new RuntimeException("Role não encontrada"))
+                .clearCache();
+    }
+
 }

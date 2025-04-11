@@ -8,4 +8,5 @@ import org.springframework.stereotype.Component;
 public interface ResolverUsers {
     boolean roleEsperada(Role role);
     void trackUserForRegister(UsersEntity users);
+    void clearCache();
 }

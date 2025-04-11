@@ -5,12 +5,16 @@ import br.com.thaua.Ecommerce.domain.entity.UsersEntity;
 import br.com.thaua.Ecommerce.domain.enums.Role;
 import br.com.thaua.Ecommerce.repositories.UsersRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.CacheManager;
 import org.springframework.stereotype.Component;
+
+import java.util.Objects;
 
 @RequiredArgsConstructor
 @Component
 public class AdminResolver implements ResolverUsers {
     private final UsersRepository usersRepository;
+    private final CacheManager cacheManager;
 
     @Override
     public boolean roleEsperada(Role role) {
@@ -22,6 +26,11 @@ public class AdminResolver implements ResolverUsers {
         AdminEntity adminEntity = new AdminEntity();
         adminEntity.setUsers(usersEntity);
         usersEntity.setAdmin(adminEntity);
+    }
+
+    @Override
+    public void clearCache() {
+        Objects.requireNonNull(cacheManager.getCache("admins")).clear();
     }
 
 }

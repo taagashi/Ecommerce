@@ -39,12 +39,14 @@ public class UsersService {
     private final ValidationService validationService;
 
     public String cadastrarUsuario(UsersRequest usuario) {
-//        TALVES CRIAR UMA CLASSE QUE CODIFICA E DECODIFICA UMA SENHA
         usuario.setPassword(passwordEncoder.encode(usuario.getPassword()));
         UsersEntity usersEntity = userMapper.toEntity(usuario);
 
         resolverGeralUsers.setInformationUsers(usersEntity);
         UsersEntity saveUser = usersRepository.save(usersEntity);
+
+        resolverGeralUsers.clearCache(usersEntity);
+        
 //        emailMessageService.registroDeUsuario(usuario.getName(), usuario.getEmail());
         return jwtService.generateToken(new MyUserDetails(saveUser.getId(), saveUser.getEmail(), saveUser.getPassword(), saveUser.getRole().name(), saveUser));
     }
