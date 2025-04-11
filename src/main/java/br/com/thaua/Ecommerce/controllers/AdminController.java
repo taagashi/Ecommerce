@@ -35,7 +35,7 @@ public class AdminController {
     @Operation(summary = "Listar clientes", description = "Lista todos os clientes")
     @GetMapping("/clientes")
     public ResponseEntity<Pagina<ClienteResponse>> listarClientes(Pageable pageable) {
-        log.info("listar clientes");
+        log.info("LISTAR CLIENTES");
         return ResponseEntity.ok(adminService.listarClientes(pageable));
     }
 
@@ -43,7 +43,7 @@ public class AdminController {
     @Operation(summary = "buscar cliente", description = "admin pode buscar um cliente especifico")
     @GetMapping("/clientes/{clienteId}/list")
     public ResponseEntity<ClienteResponse> buscarCliente(@PathVariable Long clienteId) {
-        log.info("buscar cliente");
+        log.info("BUSCAR CLIENTE");
         return ResponseEntity.ok(adminService.buscarCliente(clienteId, ConstructorErrors.returnMapErrors()));
     }
 
@@ -51,7 +51,7 @@ public class AdminController {
     @Operation(summary = "buscar fornecedor", description = "admin pode buscar um fornecedor especifico")
     @GetMapping("/fornecedores/{fornecedorId}/list")
     public ResponseEntity<FornecedorResponse> buscarFornecedor(@PathVariable Long fornecedorId) {
-        log.info("buscar fornecedor");
+        log.info("BUSCAR FORNECEDOR");
         return ResponseEntity.ok(adminService.buscarFornecedor(fornecedorId, ConstructorErrors.returnMapErrors()));
     }
 
@@ -59,7 +59,7 @@ public class AdminController {
     @Operation(summary = "listar admin's", description = "admin pode ver todos os admin's registrados")
     @GetMapping("/list")
     public ResponseEntity<Pagina<AdminResponse>> listarAdmins(Pageable pageable) {
-        log.info("listar admins");
+        log.info("LISTAR ADMINS");
         return ResponseEntity.ok(adminService.listarAdmins(pageable));
     }
 
@@ -67,7 +67,7 @@ public class AdminController {
     @Operation(summary = "buscar admin", description = "admin pode buscar por outro admin especifico")
     @GetMapping("/{adminId}/list")
     public ResponseEntity<AdminResponse> buscarAdmin(@PathVariable Long adminId) {
-        log.info("buscar admin");
+        log.info("BUSCAR ADMIN");
         return ResponseEntity.ok(adminService.buscarAdmin(adminId, ConstructorErrors.returnMapErrors()));
     }
 
@@ -75,7 +75,7 @@ public class AdminController {
     @Operation(summary = "listar fornecedores", description = "lista todos os fornecedores")
     @GetMapping("/fornecedores/list")
     public ResponseEntity<Pagina<FornecedorResponse>> listarFornecedores(Pageable pageable) {
-        log.info("listar fornecedores");
+        log.info("LISTAR FORNECEDORES");
         return ResponseEntity.ok(adminService.listarFornecedores(pageable));
     }
 
@@ -84,7 +84,7 @@ public class AdminController {
     @Operation(summary = "cadastrar nova categoria", description = "admin pode cadastrar novas categorias para produtos")
     @PostMapping("/categorias/register")
     public ResponseEntity<CategoriaResponse> cadastrarNovaCategoria(@RequestBody CategoriaRequest categoriaRequest) {
-        log.info("cadastrar nova categoria");
+        log.info("CADASTRAR NOVA CATEGORIA");
         return ResponseEntity.ok(adminService.cadastrarNovaCategoria(categoriaRequest));
     }
 
@@ -93,7 +93,7 @@ public class AdminController {
     @Operation(summary = "remover cliente", description = "admin pode remover a conta de um cliente atraves do id do cliente")
     @DeleteMapping("/users/{userId}/delete")
     public ResponseEntity<String> removerCliente(@PathVariable Long userId) {
-        log.info("remover cliente");
+        log.info("REMOVER CLIENTE");
         return ResponseEntity.ok(adminService.removerUsuario(userId, ConstructorErrors.returnMapErrors()));
     }
 
@@ -102,7 +102,7 @@ public class AdminController {
     @Operation(summary = "listar pedidos de um cliente", description = "admin pode listar os pedidos de um determinado cliente atraves do id do cliente")
     @GetMapping("/clientes/{clienteId}/pedidos/list")
     public ResponseEntity<Pagina<PedidoResponse>> listarPedidosDoCliente(@PathVariable Long clienteId, Pageable pageable) {
-        log.info("listar pedidos do cliente");
+        log.info("LISTAR PEDIDOS CLIENTE");
         return ResponseEntity.ok(adminService.listarPedidosDoCliente(clienteId, pageable, ConstructorErrors.returnMapErrors()));
     }
 
@@ -111,7 +111,7 @@ public class AdminController {
     @Operation(summary = "atualizar status do pedido", description = "admin pode atualizar o status de um pedido atraves do id do pedido")
     @PatchMapping("/pedidos/{pedidoId}/status/update")
     public ResponseEntity<PedidoResponse> atualizarStatusPedido(@PathVariable Long pedidoId, @RequestBody PedidoPatchRequest pedidoPatchRequest) {
-        log.info("atualizar status de um determinado pedido");
+        log.info("ATUALIZAR STATUS PEDIDO");
         return ResponseEntity.ok(adminService.atualizarStatusPedido(pedidoId, pedidoPatchRequest, ConstructorErrors.returnMapErrors()));
     }
 
@@ -120,7 +120,7 @@ public class AdminController {
     @Operation(summary = "cadastrar endereco para um usuario", description = "admin pode cadastrar endereco para um usuario especifico")
     @PostMapping("/users/{userId}/enderecos/register")
     public ResponseEntity<EnderecoResponse> cadastrarEnderecoUsuario(@PathVariable Long userId, EnderecoRequest enderecoRequest) {
-        log.info("cadastrar endereco de usuario");
+        log.info("CADASTRAR ENDERECO USUARIO");
         return ResponseEntity.ok(adminService.cadastrarEnderecoUsuario(userId, enderecoRequest, ConstructorErrors.returnMapErrors()));
     }
 
@@ -129,7 +129,7 @@ public class AdminController {
     @Operation(summary = "exibir endereco do usuario", description = "admin pode exibir o endereco de um usuario especifico")
     @GetMapping("/users/{userId}/endereco/list")
     public ResponseEntity<EnderecoResponse> exibirEnderecoUsuario(@PathVariable Long userId) {
-        log.info("exibir endereco de usuario");
+        log.info("EXIBIR ENDERECO USUARIO");
         return ResponseEntity.ok(adminService.exibirEnderecoUsuario(userId, ConstructorErrors.returnMapErrors()));
     }
 
@@ -138,7 +138,7 @@ public class AdminController {
     @Operation(summary = "atualizar endereco do usuario", description = "admin pode atualizar endereco de um usuario especifico")
     @PutMapping("/users/{userId}/enderecos/update")
     public ResponseEntity<EnderecoResponse> atualizarEnderecoUsuario(@PathVariable Long userId, @RequestBody EnderecoRequest enderecoRequest) {
-        log.info("atualizar endereco de usuario");
+        log.info("ATUALIZAR ENDERECO USUARIO");
         return ResponseEntity.ok(adminService.atualizarEnderecoUsuario(userId, enderecoRequest, ConstructorErrors.returnMapErrors()));
     }
 
@@ -147,7 +147,7 @@ public class AdminController {
     @Operation(summary = "remover endereco do usuario", description = "admin pode remover o endereco de um usuario especifico")
     @DeleteMapping("/users/{userId}/enderecos/delete")
     public ResponseEntity<String> deletarEnderecoUsuario(@PathVariable Long userId) {
-        log.info("deletar endereco de usuario");
+        log.info("DELETAR ENDERECO USUARIO");
         return ResponseEntity.ok(adminService.deletarEnderecoUsuario(userId, ConstructorErrors.returnMapErrors()));
     }
 
@@ -156,7 +156,7 @@ public class AdminController {
     @Operation(summary = "atualizar categoria", description = "admin pode atualizar as informacoes de uma categoria especifica")
     @PutMapping("/categorias/{categoriaId}/update")
     public ResponseEntity<CategoriaResponse> atualizarCategoria(@PathVariable Long categoriaId, @RequestBody CategoriaRequest categoriaRequest) {
-        log.info("atualizar categoria");
+        log.info("ATUALIZAR CATEGORIA");
         return ResponseEntity.ok(adminService.atualizarCategoria(categoriaId, categoriaRequest, ConstructorErrors.returnMapErrors()));
     }
 
@@ -165,7 +165,7 @@ public class AdminController {
     @Operation(summary = "deletar categoria", description = "admin pode deletar uma categoria especifica")
     @DeleteMapping("/categorias/{categoriaId}/delete")
     public ResponseEntity<String> deletarCategoria(@PathVariable Long categoriaId) {
-        log.info("deletar categoria");
+        log.info("DELETAR CATEGORIA");
         return ResponseEntity.ok(adminService.deletarCategoria(categoriaId, ConstructorErrors.returnMapErrors()));
     }
 }
