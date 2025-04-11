@@ -1,10 +1,12 @@
 package br.com.thaua.Ecommerce.services.resolvers;
 
 import br.com.thaua.Ecommerce.domain.entity.UsersEntity;
+import br.com.thaua.Ecommerce.exceptions.RoleNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.Map;
 
 @Component
 @RequiredArgsConstructor
@@ -15,15 +17,19 @@ public class ResolverGeralUsers {
         resolverUsers.stream()
                 .filter(user -> user.roleEsperada(usersEntity.getRole()))
                 .findFirst()
-                .orElseThrow(() -> new RuntimeException("Role não encontrada"))
+                .orElseThrow(() -> throwExceptionRole(usersEntity))
                 .trackUserForRegister(usersEntity);
     }
 
     public void clearCache(UsersEntity usersEntity) {
         resolverUsers.stream().filter(user -> user.roleEsperada(usersEntity.getRole()))
                 .findFirst()
-                .orElseThrow(() -> new RuntimeException("Role não encontrada"))
+                .orElseThrow(() -> throwExceptionRole(usersEntity))
                 .clearCache();
+    }
+
+    private RuntimeException throwExceptionRole(UsersEntity usersEntity) {
+        throw new RoleNotFoundException("Role não encontrada", Map.of("Role incorreta", usersEntity.getName() + " você inseriu a role incorretamente"));
     }
 
 }
