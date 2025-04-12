@@ -89,7 +89,7 @@ public class AdminController {
     }
 
 //    DELETE /api/v1/clientes/{id} - Remover cliente [ROLE: ADMIN]
-    @CacheEvict("clientes")
+    @CacheEvict(value = "clientes", allEntries = true)
     @Operation(summary = "remover cliente", description = "admin pode remover a conta de um cliente atraves do id do cliente")
     @DeleteMapping("/users/{userId}/delete")
     public ResponseEntity<String> removerCliente(@PathVariable Long userId) {
@@ -152,7 +152,7 @@ public class AdminController {
     }
 
 //    PUT /api/V1/categorias/update - Atualizar categoria [ROLE ADMIN]
-    @CachePut("categorias")
+    @CacheEvict("categorias")
     @Operation(summary = "atualizar categoria", description = "admin pode atualizar as informacoes de uma categoria especifica")
     @PutMapping("/categorias/{categoriaId}/update")
     public ResponseEntity<CategoriaResponse> atualizarCategoria(@PathVariable Long categoriaId, @RequestBody CategoriaRequest categoriaRequest) {
