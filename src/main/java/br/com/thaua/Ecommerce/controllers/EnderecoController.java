@@ -8,6 +8,7 @@ import br.com.thaua.Ecommerce.services.UsersService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.hibernate.annotations.Cache;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
@@ -15,6 +16,7 @@ import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+@Slf4j
 @SecurityRequirement(name = "bearerAuth")
 @RequiredArgsConstructor
 @RestController
@@ -28,6 +30,7 @@ public class EnderecoController {
     @Operation(summary = "cadastrar endereco", description = "o usuario autenticado pode cadastrar um endereco para si")
     @PostMapping("/register")
     public ResponseEntity<EnderecoResponse> cadastrarEndereco(@RequestBody EnderecoRequest enderecoRequest) {
+        log.info("CADASTRAR ENDERECO");
         return ResponseEntity.ok(usersService.cadastrarEndereco(enderecoRequest, ConstructorErrors.returnMapErrors()));
     }
 
@@ -36,6 +39,7 @@ public class EnderecoController {
     @Operation(summary = "Exibir endereco", description = "usuario cadastrado pode ver o seu endereco completo")
     @GetMapping("/list")
     public ResponseEntity<EnderecoResponse> exibirEndereco() {
+        log.info("EXIBIR ENDERECO");
         return ResponseEntity.ok(usersService.exibirEndereco(ConstructorErrors.returnMapErrors()));
     }
 
@@ -44,6 +48,7 @@ public class EnderecoController {
     @Operation(summary = "remover endereco", description = "usuario autenticado pode limpar as informacoes de seu endereco")
     @DeleteMapping("/delete")
     public ResponseEntity<String> removerEndereco() {
+        log.info("REMOVER ENDERECO");
         return ResponseEntity.ok(usersService.deletarEndereco(ConstructorErrors.returnMapErrors()));
     }
 
@@ -52,6 +57,7 @@ public class EnderecoController {
     @Operation(summary = "atualizar endereço", description = "usuario atualiza todas as informações do seu endereco")
     @PutMapping("/update")
     public ResponseEntity<EnderecoResponse> atualizarEndereco(@RequestBody EnderecoRequest enderecoRequest) {
+        log.info("ATUALIZAR ENDERECO");
         return ResponseEntity.ok(usersService.atualizarEndereco(enderecoRequest, ConstructorErrors.returnMapErrors()));
     }
 }
