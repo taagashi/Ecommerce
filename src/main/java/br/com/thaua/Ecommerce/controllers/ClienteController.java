@@ -31,7 +31,7 @@ import java.util.List;
 public class ClienteController {
     private final ClienteService clienteService;
 //    PATCH /api/v1/clientes/cpf-telefone/update - atualizar cpf e telfone [ROLE: CLIENTE]
-    @CacheEvict(value = "clientes", allEntries = true)
+    @CachePut(value = "clientes", key = "T(org.springframework.security.core.context.SecurityContextHolder).getContext().getAuthentication().getPrincipal().getUsername()")
     @Operation(summary = "atualizar cpf e telefone", description = "o cliente autenticado adiciona/atualiza seu numero e cpf para pode realizar acoes mais ativas na aplicacao")
     @PatchMapping("cpf-telefone/update")
     public ResponseEntity<ClienteResponse> atualizarCpfETelefone(@RequestBody ClienteCpfTelefoneRequest clienteCpfTelefoneRequest) {
@@ -40,7 +40,7 @@ public class ClienteController {
     }
 
 //    GET /api/v1/clientes/view-profile - Exibir meu perfl [ROLE: CLIENTE]
-    @Cacheable("clientes")
+    @Cacheable(value = "clientes",key = "T(org.springframework.security.core.context.SecurityContextHolder).getContext().getAuthentication().getPrincipal().getUsername()")
     @Operation(summary = "exibir perfil", description = "cliente pode ver o seu perfil")
     @GetMapping("/view-profile")
     public ResponseEntity<ClienteComPedidoResponse> exibirPerfil() {
@@ -49,7 +49,7 @@ public class ClienteController {
     }
 
 //    PUT /api/v1/clientes/update - Atualizar meus dados [ROLE: CLIENTE]1
-    @CacheEvict(value = "clientes", allEntries = true)
+    @CachePut(value = "clientes", key = "T(org.springframework.security.core.context.SecurityContextHolder).getContext().getAuthentication().getPrincipal().getUsername()")
     @Operation(summary = "atualizar dados", description = "cliente atualiza dados como: nome, email, telefone e cpf")
     @PutMapping("/update")
     public ResponseEntity<ClienteResponse> atualizarDados(@RequestBody ClienteUpdateRequest clienteUpdateRequest) {
@@ -58,6 +58,7 @@ public class ClienteController {
     }
 
 //    POST /api/v1/clientes/pedidos/register - Fazer pedido [ROLE: CLIENTE]
+    @CachePut(value = "pedidos", key = "T(org.springframework.security.core.context.SecurityContexHolder).getContext().getAuthentication().getPrincipal().getUsername()")
     @Operation(summary = "fazer pedido", description = "cliente pode diversos pedidos de uma só vez para diferentes produtos")
     @PostMapping("/pedidos/register")
     public ResponseEntity<PedidoResponse> fazerPedido(@RequestBody List<ItemPedidoRequest> itemPedidoRequest) {
@@ -65,7 +66,7 @@ public class ClienteController {
     }
 
 //    GET /api/v1/clientes/list/pedidos - Listar meus pedidos [ROLE: CLIENTE]
-    @Cacheable("pedidos")
+    @Cacheable(value = "pedidos", key = "T(org.springframework.security.core.context.SecurityContextHolder).getContext().getAuthentication().getPrincipal().getUsername()")
     @Operation(summary = "listar pedidos", description = "cliente pode listar todos os seus pedidos")
     @GetMapping("/pedidos/list")
     public ResponseEntity<Pagina<PedidoResponse>> listarPedidos(Pageable pageable) {
