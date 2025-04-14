@@ -31,7 +31,7 @@ import org.springframework.web.bind.annotation.*;
 public class AdminController {
     private final AdminService adminService;
 
-    @Cacheable("clientes")
+    @Cacheable(value = "clientesListagem")
     @Operation(summary = "Listar clientes", description = "Lista todos os clientes")
     @GetMapping("/clientes")
     public ResponseEntity<Pagina<ClienteResponse>> listarClientes(Pageable pageable) {
@@ -55,7 +55,15 @@ public class AdminController {
         return ResponseEntity.ok(adminService.buscarFornecedor(fornecedorId, ConstructorErrors.returnMapErrors()));
     }
 
-    @Cacheable("admins")
+    @Cacheable(value = "fornecedoresListagem")
+    @Operation(summary = "listar fornecedores", description = "lista todos os fornecedores")
+    @GetMapping("/fornecedores/list")
+    public ResponseEntity<Pagina<FornecedorResponse>> listarFornecedores(Pageable pageable) {
+        log.info("LISTAR FORNECEDORES");
+        return ResponseEntity.ok(adminService.listarFornecedores(pageable));
+    }
+
+    @Cacheable(value = "adminsListagem")
     @Operation(summary = "listar admin's", description = "admin pode ver todos os admin's registrados")
     @GetMapping("/list")
     public ResponseEntity<Pagina<AdminResponse>> listarAdmins(Pageable pageable) {
@@ -69,14 +77,6 @@ public class AdminController {
     public ResponseEntity<AdminResponse> buscarAdmin(@PathVariable Long adminId) {
         log.info("BUSCAR ADMIN");
         return ResponseEntity.ok(adminService.buscarAdmin(adminId, ConstructorErrors.returnMapErrors()));
-    }
-
-    @Cacheable("fornecedores")
-    @Operation(summary = "listar fornecedores", description = "lista todos os fornecedores")
-    @GetMapping("/fornecedores/list")
-    public ResponseEntity<Pagina<FornecedorResponse>> listarFornecedores(Pageable pageable) {
-        log.info("LISTAR FORNECEDORES");
-        return ResponseEntity.ok(adminService.listarFornecedores(pageable));
     }
 
 //    POST /api/v1/categorias/register - Cadastrar nova categoria [ROLE ADMIN]

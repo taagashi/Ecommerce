@@ -31,9 +31,9 @@ public class FornecedorResolver implements ResolverUsers{
     }
 
     @Override
-    public void clearCache() {
-        Objects.requireNonNull(cacheManager.getCache("fornecedores")).clear();
-        log.info("CACHE FORNECEDORES LIMPO");
+    public void cleanCache(UsersEntity usersEntity) {
+        Objects.requireNonNull(cacheManager.getCache("fornecedoresListagem")).clear();
+        log.info("CACHE FORNECEDORESLITAGEM FOI LIMPO");
     }
 
 }

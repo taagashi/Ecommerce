@@ -23,11 +23,11 @@ public class ResolverGeralUsers {
                 .trackUserForRegister(usersEntity);
     }
 
-    public void clearCache(UsersEntity usersEntity) {
+    public void cleanCache(UsersEntity usersEntity) {
         resolverUsers.stream().filter(user -> user.roleEsperada(usersEntity.getRole()))
                 .findFirst()
                 .orElseThrow(() -> throwExceptionRole(usersEntity))
-                .clearCache();
+                .cleanCache(usersEntity);
     }
 
     private RuntimeException throwExceptionRole(UsersEntity usersEntity) {

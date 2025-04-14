@@ -31,9 +31,9 @@ public class ClienteResolver implements ResolverUsers{
     }
 
     @Override
-    public void clearCache() {
-        Objects.requireNonNull(cacheManager.getCache("clientes")).clear();
-        log.info("CACHE CLIENTES LIMPO");
+    public void cleanCache(UsersEntity usersEntity) {
+        Objects.requireNonNull(cacheManager.getCache("clientesListagem")).clear();
+        log.info("CACHE CLIENTESLISTAGEM LIMPO");
     }
 
 }

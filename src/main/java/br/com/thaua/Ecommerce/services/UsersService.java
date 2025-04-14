@@ -20,7 +20,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import br.com.thaua.Ecommerce.services.validators.ValidationService;
-import jakarta.validation.ConstraintViolationException;
 
 import java.util.Map;
 
@@ -44,9 +43,8 @@ public class UsersService {
 
         resolverGeralUsers.setInformationUsers(usersEntity);
         UsersEntity saveUser = usersRepository.save(usersEntity);
+        resolverGeralUsers.cleanCache(usersEntity);
 
-//        resolverGeralUsers.clearCache(saveUser);
-        
 //        emailMessageService.registroDeUsuario(usuario.getName(), usuario.getEmail());
         return jwtService.generateToken(new MyUserDetails(saveUser.getId(), saveUser.getEmail(), saveUser.getPassword(), saveUser.getRole().name(), saveUser));
     }
@@ -55,7 +53,7 @@ public class UsersService {
         Authentication authenticateUser = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(email, password));
         MyUserDetails myUserDetails = (MyUserDetails) authenticateUser.getPrincipal();
 
-//        resolverGeralUsers.clearCache(myUserDetails.getUser());
+//        resolverGeralUsers.cleanCache(myUserDetails.getUser());
 
         return jwtService.generateToken(myUserDetails);
     }
@@ -65,7 +63,7 @@ public class UsersService {
         UsersEntity usersEntity = ExtractTypeUserContextHolder.extractUser();
         usersRepository.delete(usersEntity);
 
-//        resolverGeralUsers.clearCache(usersEntity);
+//        resolverGeralUsers.cleanCache(usersEntity);
 
         return usersEntity.getName() + " sua conta foi deletada com sucesso";
     }
