@@ -39,7 +39,7 @@ public class AdminController {
         return ResponseEntity.ok(adminService.listarClientes(pageable));
     }
 
-    @Cacheable("clientes")
+    @Cacheable("clientes-Admin")
     @Operation(summary = "buscar cliente", description = "admin pode buscar um cliente especifico")
     @GetMapping("/clientes/{clienteId}/list")
     public ResponseEntity<ClienteResponse> buscarCliente(@PathVariable Long clienteId) {
@@ -47,7 +47,7 @@ public class AdminController {
         return ResponseEntity.ok(adminService.buscarCliente(clienteId, ConstructorErrors.returnMapErrors()));
     }
 
-    @Cacheable("fornecedores")
+    @Cacheable("fornecedores-Admin")
     @Operation(summary = "buscar fornecedor", description = "admin pode buscar um fornecedor especifico")
     @GetMapping("/fornecedores/{fornecedorId}/list")
     public ResponseEntity<FornecedorResponse> buscarFornecedor(@PathVariable Long fornecedorId) {
@@ -71,7 +71,7 @@ public class AdminController {
         return ResponseEntity.ok(adminService.listarAdmins(pageable));
     }
 
-    @Cacheable("admins")
+    @Cacheable("admins-Admin")
     @Operation(summary = "buscar admin", description = "admin pode buscar por outro admin especifico")
     @GetMapping("/{adminId}/list")
     public ResponseEntity<AdminResponse> buscarAdmin(@PathVariable Long adminId) {
@@ -89,16 +89,16 @@ public class AdminController {
     }
 
 //    DELETE /api/v1/clientes/{id} - Remover cliente [ROLE: ADMIN]
-    @CacheEvict(value = "clientes", allEntries = true)
-    @Operation(summary = "remover cliente", description = "admin pode remover a conta de um cliente atraves do id do cliente")
+    @CacheEvict(value = "clientes-Admin", allEntries = true)
+    @Operation(summary = "remover usuario", description = "admin pode remover a conta de um determinado usuario")
     @DeleteMapping("/users/{userId}/delete")
-    public ResponseEntity<String> removerCliente(@PathVariable Long userId) {
+    public ResponseEntity<String> removerUsuario(@PathVariable Long userId) {
         log.info("REMOVER CLIENTE");
         return ResponseEntity.ok(adminService.removerUsuario(userId, ConstructorErrors.returnMapErrors()));
     }
 
 //   GET /api/v1/clientes/{id}/pedidos - Listar pedidos do cliente [ROLE: ADMIN]
-    @Cacheable("pedidos")
+    @Cacheable("pedidos-Admin")
     @Operation(summary = "listar pedidos de um cliente", description = "admin pode listar os pedidos de um determinado cliente atraves do id do cliente")
     @GetMapping("/clientes/{clienteId}/pedidos/list")
     public ResponseEntity<Pagina<PedidoResponse>> listarPedidosDoCliente(@PathVariable Long clienteId, Pageable pageable) {
@@ -107,7 +107,7 @@ public class AdminController {
     }
 
 //    PATCH /api/v1/pedidos/{id}/status/    update - Atualizar status do pedido [ROLE: ADMIN
-    @CachePut("pedidos")
+    @CacheEvict(value = "pedidos-Admin", allEntries = true)
     @Operation(summary = "atualizar status do pedido", description = "admin pode atualizar o status de um pedido atraves do id do pedido")
     @PatchMapping("/pedidos/{pedidoId}/status/update")
     public ResponseEntity<PedidoResponse> atualizarStatusPedido(@PathVariable Long pedidoId, @RequestBody PedidoPatchRequest pedidoPatchRequest) {
@@ -116,7 +116,7 @@ public class AdminController {
     }
 
 //    POST /api/v1/users/{userId}/enderecos/register - Cadastrar endereço para Usuarios [ROLE: ADMIN]
-    @CachePut("enderecos")
+    @CachePut(value = "enderecos-Admin", key = "#userId")
     @Operation(summary = "cadastrar endereco para um usuario", description = "admin pode cadastrar endereco para um usuario especifico")
     @PostMapping("/users/{userId}/enderecos/register")
     public ResponseEntity<EnderecoResponse> cadastrarEnderecoUsuario(@PathVariable Long userId, EnderecoRequest enderecoRequest) {
@@ -125,7 +125,7 @@ public class AdminController {
     }
 
 //    GET /api/v1/users/{userId}/enderecos/list - Exibir endereco do usuario [ROLE: ADMIN]
-    @Cacheable("enderecos")
+    @Cacheable(value = "enderecos-Admin", key = "#userId")
     @Operation(summary = "exibir endereco do usuario", description = "admin pode exibir o endereco de um usuario especifico")
     @GetMapping("/users/{userId}/endereco/list")
     public ResponseEntity<EnderecoResponse> exibirEnderecoUsuario(@PathVariable Long userId) {
@@ -134,7 +134,7 @@ public class AdminController {
     }
 
 //    PUT /api/users/{userId}/enderecos/update - Atualizar endereço do usuario [ROLE: ADMIN]
-    @CachePut("enderecos")
+    @CachePut(value = "enderecos-Admin", key = "#userId")
     @Operation(summary = "atualizar endereco do usuario", description = "admin pode atualizar endereco de um usuario especifico")
     @PutMapping("/users/{userId}/enderecos/update")
     public ResponseEntity<EnderecoResponse> atualizarEnderecoUsuario(@PathVariable Long userId, @RequestBody EnderecoRequest enderecoRequest) {
@@ -143,7 +143,7 @@ public class AdminController {
     }
 
 //    DELETE /api/v1/users/{userId}/enderecos/delete` - Remover endereço do usuario [ROLE: ADMIN]
-    @CacheEvict("enderecos")
+    @CacheEvict(value = "enderecos-Admin", key = "#userId")
     @Operation(summary = "remover endereco do usuario", description = "admin pode remover o endereco de um usuario especifico")
     @DeleteMapping("/users/{userId}/enderecos/delete")
     public ResponseEntity<String> deletarEnderecoUsuario(@PathVariable Long userId) {
@@ -152,7 +152,7 @@ public class AdminController {
     }
 
 //    PUT /api/V1/categorias/update - Atualizar categoria [ROLE ADMIN]
-    @CacheEvict("categorias")
+    @CacheEvict(value = "categorias", allEntries = true)
     @Operation(summary = "atualizar categoria", description = "admin pode atualizar as informacoes de uma categoria especifica")
     @PutMapping("/categorias/{categoriaId}/update")
     public ResponseEntity<CategoriaResponse> atualizarCategoria(@PathVariable Long categoriaId, @RequestBody CategoriaRequest categoriaRequest) {
@@ -161,7 +161,7 @@ public class AdminController {
     }
 
 //    DELETE /api/categorias/{id}/delete` - Remover categoria [ROLE ADMIN]
-    @CacheEvict("categorias")
+    @CacheEvict(value = "categorias", allEntries = true)
     @Operation(summary = "deletar categoria", description = "admin pode deletar uma categoria especifica")
     @DeleteMapping("/categorias/{categoriaId}/delete")
     public ResponseEntity<String> deletarCategoria(@PathVariable Long categoriaId) {

@@ -138,9 +138,8 @@ public class AdminService {
         EnderecoEntity enderecoEntity = enderecoMapper.enderecoRequestToEntity(enderecoRequest);
         enderecoEntity.setUsers(usersEntity.get());
         usersEntity.get().setEndereco(enderecoEntity);
-        usersRepository.save(usersEntity.get());
 
-        return enderecoMapper.toEnderecoResponse(enderecoEntity);
+        return enderecoMapper.toEnderecoResponse(usersRepository.save(usersEntity.get()).getEndereco());
     }
 
     public EnderecoResponse exibirEnderecoUsuario(Long userId, Map<String, String> errors) {

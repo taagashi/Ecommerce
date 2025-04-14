@@ -30,11 +30,11 @@ public class CategoriaController {
     private final CategoriaService categoriaService;
 
 //    GET /api/v1/categorias/list - Listar todas as categorias [QUALQUER USUARIO AUTENTICADO]
-    @Cacheable("categorias")
+    @Cacheable(value = "categorias")
     @Operation(summary = "exibir categorias", description = "usuario autenticado pode ver todas as categorias cadastradas")
     @GetMapping("/list")
     public ResponseEntity<Pagina<CategoriaResponse>> exibirCategorias(Pageable pageable) {
-        log.info("Exibindo categorias");
+        log.info("EXIBINDO CATEGORIAS");
         return ResponseEntity.ok(categoriaService.exibirCategorias(pageable));
     }
 
@@ -43,7 +43,7 @@ public class CategoriaController {
     @Operation(summary = "exibir categoria", description = "usuario atutenticado pode ver uma categoria especifica procurando pelo id da categoria")
     @GetMapping("/{categoriaId}/list")
     public ResponseEntity<CategoriaResponse> exibirCategoria(@PathVariable Long categoriaId) {
-        log.info("Exibindo categoria");
+        log.info("EXIBINDO UMA CATEGORIA");
         return ResponseEntity.ok(categoriaService.exibirCategoria(categoriaId, ConstructorErrors.returnMapErrors()));
     }
 
@@ -51,6 +51,7 @@ public class CategoriaController {
     @Operation(summary = "exibir produtos de uma categoria", description = "usuario autenticado pode ver todos os produtos de uma categoria")
     @GetMapping("/{categoriaId}/produtos/list")
     public ResponseEntity<CategoriaProdutosResponse> listarProdutosPorCategoria(@PathVariable Long categoriaId) {
+        log.info("LISTANDO PRODUTOS POR CATEGORIA");
         return ResponseEntity.ok(categoriaService.listarProdutosPorCategoria(categoriaId, ConstructorErrors.returnMapErrors()));
     }
 }
