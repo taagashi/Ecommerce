@@ -20,6 +20,9 @@ import br.com.thaua.Ecommerce.repositories.UsersRepository;
 import br.com.thaua.Ecommerce.services.returnTypeUsers.ExtractTypeUserContextHolder;
 import br.com.thaua.Ecommerce.services.validators.ValidationService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
@@ -37,6 +40,7 @@ public class FornecedorService {
     private final ValidationService validationService;
     private final PaginaMapper paginaMapper;
 
+    @CachePut(value = "forneceedores", key = "T(org.springframework.security.core.context.SecurityContextHolder).getContext().getAuthentication().getPrincipal().getUsername()")
     public FornecedorResponse atualizarCNPJeTelefone(FornecedorCNPJTelefoneRequest fornecedorCNPJTelefoneRequest) {
         UsersEntity usersEntity = ExtractTypeUserContextHolder.extractUser();
         usersEntity.getFornecedor().setCnpj(fornecedorCNPJTelefoneRequest.getCnpj());
@@ -45,6 +49,7 @@ public class FornecedorService {
         return fornecedorMapper.FornecedorToResponse(usersRepository.save(usersEntity).getFornecedor());
     }
 
+    @CacheEvict(value = "produtos-Fornecedor", allEntries = true)
     public ProdutoResponse cadastrarProduto(ProdutoRequest produtoRequest, Map<String, String> errors) {
         UsersEntity usersEntity = ExtractTypeUserContextHolder.extractUser();
 
@@ -59,11 +64,13 @@ public class FornecedorService {
         return produtoMapper.produtoToResponse(produtoRepository.save(produtoEntity));
     }
 
+    @Cacheable(value = "produtos-Fornecedor", key = "T(org.springframework.security.core.context.SecurityContextHolder).getContext().getAuthentication().getPrincipal().getUsername() + '_' + #pageable.getPageNumber() + '_' + #pageable.getPageSize()")
     public Pagina<ProdutoResponse> exibirProdutos(Pageable pageable) {
         UsersEntity usersEntity = ExtractTypeUserContextHolder.extractUser();
         return paginaMapper.toPagina(produtoRepository.findAllByFornecedorId(usersEntity.getId(), pageable).map(produtoMapper::produtoToResponse));
     }
 
+    @Cacheable("produtos-Fornecedor")
     public ProdutoResponse buscarProduto(Long produtoId, Map<String, String> errors) {
         UsersEntity usersEntity = ExtractTypeUserContextHolder.extractUser();
         Optional<ProdutoEntity> produtoEntity = produtoRepository.findByIdAndFornecedorId(produtoId, usersEntity.getId());
@@ -74,6 +81,7 @@ public class FornecedorService {
         return produtoMapper.produtoToResponse(produtoEntity.get());
     }
 
+    @CacheEvict(value = "produtos-Fornecedor", allEntries = true)
     public ProdutoResponse atualizarProduto(Long produtoid, ProdutoRequest produtoRequest, Map<String, String> errors) {
         UsersEntity usersEntity = ExtractTypeUserContextHolder.extractUser();
         Optional<ProdutoEntity> produtoEntity = produtoRepository.findByIdAndFornecedorId(produtoid, usersEntity.getId());
@@ -89,6 +97,7 @@ public class FornecedorService {
         return produtoMapper.produtoToResponse(produtoRepository.save(produtoEntity.get()));
     }
 
+    @CachePut(value = "categorias-Produtos", key = "#categoriaId")
     public ProdutoResponse adicionarProdutoACategoria(Long categoriaId, Long produtoId, Map<String, String> errors) {
         UsersEntity usersEntity = ExtractTypeUserContextHolder.extractUser();
         Optional<CategoriaEntity> categoriaEntity = categoriaRepository.findById(categoriaId);
@@ -108,6 +117,7 @@ public class FornecedorService {
         return produtoMapper.produtoToResponse(produtoEntity.get());
     }
 
+    @CacheEvict(value = "produtos-Fornecedor", allEntries = true)
     public ProdutoResponse atualizarEstoqueProduto(Long produtoId, ProdutoNovoEstoqueRequest produtoNovoEstoqueRequest, Map<String, String> errors) {
         UsersEntity usersEntity = ExtractTypeUserContextHolder.extractUser();
         Optional<ProdutoEntity> produtoEntity = produtoRepository.findByIdAndFornecedorId(produtoId, usersEntity.getId());
@@ -121,6 +131,7 @@ public class FornecedorService {
     }
 
 //    PRECISO DAR UMA REVISADA MELHOR NESSE PARTE DE CODIGO
+    @CacheEvict(value = "produtos-Fornecedor", allEntries = true)
     public String removerProduto(Long produtoId, Map<String, String> errors) {
         UsersEntity usersEntity = ExtractTypeUserContextHolder.extractUser();
         Optional<ProdutoEntity> produtoEntity = produtoRepository.findByIdAndFornecedorId(produtoId, usersEntity.getId());
@@ -137,7 +148,7 @@ public class FornecedorService {
 
         return produtoEntity.get().getNome() + " foi removido com sucesso, " + usersEntity.getName();
     }
-
+    @CacheEvict(value = "categorias-Produtos", allEntries = true)
     public String removerProdutoDeCategoria(Long categoriaId, Long produtoId, Map<String, String> errors) {
         UsersEntity usersEntity = ExtractTypeUserContextHolder.extractUser();
         Optional<ProdutoEntity> produtoEntity = produtoRepository.findByIdAndFornecedorId(produtoId, usersEntity.getId());
