@@ -8,6 +8,10 @@ import br.com.thaua.Ecommerce.services.UsersService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
+import org.hibernate.annotations.Cache;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -20,6 +24,7 @@ public class EnderecoController {
     private final UsersService usersService;
     private final EnderecoMapper enderecoMapper;
 
+    @CachePut(value = "enderecos", key = "T(org.springframework.security.core.context.SecurityContextHolder).getContext().getAuthentication().getPrincipal().getUsername()")
     @Operation(summary = "cadastrar endereco", description = "o usuario autenticado pode cadastrar um endereco para si")
     @PostMapping("/register")
     public ResponseEntity<EnderecoResponse> cadastrarEndereco(@RequestBody EnderecoRequest enderecoRequest) {
@@ -27,6 +32,7 @@ public class EnderecoController {
     }
 
 //    GET /api/v1/users/enderecos/list - Exibir meu endereco [USUARIO AUTENTICADO]
+    @Cacheable(value = "enderecos", key = "T(org.springframework.security.core.context.SecurityContextHolder).getContext().getAuthentication().getPrincipal().getUsername()")
     @Operation(summary = "Exibir endereco", description = "usuario cadastrado pode ver o seu endereco completo")
     @GetMapping("/list")
     public ResponseEntity<EnderecoResponse> exibirEndereco() {
@@ -34,6 +40,7 @@ public class EnderecoController {
     }
 
 //    DELETE /api/v1/users/enderecos/delete` - Remover endereço do usuario [USUARIO AUTENTICADO]
+    @CacheEvict(value = "enderecos", key = "T(org.springframework.security.core.context.SecurityContextHolder).getContext().getAuthentication().getPrincipal().getUsername()")
     @Operation(summary = "remover endereco", description = "usuario autenticado pode limpar as informacoes de seu endereco")
     @DeleteMapping("/delete")
     public ResponseEntity<String> removerEndereco() {
@@ -41,6 +48,7 @@ public class EnderecoController {
     }
 
 //    PUT /api/v1/users/enderecos/update - Atualizar endereço do cliente [USUARIO AUTENTICADO]
+    @CachePut(value = "enderecos", key = "T(org.springframework.security.core.context.SecurityContextHolder).getContext().getAuthentication().getPrincipal().getUsername()")
     @Operation(summary = "atualizar endereço", description = "usuario atualiza todas as informações do seu endereco")
     @PutMapping("/update")
     public ResponseEntity<EnderecoResponse> atualizarEndereco(@RequestBody EnderecoRequest enderecoRequest) {
