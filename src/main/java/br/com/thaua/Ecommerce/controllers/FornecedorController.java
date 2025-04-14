@@ -74,6 +74,7 @@ public class FornecedorController {
     }
 
 //    POST /api/v1/funcionarios/categorias/{categoriaId}/produtos/{produtoId}` - Associar produto à categoria [ROLE: FUNCIONARIO]
+    @CachePut(value = "categorias-Produtos", key = "#categoriaId")
     @Operation(summary = "adicionar produto para uma categoria", description = "fornecedor pode adicionar um de seus produtos para alguma categoria")
     @PostMapping("/categorias/{categoriaId}/produtos/{produtoId}")
     public ResponseEntity<ProdutoResponse> adicionarProdutoACategoria(@PathVariable Long categoriaId, @PathVariable Long produtoId) {
