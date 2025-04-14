@@ -74,12 +74,14 @@ public class ClienteController {
     }
 
 //    GET /api/v1/clientes/pedidos/{id}/list - Buscar pedido por ID [ROLE: CLIENTES]
+    @Cacheable(value = "pedidos", key = "(Org.springframework.security.core.context.SecurityContextHolder).getContext().getAuthentication().getPrincipal().getUsername()")
     @Operation(summary = "listar um pedido", description = "cliente pode listar um pedido especifico atraves do id do pedido")
     @GetMapping("/pedidos/{pedidoId}/list")
     public ResponseEntity<PedidoResponse> buscarPedido(@PathVariable Long pedidoId) {
         return ResponseEntity.ok(clienteService.buscarPedido(pedidoId, ConstructorErrors.returnMapErrors()));
     }
 
+    @Cacheable(value = "pedidos", key = "T(org.springframework.security.core.context.SecurityContextHolder).getContext().getAuthentication().getPrincipal().getUsername()")
     @Operation(summary = "buscar item pedido", description = "cliente pode buscar um item pedido especifico atraves do id do item pedido")
     @GetMapping("/pedidos/itensPedidos/{itemPedidoId}")
     public ResponseEntity<ItemPedidoResponse> buscarItemPedido(@PathVariable Long itemPedidoId) {
