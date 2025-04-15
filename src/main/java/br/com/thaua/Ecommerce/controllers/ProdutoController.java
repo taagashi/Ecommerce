@@ -25,7 +25,6 @@ import java.math.BigDecimal;
 public class ProdutoController {
     private final ProdutoService produtoService;
 
-    @Cacheable("categoria-Produto")
     @Operation(summary = "Lista todas as categorias de um determinado produto", description = "faz a listagem de categorias de um produto atraves de seu id")
     @GetMapping("/{produtoId}/categorias/list")
     public ResponseEntity<ProdutoCategoriaResponse> exibirCategoriasDeProduto(@PathVariable Long produtoId) {
@@ -33,7 +32,6 @@ public class ProdutoController {
         return ResponseEntity.ok(produtoService.exibirCategoriasDeProduto(produtoId, ConstructorErrors.returnMapErrors()));
     }
 
-    @Cacheable("produtos")
     @Operation(summary = "Lista todos os produtos com filtrando os precos", description = "lista todos os produtos usando um filtro de precos para o usuario poder ver qual eh o produto mais barato e afins")
     @GetMapping("/list")
     public ResponseEntity<Pagina<ProdutoResponse>> exibirProdutos(

@@ -11,6 +11,7 @@ import br.com.thaua.Ecommerce.repositories.ProdutoRepository;
 import br.com.thaua.Ecommerce.repositories.specifications.ProdutoSpecifications;
 import br.com.thaua.Ecommerce.services.validators.ValidationService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
@@ -27,6 +28,7 @@ public class ProdutoService {
     private final PaginaMapper paginaMapper;
     private final ValidationService validationService;
 
+    @Cacheable("categoria-Produto")
     public ProdutoCategoriaResponse exibirCategoriasDeProduto(Long produtoId, Map<String, String> errors) {
         Optional<ProdutoEntity> produtoEntity = produtoRepository.findById(produtoId);
 
@@ -36,6 +38,7 @@ public class ProdutoService {
         return produtoMapper.toProdutoCategoriaResponse(produtoEntity.get());
     }
 
+    @Cacheable("produtos")
     public Pagina<ProdutoResponse> exibirProdutos(Pageable pageable, BigDecimal min, BigDecimal max) {
         return paginaMapper.toPagina(produtoSpecifications.buscarComFiltros(min, max, pageable).map(produtoMapper::produtoToResponse));
     }
