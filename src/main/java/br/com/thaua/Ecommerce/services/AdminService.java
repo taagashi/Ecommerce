@@ -17,6 +17,7 @@ import br.com.thaua.Ecommerce.repositories.*;
 import br.com.thaua.Ecommerce.services.returnTypeUsers.ExtractTypeUserContextHolder;
 import br.com.thaua.Ecommerce.services.validators.ValidationService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
@@ -28,6 +29,7 @@ import org.springframework.stereotype.Service;
 import java.util.Map;
 import java.util.Optional;
 
+@Slf4j
 @RequiredArgsConstructor
 @Service
 public class AdminService {
@@ -50,6 +52,7 @@ public class AdminService {
     @Cacheable(value = "adminsListagem")
     public Pagina<AdminResponse> listarAdmins(Pageable pageable) {
         Page<AdminResponse> pageAdmins = adminRepository.findAll(pageable).map(adminMapper::adminEntityToAdminResponse);
+        log.info("EXECUTANDO SERVICE-ADMIN LISTAR ADMINS");
         return paginaMapper.toPagina(pageAdmins);
     }
 
@@ -59,12 +62,15 @@ public class AdminService {
         validationService.validarExistenciaEntidade(adminEntity.orElse(null), errors);
         validationService.analisarException("Houve um erro na hora de buscar admin", UserNotFoundException.class, errors);
 
+        log.info("EXECUTANDO SERVICE-ADMIN BUSCAR ADMIN");
         return adminMapper.adminEntityToAdminResponse(adminRepository.findById(adminId).get());
     }
 
     @Cacheable(value = "clientesListagem")
     public Pagina<ClienteResponse> listarClientes(Pageable pageable) {
         Page<ClienteResponse> pageClientes = clienteRepository.findAll(pageable).map(clienteMapper::toResponse);
+
+        log.info("EXECUTANDO SERVICE-ADMIN LISTAR CLIENTES");
         return paginaMapper.toPagina(pageClientes);
     }
 
@@ -74,6 +80,7 @@ public class AdminService {
         validationService.validarExistenciaEntidade(clienteEntity.orElse(null), errors);
         validationService.analisarException("Houve um erro na hora de buscar o cliente", UserNotFoundException.class, errors);
 
+        log.info("EXECUTANDO SERVICE-ADMIN BUSCAR CLIENTE");
         return clienteMapper.toResponse(clienteRepository.findById(clienteId).get());
     }
 
@@ -83,12 +90,15 @@ public class AdminService {
         validationService.validarExistenciaEntidade(fornecedorEntity.orElse(null), errors);
         validationService.analisarException("Houve um erro na hora de buscar o fornecedor", UserNotFoundException.class, errors);
 
+        log.info("EXECUTANDO SERVICE-ADMIN BUSCAR FORNECEDOR");
         return fornecedorMapper.FornecedorToResponse(fornecedorEntity.get());
     }
 
     @CacheEvict(value = "categorias", allEntries = true)
     public CategoriaResponse cadastrarNovaCategoria(CategoriaRequest categoriaRequest) {
         CategoriaEntity categoriaEntity = categoriaMapper.toEntity(categoriaRequest);
+
+        log.info("EXECUTANDO SERVICE-ADMIN CADASTRAR CATEGORIA");
         return categoriaMapper.toResponse(categoriaRepository.save(categoriaEntity));
     }
 
@@ -96,6 +106,8 @@ public class AdminService {
     public Pagina<FornecedorResponse> listarFornecedores(@PageableDefault(size = 2) Pageable pageable) {
         Page<FornecedorResponse> pageFornecedores = fornecedorRepository.findAll(pageable).map(fornecedorMapper::FornecedorToResponse);
 
+
+        log.info("EXECUTANDO SERVICE-ADMIN LISTAR FORNECEDORES");
         return paginaMapper.toPagina(pageFornecedores);
     }
 
@@ -116,6 +128,8 @@ public class AdminService {
         usersEntity.getAdmin().setContasBanidas(usersEntity.getAdmin().getContasBanidas() + 1);
         usersRepository.save(usersEntity);
 
+
+        log.info("EXECUTANDO SERVICE-ADMIN REMOVER USUARIO");
         return userDeletar.get().getName() + " foi removido com sucesso";
     }
 
@@ -126,6 +140,7 @@ public class AdminService {
         validationService.validarExistenciaEntidade(clienteEntity.orElse(null), errors);
         validationService.analisarException("Houve um erro na hora de buscar os pedidos do cliente", PedidoNotFoundException.class, errors);
 
+        log.info("EXECUTANDO SERVICE-ADMIN LISTAR PEDIDOS DO CLIENTE");
         return paginaMapper.toPagina(pedidoRepository.findAllByClienteId(clienteId, pageable).map(pedidoMapper::toPedidoResponse));
     }
 
@@ -138,6 +153,8 @@ public class AdminService {
 
         pedidoEntity.get().setStatusPedido(pedidoPatchRequest.getStatusPedido());
 
+
+        log.info("EXECUTANDO SERVICE-ADMIN ATUALIZAR STATUS PEDIDO");
         return pedidoMapper.toPedidoResponse(pedidoRepository.save(pedidoEntity.get()));
     }
 
@@ -152,6 +169,8 @@ public class AdminService {
         enderecoEntity.setUsers(usersEntity.get());
         usersEntity.get().setEndereco(enderecoEntity);
 
+
+        log.info("EXECUTANDO SERVICE-ADMIN CADASTRAR ENDERECO");
         return enderecoMapper.toEnderecoResponse(usersRepository.save(usersEntity.get()).getEndereco());
     }
 
@@ -162,6 +181,8 @@ public class AdminService {
         validationService.validarExistenciaEntidade(usersEntity.orElse(null), errors);
         validationService.analisarException("Houve um erro ao exibir endereco de usuario", AddressNotFoundException.class, errors);
 
+
+        log.info("EXECUTANDO SERVICE-ADMIN EXIBIR ENDERECO");
         return enderecoMapper.toEnderecoResponse(usersEntity.get().getEndereco());
     }
 
@@ -177,6 +198,8 @@ public class AdminService {
         enderecoEntity.setUsers(usersEntity.get());
         usersEntity.get().setEndereco(enderecoEntity);
 
+
+        log.info("EXECUTANDO SERVICE-ADMIN ATUALIZAR ENDERECO");
         return enderecoMapper.toEnderecoResponse(enderecoEntity);
     }
 
@@ -195,6 +218,8 @@ public class AdminService {
         usersRepository.save(usersEntity.get());
         enderecoRepository.delete(enderecoEntity);
 
+
+        log.info("EXECUTANDO SERVICE-ADMIN DELETAR ENDERECO");
         return usersEntity.get().getName() + " teve seu endereco limpo com sucesso";
     }
 
@@ -208,6 +233,8 @@ public class AdminService {
         categoriaEntity.get().setNome(categoriaRequest.getNome());
         categoriaEntity.get().setDescricao(categoriaRequest.getDescricao());
 
+
+        log.info("EXECUTANDO SERVICE-ADMIN ATUALIZAR CATEGORIA");
         return categoriaMapper.toResponse(categoriaRepository.save(categoriaEntity.get()));
     }
 
@@ -220,6 +247,8 @@ public class AdminService {
 
         categoriaRepository.delete(categoriaEntity.get());
 
+
+        log.info("EXECUTANDO SERVICE-ADMIN DELETAR CATEGORIA");
         return "categoria " + categoriaEntity.get().getNome() + " foi deletada com sucesso";
     }
 
