@@ -10,6 +10,7 @@ import br.com.thaua.Ecommerce.mappers.PaginaMapper;
 import br.com.thaua.Ecommerce.repositories.CategoriaRepository;
 import br.com.thaua.Ecommerce.services.validators.ValidationService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
@@ -24,10 +25,12 @@ public class CategoriaService {
     private final PaginaMapper paginaMapper;
     private final ValidationService validationService;
 
+    @Cacheable(value = "categorias")
     public Pagina<CategoriaResponse> exibirCategorias(Pageable pageable) {
         return paginaMapper.toPagina(categoriaRepository.findAll(pageable).map(categoriaMapper::toResponse));
     }
 
+    @Cacheable(value = "categorias")
     public CategoriaResponse exibirCategoria(Long categoriaId, Map<String, String> errors) {
         Optional<CategoriaEntity> categoriaEntity = categoriaRepository.findById(categoriaId);
 
@@ -37,6 +40,7 @@ public class CategoriaService {
         return categoriaMapper.toResponse(categoriaEntity.get());
     }
 
+    @Cacheable(value = "categorias-Produtos", key = "#categoriaId")
     public CategoriaProdutosResponse listarProdutosPorCategoria(Long categoriaId, Map<String, String> errors) {
         Optional<CategoriaEntity> categoriaEntity = categoriaRepository.findById(categoriaId);
 

@@ -29,7 +29,6 @@ public class CategoriaController {
     private final CategoriaService categoriaService;
 
 //    GET /api/v1/categorias/list - Listar todas as categorias [QUALQUER USUARIO AUTENTICADO]
-    @Cacheable(value = "categorias")
     @Operation(summary = "exibir categorias", description = "usuario autenticado pode ver todas as categorias cadastradas")
     @GetMapping("/list")
     public ResponseEntity<Pagina<CategoriaResponse>> exibirCategorias(Pageable pageable) {
@@ -38,7 +37,6 @@ public class CategoriaController {
     }
 
 //    GET /api/v1/categorias/{categoriaId}/list - Buscar categoria por ID [QUALQUER USUARIO AUTENTICADO]
-    @Cacheable(value = "categorias")
     @Operation(summary = "exibir categoria", description = "usuario atutenticado pode ver uma categoria especifica procurando pelo id da categoria")
     @GetMapping("/{categoriaId}/list")
     public ResponseEntity<CategoriaResponse> exibirCategoria(@PathVariable Long categoriaId) {
@@ -47,7 +45,6 @@ public class CategoriaController {
     }
 
 //    GET /api/v1/categorias/{categoriaId}/produtos/list` - Listar produtos por categoria [QUALQUER USUARIO AUTENTICADO]
-    @Cacheable(value = "categorias-Produtos", key = "#categoriaId")
     @Operation(summary = "exibir produtos de uma categoria", description = "usuario autenticado pode ver todos os produtos de uma categoria")
     @GetMapping("/{categoriaId}/produtos/list")
     public ResponseEntity<CategoriaProdutosResponse> listarProdutosPorCategoria(@PathVariable Long categoriaId) {
