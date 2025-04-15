@@ -17,6 +17,9 @@ import br.com.thaua.Ecommerce.repositories.*;
 import br.com.thaua.Ecommerce.services.returnTypeUsers.ExtractTypeUserContextHolder;
 import br.com.thaua.Ecommerce.services.validators.ValidationService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
@@ -44,11 +47,13 @@ public class AdminService {
     private final PaginaMapper paginaMapper;
     private final ValidationService validationService;
 
+    @Cacheable(value = "adminsListagem")
     public Pagina<AdminResponse> listarAdmins(Pageable pageable) {
         Page<AdminResponse> pageAdmins = adminRepository.findAll(pageable).map(adminMapper::adminEntityToAdminResponse);
         return paginaMapper.toPagina(pageAdmins);
     }
 
+    @Cacheable("admins-Admin")
     public AdminResponse buscarAdmin(Long adminId, Map<String, String> errors) {
         Optional<AdminEntity> adminEntity = adminRepository.findById(adminId);
         validationService.validarExistenciaEntidade(adminEntity.orElse(null), errors);
@@ -56,13 +61,14 @@ public class AdminService {
 
         return adminMapper.adminEntityToAdminResponse(adminRepository.findById(adminId).get());
     }
-    
+
+    @Cacheable(value = "clientesListagem")
     public Pagina<ClienteResponse> listarClientes(Pageable pageable) {
         Page<ClienteResponse> pageClientes = clienteRepository.findAll(pageable).map(clienteMapper::toResponse);
         return paginaMapper.toPagina(pageClientes);
     }
 
-
+    @Cacheable("clientes-Admin")
     public ClienteResponse buscarCliente(Long clienteId, Map<String, String> errors) {
         Optional<ClienteEntity> clienteEntity = clienteRepository.findById(clienteId);
         validationService.validarExistenciaEntidade(clienteEntity.orElse(null), errors);
@@ -71,6 +77,7 @@ public class AdminService {
         return clienteMapper.toResponse(clienteRepository.findById(clienteId).get());
     }
 
+    @Cacheable("fornecedores-Admin")
     public FornecedorResponse buscarFornecedor(Long fornecedorId, Map<String, String> errors) {
         Optional<FornecedorEntity> fornecedorEntity = fornecedorRepository.findById(fornecedorId);
         validationService.validarExistenciaEntidade(fornecedorEntity.orElse(null), errors);
@@ -79,17 +86,20 @@ public class AdminService {
         return fornecedorMapper.FornecedorToResponse(fornecedorEntity.get());
     }
 
+    @CacheEvict(value = "categorias", allEntries = true)
     public CategoriaResponse cadastrarNovaCategoria(CategoriaRequest categoriaRequest) {
         CategoriaEntity categoriaEntity = categoriaMapper.toEntity(categoriaRequest);
         return categoriaMapper.toResponse(categoriaRepository.save(categoriaEntity));
     }
 
+    @Cacheable(value = "fornecedoresListagem")
     public Pagina<FornecedorResponse> listarFornecedores(@PageableDefault(size = 2) Pageable pageable) {
         Page<FornecedorResponse> pageFornecedores = fornecedorRepository.findAll(pageable).map(fornecedorMapper::FornecedorToResponse);
 
         return paginaMapper.toPagina(pageFornecedores);
     }
 
+    @CacheEvict(value = "clientes-Admin", allEntries = true)
     public String removerUsuario(Long userId, Map<String, String> errors) {
         UsersEntity usersEntity = ExtractTypeUserContextHolder.extractUser();
 
@@ -109,6 +119,7 @@ public class AdminService {
         return userDeletar.get().getName() + " foi removido com sucesso";
     }
 
+    @Cacheable("pedidos-Admin")
     public Pagina<PedidoResponse> listarPedidosDoCliente(Long clienteId, Pageable pageable, Map<String, String> errors) {
         Optional<ClienteEntity> clienteEntity = clienteRepository.findById(clienteId);
 
@@ -118,6 +129,7 @@ public class AdminService {
         return paginaMapper.toPagina(pedidoRepository.findAllByClienteId(clienteId, pageable).map(pedidoMapper::toPedidoResponse));
     }
 
+    @CacheEvict(value = "pedidos-Admin", allEntries = true)
     public PedidoResponse atualizarStatusPedido(Long pedidoId, PedidoPatchRequest pedidoPatchRequest, Map<String, String> errors) {
         Optional<PedidoEntity> pedidoEntity = pedidoRepository.findById(pedidoId);
 
@@ -129,6 +141,7 @@ public class AdminService {
         return pedidoMapper.toPedidoResponse(pedidoRepository.save(pedidoEntity.get()));
     }
 
+    @CachePut(value = "enderecos-Admin", key = "#userId")
     public EnderecoResponse cadastrarEnderecoUsuario(Long userId, EnderecoRequest enderecoRequest, Map<String, String> errors) {
         Optional<UsersEntity> usersEntity = usersRepository.findById(userId);
 
@@ -142,6 +155,7 @@ public class AdminService {
         return enderecoMapper.toEnderecoResponse(usersRepository.save(usersEntity.get()).getEndereco());
     }
 
+    @Cacheable(value = "enderecos-Admin", key = "#userId")
     public EnderecoResponse exibirEnderecoUsuario(Long userId, Map<String, String> errors) {
         Optional<UsersEntity> usersEntity = usersRepository.findById(userId);
 
@@ -151,6 +165,7 @@ public class AdminService {
         return enderecoMapper.toEnderecoResponse(usersEntity.get().getEndereco());
     }
 
+    @CachePut(value = "enderecos-Admin", key = "#userId")
     public EnderecoResponse atualizarEnderecoUsuario(Long userId, EnderecoRequest enderecoRequest, Map<String, String> errors) {
         Optional<UsersEntity> usersEntity = usersRepository.findById(userId);
 
@@ -165,6 +180,7 @@ public class AdminService {
         return enderecoMapper.toEnderecoResponse(enderecoEntity);
     }
 
+    @CacheEvict(value = "enderecos-Admin", key = "#userId")
     public String deletarEnderecoUsuario(Long userId, Map<String, String> errors) {
         Optional<UsersEntity> usersEntity = usersRepository.findById(userId);
 
@@ -182,6 +198,7 @@ public class AdminService {
         return usersEntity.get().getName() + " teve seu endereco limpo com sucesso";
     }
 
+    @CacheEvict(value = "categorias", allEntries = true)
     public CategoriaResponse atualizarCategoria(Long categoriaId, CategoriaRequest categoriaRequest, Map<String, String> errors) {
         Optional<CategoriaEntity> categoriaEntity = categoriaRepository.findById(categoriaId);
 
@@ -194,6 +211,7 @@ public class AdminService {
         return categoriaMapper.toResponse(categoriaRepository.save(categoriaEntity.get()));
     }
 
+    @CacheEvict(value = "categorias", allEntries = true)
     public String deletarCategoria(Long categoriaId, Map<String, String> errors) {
         Optional<CategoriaEntity> categoriaEntity = categoriaRepository.findById(categoriaId);
 
