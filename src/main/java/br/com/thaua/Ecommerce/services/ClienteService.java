@@ -21,6 +21,7 @@ import br.com.thaua.Ecommerce.repositories.*;
 import br.com.thaua.Ecommerce.services.returnTypeUsers.ExtractTypeUserContextHolder;
 import br.com.thaua.Ecommerce.services.validators.ValidationService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Pageable;
@@ -33,6 +34,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+@Slf4j
 @RequiredArgsConstructor
 @Service
 public class ClienteService {
@@ -54,12 +56,16 @@ public class ClienteService {
         usersEntity.getCliente().setCpf(clienteCpfTelefoneRequest.getCpf());
         usersEntity.setTelefone(clienteCpfTelefoneRequest.getTelefone());
 
+
+        log.info("EXECUTANDO SERVICE-CLIENTE ATUALIZAR CPF E TELEFONE");
         return clienteMapper.toResponse(usersRepository.save(usersEntity).getCliente());
     }
 
     @Cacheable(value = "clientes",key = "T(org.springframework.security.core.context.SecurityContextHolder).getContext().getAuthentication().getPrincipal().getUsername()")
     public ClienteComPedidoResponse exibirPerfil() {
         UsersEntity usersEntity = ExtractTypeUserContextHolder.extractUser();
+
+        log.info("EXECUTANDO SERVICE-CLIENTE EXIBIR PERFIL");
         return clienteMapper.toResponseComPedido(usersEntity.getCliente());
     }
 
@@ -72,6 +78,8 @@ public class ClienteService {
         usersEntity.getCliente().setCpf(clienteUpdateRequest.getCpf());
         usersEntity.setTelefone(clienteUpdateRequest.getTelefone());
 
+
+        log.info("EXECUTANDO SERVICE-CLIENTE ATUALIZAR DADOS");
         return clienteMapper.toResponse(usersRepository.save(usersEntity).getCliente());
     }
 
@@ -111,6 +119,8 @@ public class ClienteService {
         }
 
         pedidoEntity.setItensPedidos(itemPedidoEntityList);
+
+        log.info("EXECUTANDO SERVICE-CLIENTE FAZER PEDIDO");
         pedidoRepository.save(pedidoEntity);
             return pedidoMapper.toPedidoResponse(pedidoEntity);
     }
@@ -119,6 +129,8 @@ public class ClienteService {
     public Pagina<PedidoResponse> listarPedidos(Pageable pageable) {
         UsersEntity usersEntity = ExtractTypeUserContextHolder.extractUser();
 
+
+        log.info("EXECUTANDO SERVICE-CLIENTE LISTAR PEDIDOS");
         return paginaMapper.toPagina(pedidoRepository.findAllByClienteId(usersEntity.getId(), pageable).map(pedidoMapper::toPedidoResponse));
     }
 
@@ -130,6 +142,8 @@ public class ClienteService {
         validationService.validarExistenciaEntidade(pedidoEntity.orElse(null), errors);
         validationService.analisarException(usersEntity.getName() + " houve um erro ao tentar buscar pedido", PedidoNotFoundException.class, errors);
 
+
+        log.info("EXECUTANDO SERVICE-CLIENTE BUSCAR PEDIDO");
         return pedidoMapper.toPedidoResponse(pedidoEntity.get());
     }
 
@@ -141,6 +155,8 @@ public class ClienteService {
         validationService.validarExistenciaEntidade(itemPedidoEntity.orElse(null), errors);
         validationService.analisarException(usersEntity.getName() + " houve um erro ao tentar buscar item pedido", ItemPedidoNotFoundException.class, errors);
 
+
+        log.info("EXECUTANDO SERVICE-CLIENTE BUSCAR ITEM PEDIDO");
         return itemPedidoMapper.toItemPedidoResponse(itemPedidoEntity.get());
     }
 }
