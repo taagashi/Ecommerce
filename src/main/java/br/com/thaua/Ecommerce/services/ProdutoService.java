@@ -30,7 +30,7 @@ public class ProdutoService {
     private final PaginaMapper paginaMapper;
     private final ValidationService validationService;
 
-    @Cacheable("categoria-Produto")
+//    @Cacheable("categoria-Produto")
     public ProdutoCategoriaResponse exibirCategoriasDeProduto(Long produtoId, Map<String, String> errors) {
         Optional<ProdutoEntity> produtoEntity = produtoRepository.findById(produtoId);
 
@@ -42,7 +42,7 @@ public class ProdutoService {
         return produtoMapper.toProdutoCategoriaResponse(produtoEntity.get());
     }
 
-    @Cacheable("produtos")
+//    @Cacheable("produtos")
     public Pagina<ProdutoResponse> exibirProdutos(Pageable pageable, BigDecimal min, BigDecimal max) {
 
         log.info("EXECUTANDO SERVICE-PRODUTO EXIBIR PRODUTOS");

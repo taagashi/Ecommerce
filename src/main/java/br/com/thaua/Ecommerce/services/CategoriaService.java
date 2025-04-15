@@ -27,13 +27,13 @@ public class CategoriaService {
     private final PaginaMapper paginaMapper;
     private final ValidationService validationService;
 
-    @Cacheable(value = "categorias")
+//    @Cacheable(value = "categorias")
     public Pagina<CategoriaResponse> exibirCategorias(Pageable pageable) {
         log.info("EXECUTANDO SERVICE-CATEGORIA EXIBIR CATEGORIAS");
         return paginaMapper.toPagina(categoriaRepository.findAll(pageable).map(categoriaMapper::toResponse));
     }
 
-    @Cacheable(value = "categorias")
+//    @Cacheable(value = "categorias")
     public CategoriaResponse exibirCategoria(Long categoriaId, Map<String, String> errors) {
         Optional<CategoriaEntity> categoriaEntity = categoriaRepository.findById(categoriaId);
 
@@ -45,7 +45,7 @@ public class CategoriaService {
         return categoriaMapper.toResponse(categoriaEntity.get());
     }
 
-    @Cacheable(value = "categorias-Produtos", key = "#categoriaId")
+//    @Cacheable(value = "categorias-Produtos", key = "#categoriaId")
     public CategoriaProdutosResponse listarProdutosPorCategoria(Long categoriaId, Map<String, String> errors) {
         Optional<CategoriaEntity> categoriaEntity = categoriaRepository.findById(categoriaId);
 

@@ -46,7 +46,7 @@ public class UsersService {
 
         resolverGeralUsers.setInformationUsers(usersEntity);
         UsersEntity saveUser = usersRepository.save(usersEntity);
-        resolverGeralUsers.cleanCache(usersEntity);
+//        resolverGeralUsers.cleanCache(usersEntity);
 
 //        emailMessageService.registroDeUsuario(usuario.getName(), usuario.getEmail());
         return jwtService.generateToken(new MyUserDetails(saveUser.getId(), saveUser.getEmail(), saveUser.getPassword(), saveUser.getRole().name(), saveUser));
