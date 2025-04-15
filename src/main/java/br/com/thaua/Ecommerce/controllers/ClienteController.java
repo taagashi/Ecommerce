@@ -14,7 +14,6 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Pageable;
@@ -31,7 +30,6 @@ import java.util.List;
 public class ClienteController {
     private final ClienteService clienteService;
 //    PATCH /api/v1/clientes/cpf-telefone/update - atualizar cpf e telfone [ROLE: CLIENTE]
-    @CachePut(value = "clientes", key = "T(org.springframework.security.core.context.SecurityContextHolder).getContext().getAuthentication().getPrincipal().getUsername()")
     @Operation(summary = "atualizar cpf e telefone", description = "o cliente autenticado adiciona/atualiza seu numero e cpf para pode realizar acoes mais ativas na aplicacao")
     @PatchMapping("cpf-telefone/update")
     public ResponseEntity<ClienteResponse> atualizarCpfETelefone(@RequestBody ClienteCpfTelefoneRequest clienteCpfTelefoneRequest) {
@@ -40,7 +38,6 @@ public class ClienteController {
     }
 
 //    GET /api/v1/clientes/view-profile - Exibir meu perfl [ROLE: CLIENTE]
-    @Cacheable(value = "clientes",key = "T(org.springframework.security.core.context.SecurityContextHolder).getContext().getAuthentication().getPrincipal().getUsername()")
     @Operation(summary = "exibir perfil", description = "cliente pode ver o seu perfil")
     @GetMapping("/view-profile")
     public ResponseEntity<ClienteComPedidoResponse> exibirPerfil() {
@@ -49,7 +46,6 @@ public class ClienteController {
     }
 
 //    PUT /api/v1/clientes/update - Atualizar meus dados [ROLE: CLIENTE]1
-    @CachePut(value = "clientes", key = "T(org.springframework.security.core.context.SecurityContextHolder).getContext().getAuthentication().getPrincipal().getUsername()")
     @Operation(summary = "atualizar dados", description = "cliente atualiza dados como: nome, email, telefone e cpf")
     @PutMapping("/update")
     public ResponseEntity<ClienteResponse> atualizarDados(@RequestBody ClienteUpdateRequest clienteUpdateRequest) {
@@ -58,7 +54,6 @@ public class ClienteController {
     }
 
 //    POST /api/v1/clientes/pedidos/register - Fazer pedido [ROLE: CLIENTE]
-    @CachePut(value = "pedidos", key = "T(org.springframework.security.core.context.SecurityContexHolder).getContext().getAuthentication().getPrincipal().getUsername()")
     @Operation(summary = "fazer pedido", description = "cliente pode diversos pedidos de uma só vez para diferentes produtos")
     @PostMapping("/pedidos/register")
     public ResponseEntity<PedidoResponse> fazerPedido(@RequestBody List<ItemPedidoRequest> itemPedidoRequest) {
@@ -66,7 +61,7 @@ public class ClienteController {
     }
 
 //    GET /api/v1/clientes/list/pedidos - Listar meus pedidos [ROLE: CLIENTE]
-    @Cacheable(value = "pedidos", key = "T(org.springframework.security.core.context.SecurityContextHolder).getContext().getAuthentication().getPrincipal().getUsername()")
+
     @Operation(summary = "listar pedidos", description = "cliente pode listar todos os seus pedidos")
     @GetMapping("/pedidos/list")
     public ResponseEntity<Pagina<PedidoResponse>> listarPedidos(Pageable pageable) {
@@ -74,14 +69,12 @@ public class ClienteController {
     }
 
 //    GET /api/v1/clientes/pedidos/{id}/list - Buscar pedido por ID [ROLE: CLIENTES]
-    @Cacheable(value = "pedidos", key = "(Org.springframework.security.core.context.SecurityContextHolder).getContext().getAuthentication().getPrincipal().getUsername()")
     @Operation(summary = "listar um pedido", description = "cliente pode listar um pedido especifico atraves do id do pedido")
     @GetMapping("/pedidos/{pedidoId}/list")
     public ResponseEntity<PedidoResponse> buscarPedido(@PathVariable Long pedidoId) {
         return ResponseEntity.ok(clienteService.buscarPedido(pedidoId, ConstructorErrors.returnMapErrors()));
     }
 
-    @Cacheable(value = "pedidos", key = "T(org.springframework.security.core.context.SecurityContextHolder).getContext().getAuthentication().getPrincipal().getUsername()")
     @Operation(summary = "buscar item pedido", description = "cliente pode buscar um item pedido especifico atraves do id do item pedido")
     @GetMapping("/pedidos/itensPedidos/{itemPedidoId}")
     public ResponseEntity<ItemPedidoResponse> buscarItemPedido(@PathVariable Long itemPedidoId) {

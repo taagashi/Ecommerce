@@ -21,6 +21,8 @@ import br.com.thaua.Ecommerce.repositories.*;
 import br.com.thaua.Ecommerce.services.returnTypeUsers.ExtractTypeUserContextHolder;
 import br.com.thaua.Ecommerce.services.validators.ValidationService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
@@ -45,6 +47,7 @@ public class ClienteService {
     private final ValidationService validationService;
     private final PaginaMapper paginaMapper;
 
+    @CachePut(value = "clientes", key = "T(org.springframework.security.core.context.SecurityContextHolder).getContext().getAuthentication().getPrincipal().getUsername()")
     public ClienteResponse atualizarCpfETelefone(ClienteCpfTelefoneRequest clienteCpfTelefoneRequest, Map<String, String> errors) {
         UsersEntity usersEntity = ExtractTypeUserContextHolder.extractUser();
 
@@ -54,12 +57,14 @@ public class ClienteService {
         return clienteMapper.toResponse(usersRepository.save(usersEntity).getCliente());
     }
 
+    @Cacheable(value = "clientes",key = "T(org.springframework.security.core.context.SecurityContextHolder).getContext().getAuthentication().getPrincipal().getUsername()")
     public ClienteComPedidoResponse exibirPerfil() {
         UsersEntity usersEntity = ExtractTypeUserContextHolder.extractUser();
         return clienteMapper.toResponseComPedido(usersEntity.getCliente());
     }
 
 
+    @CachePut(value = "clientes", key = "T(org.springframework.security.core.context.SecurityContextHolder).getContext().getAuthentication().getPrincipal().getUsername()")
     public ClienteResponse atualizarDados(ClienteUpdateRequest clienteUpdateRequest) {
         UsersEntity usersEntity = ExtractTypeUserContextHolder.extractUser();
         usersEntity.setName(clienteUpdateRequest.getName());
@@ -70,6 +75,7 @@ public class ClienteService {
         return clienteMapper.toResponse(usersRepository.save(usersEntity).getCliente());
     }
 
+    @CachePut(value = "pedidos", key = "T(org.springframework.security.core.context.SecurityContexHolder).getContext().getAuthentication().getPrincipal().getUsername()")
     public PedidoResponse fazerPedido(List<ItemPedidoRequest> itemPedidoRequest, Map<String, String> errors) {
        UsersEntity usersEntity = ExtractTypeUserContextHolder.extractUser();
 
@@ -109,12 +115,14 @@ public class ClienteService {
             return pedidoMapper.toPedidoResponse(pedidoEntity);
     }
 
+    @Cacheable(value = "pedidos", key = "T(org.springframework.security.core.context.SecurityContextHolder).getContext().getAuthentication().getPrincipal().getUsername()")
     public Pagina<PedidoResponse> listarPedidos(Pageable pageable) {
         UsersEntity usersEntity = ExtractTypeUserContextHolder.extractUser();
 
         return paginaMapper.toPagina(pedidoRepository.findAllByClienteId(usersEntity.getId(), pageable).map(pedidoMapper::toPedidoResponse));
     }
 
+    @Cacheable(value = "pedidos", key = "(Org.springframework.security.core.context.SecurityContextHolder).getContext().getAuthentication().getPrincipal().getUsername()")
     public PedidoResponse buscarPedido(Long pedidoId, Map<String, String> errors) {
         UsersEntity usersEntity = ExtractTypeUserContextHolder.extractUser();
         Optional<PedidoEntity> pedidoEntity = pedidoRepository.findByIdAndClienteId(pedidoId, usersEntity.getId());
@@ -125,6 +133,7 @@ public class ClienteService {
         return pedidoMapper.toPedidoResponse(pedidoEntity.get());
     }
 
+    @Cacheable(value = "pedidos", key = "T(org.springframework.security.core.context.SecurityContextHolder).getContext().getAuthentication().getPrincipal().getUsername()")
     public ItemPedidoResponse buscarItemPedido(Long itemPedidoId, Map<String, String> errors) {
         UsersEntity usersEntity = ExtractTypeUserContextHolder.extractUser();
         Optional<ItemPedidoEntity> itemPedidoEntity = itemPedidoRepository.findByIdAndPedidoClienteId(itemPedidoId, usersEntity.getId());
