@@ -48,4 +48,15 @@ public class ProdutoService {
         log.info("EXECUTANDO SERVICE-PRODUTO EXIBIR PRODUTOS");
         return paginaMapper.toPagina(produtoSpecifications.buscarComFiltros(min, max, pageable).map(produtoMapper::produtoToResponse));
     }
+
+    public ProdutoResponse buscarProduto(Long produtoId, Map<String, String> errors) {
+        log.info("EXECUTANDO SERVICE-PRODUTO BUSCAR PRODUTO");
+
+        Optional<ProdutoEntity> produtoEntity = produtoRepository.findById(produtoId);
+
+        validationService.validarExistenciaEntidade(produtoEntity.orElse(null), errors);
+        validationService.analisarException("Houve um erro ao tentar buscar o produto", ProdutoNotFoundException.class, errors);
+
+        return produtoMapper.produtoToResponse(produtoEntity.get());
+    }
 }

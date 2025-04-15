@@ -46,4 +46,11 @@ public class ProdutoController {
         log.info("EXIBIR PRODUTOS");
         return ResponseEntity.ok(produtoService.exibirProdutos(pageable, min, max));
     }
+
+    @Operation(summary = "Buscar produto por id", description = "usuario cadastrado pode buscar um produto pelo id")
+    @GetMapping("/{produtoId}")
+    public ResponseEntity<ProdutoResponse> buscarProduto(@PathVariable Long produtoId) {
+        log.info("BUSCAR PRODUTO");
+        return ResponseEntity.ok(produtoService.buscarProduto(produtoId, ConstructorErrors.returnMapErrors()));
+    }
 }
