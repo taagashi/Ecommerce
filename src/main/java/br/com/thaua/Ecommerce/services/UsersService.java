@@ -23,6 +23,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import br.com.thaua.Ecommerce.services.validators.ValidationService;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Map;
 
@@ -40,6 +41,7 @@ public class UsersService {
     private final EnderecoRepository enderecoRepository;
     private final ValidationService validationService;
 
+    @Transactional
     public String cadastrarUsuario(UsersRequest usuario) {
         usuario.setPassword(passwordEncoder.encode(usuario.getPassword()));
         UsersEntity usersEntity = userMapper.toEntity(usuario);
@@ -62,6 +64,7 @@ public class UsersService {
     }
 
 //    CRIAR LOGICA DE IMPEDIMENTO DE DELETACAO DE CONTA
+    @Transactional
     public String deletarConta() {
         UsersEntity usersEntity = ExtractTypeUserContextHolder.extractUser();
         usersRepository.delete(usersEntity);
@@ -71,7 +74,7 @@ public class UsersService {
         return usersEntity.getName() + " sua conta foi deletada com sucesso";
     }
 
-    @CachePut(value = "enderecos", key = "T(org.springframework.security.core.context.SecurityContextHolder).getContext().getAuthentication().getPrincipal().getUsername()")
+//    @CachePut(value = "enderecos", key = "T(org.springframework.security.core.context.SecurityContextHolder).getContext().getAuthentication().getPrincipal().getUsername()")
     public EnderecoResponse cadastrarEndereco(EnderecoRequest enderecoRequest, Map<String, String> errors) {
         UsersEntity usersEntity = ExtractTypeUserContextHolder.extractUser();
 
@@ -86,7 +89,7 @@ public class UsersService {
         return enderecoMapper.toEnderecoResponse(usersRepository.save(usersEntity).getEndereco());
     }
 
-    @Cacheable(value = "enderecos", key = "T(org.springframework.security.core.context.SecurityContextHolder).getContext().getAuthentication().getPrincipal().getUsername()")
+//    @Cacheable(value = "enderecos", key = "T(org.springframework.security.core.context.SecurityContextHolder).getContext().getAuthentication().getPrincipal().getUsername()")
     public EnderecoResponse exibirEndereco(Map<String, String> errors) {
         UsersEntity usersEntity = ExtractTypeUserContextHolder.extractUser();
 
@@ -96,7 +99,7 @@ public class UsersService {
         return enderecoMapper.toEnderecoResponse(usersEntity.getEndereco());
     }
 
-    @CacheEvict(value = "enderecos", key = "T(org.springframework.security.core.context.SecurityContextHolder).getContext().getAuthentication().getPrincipal().getUsername()")
+//    @CacheEvict(value = "enderecos", key = "T(org.springframework.security.core.context.SecurityContextHolder).getContext().getAuthentication().getPrincipal().getUsername()")
     public String deletarEndereco(Map<String, String> errors) {
         UsersEntity usersEntity = ExtractTypeUserContextHolder.extractUser();
 
@@ -112,7 +115,8 @@ public class UsersService {
         return usersEntity.getName() + ", as informacoes do seu endereco foram deletadas com sucesso";
     }
 
-    @CachePut(value = "enderecos", key = "T(org.springframework.security.core.context.SecurityContextHolder).getContext().getAuthentication().getPrincipal().getUsername()")
+//    @CachePut(value = "enderecos", key = "T(org.springframework.security.core.context.SecurityContextHolder).getContext().getAuthentication().getPrincipal().getUsername()")
+    @Transactional
     public EnderecoResponse atualizarEndereco(EnderecoRequest enderecoRequest, Map<String, String> errors) {
         UsersEntity usersEntity = ExtractTypeUserContextHolder.extractUser();
 
