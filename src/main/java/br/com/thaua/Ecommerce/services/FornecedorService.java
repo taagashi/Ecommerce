@@ -26,6 +26,7 @@ import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Map;
 import java.util.Optional;
@@ -43,6 +44,7 @@ public class FornecedorService {
     private final PaginaMapper paginaMapper;
 
 //    @CachePut(value = "forneceedores", key = "T(org.springframework.security.core.context.SecurityContextHolder).getContext().getAuthentication().getPrincipal().getUsername()")
+    @Transactional
     public FornecedorResponse atualizarCNPJeTelefone(FornecedorCNPJTelefoneRequest fornecedorCNPJTelefoneRequest) {
         UsersEntity usersEntity = ExtractTypeUserContextHolder.extractUser();
         usersEntity.getFornecedor().setCnpj(fornecedorCNPJTelefoneRequest.getCnpj());
@@ -54,6 +56,7 @@ public class FornecedorService {
     }
 
 //    @CacheEvict(value = "produtos-Fornecedor", allEntries = true)
+    @Transactional
     public ProdutoResponse cadastrarProduto(ProdutoRequest produtoRequest, Map<String, String> errors) {
         UsersEntity usersEntity = ExtractTypeUserContextHolder.extractUser();
 
@@ -92,6 +95,7 @@ public class FornecedorService {
     }
 
 //    @CacheEvict(value = "produtos-Fornecedor", allEntries = true)
+    @Transactional
     public ProdutoResponse atualizarProduto(Long produtoid, ProdutoRequest produtoRequest, Map<String, String> errors) {
         UsersEntity usersEntity = ExtractTypeUserContextHolder.extractUser();
         Optional<ProdutoEntity> produtoEntity = produtoRepository.findByIdAndFornecedorId(produtoid, usersEntity.getId());
@@ -110,6 +114,7 @@ public class FornecedorService {
     }
 
 //    @CachePut(value = "categorias-Produtos", key = "#categoriaId")
+    @Transactional
     public ProdutoResponse adicionarProdutoACategoria(Long categoriaId, Long produtoId, Map<String, String> errors) {
         UsersEntity usersEntity = ExtractTypeUserContextHolder.extractUser();
         Optional<CategoriaEntity> categoriaEntity = categoriaRepository.findById(categoriaId);
@@ -132,6 +137,7 @@ public class FornecedorService {
     }
 
 //    @CacheEvict(value = "produtos-Fornecedor", allEntries = true)
+    @Transactional
     public ProdutoResponse atualizarEstoqueProduto(Long produtoId, ProdutoNovoEstoqueRequest produtoNovoEstoqueRequest, Map<String, String> errors) {
         UsersEntity usersEntity = ExtractTypeUserContextHolder.extractUser();
         Optional<ProdutoEntity> produtoEntity = produtoRepository.findByIdAndFornecedorId(produtoId, usersEntity.getId());
@@ -148,6 +154,7 @@ public class FornecedorService {
 
 //    PRECISO DAR UMA REVISADA MELHOR NESSE PARTE DE CODIGO
 //    @CacheEvict(value = "produtos-Fornecedor", allEntries = true)
+    @Transactional
     public String removerProduto(Long produtoId, Map<String, String> errors) {
         UsersEntity usersEntity = ExtractTypeUserContextHolder.extractUser();
         Optional<ProdutoEntity> produtoEntity = produtoRepository.findByIdAndFornecedorId(produtoId, usersEntity.getId());
@@ -169,6 +176,7 @@ public class FornecedorService {
 
 
 //    @CacheEvict(value = "categorias-Produtos", allEntries = true)
+    @Transactional
     public String removerProdutoDeCategoria(Long categoriaId, Long produtoId, Map<String, String> errors) {
         UsersEntity usersEntity = ExtractTypeUserContextHolder.extractUser();
         Optional<ProdutoEntity> produtoEntity = produtoRepository.findByIdAndFornecedorId(produtoId, usersEntity.getId());
