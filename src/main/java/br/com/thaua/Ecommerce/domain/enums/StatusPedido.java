@@ -6,10 +6,10 @@ import lombok.Getter;
 @AllArgsConstructor
 @Getter
 public enum StatusPedido {
-    AGUARDANDO("Pedido esta em aguardo"),
     CANCELADO("Pedido foi cancelado"),
-    PAGO("Pedido foi pago"),
-    ENVIADO("Pedido foi enviado");
+    PAGO("Pedido foi pago com sucesso"),
+    ENVIADO("Pedido foi enviado para o seu endereco"),
+    AGUARDANDO_PAGAMENTO("Aguardando pagamento do pedido");
 
     private final String message;
 }
