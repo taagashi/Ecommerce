@@ -20,6 +20,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 @Slf4j
@@ -79,5 +80,11 @@ public class ClienteController {
     @GetMapping("/pedidos/itensPedidos/{itemPedidoId}")
     public ResponseEntity<ItemPedidoResponse> buscarItemPedido(@PathVariable Long itemPedidoId) {
         return ResponseEntity.ok(clienteService.buscarItemPedido(itemPedidoId, ConstructorErrors.returnMapErrors()));
+    }
+
+    @Operation(summary = "pagar pedido", description = "cliente pode pagar um pedido que foi feito por ele")
+    @PostMapping("/pedidos/{pedidoId}/pagar")
+    public ResponseEntity<String> pagarPedido(@PathVariable Long pedidoId, @RequestParam("valor") BigDecimal valorPedido) {
+        return ResponseEntity.ok(clienteService.pagarPedido(pedidoId, valorPedido, ConstructorErrors.returnMapErrors()));
     }
 }

@@ -1,6 +1,7 @@
 package br.com.thaua.Ecommerce.domain.entity;
 
 import br.com.thaua.Ecommerce.domain.abstracts.AbstractEntity;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
@@ -20,7 +21,7 @@ public class ItemPedidoEntity extends AbstractEntity {
     @JoinColumn(name="pedido_id")
     private PedidoEntity pedido;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name="produto_id")
     private ProdutoEntity produto;
 }

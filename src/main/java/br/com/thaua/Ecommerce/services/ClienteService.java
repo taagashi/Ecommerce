@@ -12,6 +12,7 @@ import br.com.thaua.Ecommerce.dto.pagina.Pagina;
 import br.com.thaua.Ecommerce.dto.pedido.PedidoResponse;
 import br.com.thaua.Ecommerce.exceptions.ClienteException;
 import br.com.thaua.Ecommerce.exceptions.ItemPedidoNotFoundException;
+import br.com.thaua.Ecommerce.exceptions.PedidoException;
 import br.com.thaua.Ecommerce.exceptions.PedidoNotFoundException;
 import br.com.thaua.Ecommerce.mappers.ClienteMapper;
 import br.com.thaua.Ecommerce.mappers.ItemPedidoMapper;
@@ -22,8 +23,6 @@ import br.com.thaua.Ecommerce.services.returnTypeUsers.ExtractTypeUserContextHol
 import br.com.thaua.Ecommerce.services.validators.ValidationService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.cache.annotation.CachePut;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -108,12 +107,10 @@ public class ClienteService {
         pedidoEntity.setValorPedido(BigDecimal.ZERO);
         pedidoEntity.setDataPedido(LocalDateTime.now());
         pedidoEntity.setCliente(usersEntity.getCliente());
-        pedidoEntity.setStatusPedido(StatusPedido.ENVIADO);
 
         for(int i=0 ; i<itemPedidoEntityList.size() ; i++) {
             Long produtoId = produtosIds.get(i);
             ProdutoEntity produtoEntity = produtoEntityMap.get(produtoId);
-            produtoEntity.setEstoque(produtoEntity.getEstoque() - itemPedidoEntityList.get(i).getQuantidade());
             produtoRepository.save(produtoEntity);
             itemPedidoEntityList.get(i).setProduto(produtoEntity);
             itemPedidoEntityList.get(i).setValorTotal(produtoEntity.getPreco().multiply(BigDecimal.valueOf(itemPedidoEntityList.get(i).getQuantidade())));
@@ -123,6 +120,7 @@ public class ClienteService {
         }
 
         pedidoEntity.setItensPedidos(itemPedidoEntityList);
+        pedidoEntity.setStatusPedido(StatusPedido.AGUARDANDO_PAGAMENTO);
 
         log.info("EXECUTANDO SERVICE-CLIENTE FAZER PEDIDO");
         pedidoRepository.save(pedidoEntity);
@@ -162,5 +160,26 @@ public class ClienteService {
 
         log.info("EXECUTANDO SERVICE-CLIENTE BUSCAR ITEM PEDIDO");
         return itemPedidoMapper.toItemPedidoResponse(itemPedidoEntity.get());
+    }
+
+    @Transactional
+    public String pagarPedido(Long pedidoId, BigDecimal valorPedido, Map<String, String> errors){
+        UsersEntity usersEntity = ExtractTypeUserContextHolder.extractUser();
+
+        Optional<PedidoEntity> pedidoEntity = pedidoRepository.findById(pedidoId);
+
+        validationService.validarExistenciaEntidade(pedidoEntity.orElse(null), errors);
+        validationService.validarPagamentoPedido(pedidoEntity.get(), valorPedido, errors);
+        validationService.validarStatusPedidoPagamento(pedidoEntity.get(), errors);
+        validationService.analisarException(usersEntity.getName() + " houve um erro ao tentar realizar pagamento de pedido", PedidoException.class, errors);
+
+        for(ItemPedidoEntity itemPedido : pedidoEntity.get().getItensPedidos()) {
+            itemPedido.getProduto().setEstoque(itemPedido.getProduto().getEstoque() - itemPedido.getQuantidade());
+            itemPedidoRepository.save(itemPedido);
+        }
+
+        pedidoEntity.get().setStatusPedido(StatusPedido.PAGO);
+
+        return usersEntity.getName() + " seu pedido foi pago com sucesso";
     }
 }

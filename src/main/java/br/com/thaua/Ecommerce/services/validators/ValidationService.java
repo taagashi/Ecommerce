@@ -1,14 +1,18 @@
 package br.com.thaua.Ecommerce.services.validators;
 
+import br.com.thaua.Ecommerce.domain.entity.PedidoEntity;
 import br.com.thaua.Ecommerce.domain.entity.UsersEntity;
 import br.com.thaua.Ecommerce.domain.enums.Estado;
+import br.com.thaua.Ecommerce.domain.enums.StatusPedido;
 import br.com.thaua.Ecommerce.dto.endereco.EnderecoRequest;
 import br.com.thaua.Ecommerce.dto.itemPedido.ItemPedidoRequest;
 import br.com.thaua.Ecommerce.dto.produto.ProdutoRequest;
+import jdk.jshell.Snippet;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.lang.reflect.Constructor;
+import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -103,4 +107,17 @@ public class ValidationService {
             }
         }
     }
+
+    public void validarPagamentoPedido(PedidoEntity pedidoEntity, BigDecimal valorPedido, Map<String, String> errors) {
+        if(valorPedido.intValue() < pedidoEntity.getValorPedido().intValue()) {
+            errors.put("Valor", "O valor fornecido é invalido para a compra do pedido");
+        }
+    }
+
+    public void validarStatusPedidoPagamento(PedidoEntity pedidoEntity, Map<String, String> errors) {
+        if(pedidoEntity.getStatusPedido() != StatusPedido.AGUARDANDO_PAGAMENTO) {
+            errors.put("Status", "O pedido já foi pago");
+        }
+    }
+
 }
