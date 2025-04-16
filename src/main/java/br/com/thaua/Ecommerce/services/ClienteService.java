@@ -26,6 +26,7 @@ import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -50,6 +51,7 @@ public class ClienteService {
     private final PaginaMapper paginaMapper;
 
 //    @CachePut(value = "clientes", key = "T(org.springframework.security.core.context.SecurityContextHolder).getContext().getAuthentication().getPrincipal().getUsername()")
+    @Transactional
     public ClienteResponse atualizarCpfETelefone(ClienteCpfTelefoneRequest clienteCpfTelefoneRequest, Map<String, String> errors) {
         UsersEntity usersEntity = ExtractTypeUserContextHolder.extractUser();
 
@@ -71,6 +73,7 @@ public class ClienteService {
 
 
 //    @CachePut(value = "clientes", key = "T(org.springframework.security.core.context.SecurityContextHolder).getContext().getAuthentication().getPrincipal().getUsername()")
+    @Transactional
     public ClienteResponse atualizarDados(ClienteUpdateRequest clienteUpdateRequest) {
         UsersEntity usersEntity = ExtractTypeUserContextHolder.extractUser();
         usersEntity.setName(clienteUpdateRequest.getName());
@@ -84,6 +87,7 @@ public class ClienteService {
     }
 
 //    @CachePut(value = "pedidos", key = "T(org.springframework.security.core.context.SecurityContexHolder).getContext().getAuthentication().getPrincipal().getUsername()")
+    @Transactional
     public PedidoResponse fazerPedido(List<ItemPedidoRequest> itemPedidoRequest, Map<String, String> errors) {
        UsersEntity usersEntity = ExtractTypeUserContextHolder.extractUser();
 
