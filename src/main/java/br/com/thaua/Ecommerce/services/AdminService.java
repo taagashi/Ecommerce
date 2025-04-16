@@ -25,6 +25,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Map;
 import java.util.Optional;
@@ -95,6 +96,7 @@ public class AdminService {
     }
 
 //    @CacheEvict(value = "categorias", allEntries = true)
+    @Transactional
     public CategoriaResponse cadastrarNovaCategoria(CategoriaRequest categoriaRequest) {
         CategoriaEntity categoriaEntity = categoriaMapper.toEntity(categoriaRequest);
 
@@ -112,6 +114,7 @@ public class AdminService {
     }
 
 //    @CacheEvict(value = "clientes-Admin", allEntries = true)
+    @Transactional
     public String removerUsuario(Long userId, Map<String, String> errors) {
         UsersEntity usersEntity = ExtractTypeUserContextHolder.extractUser();
 
@@ -145,6 +148,7 @@ public class AdminService {
     }
 
 //    @CacheEvict(value = "pedidos-Admin", allEntries = true)
+    @Transactional
     public PedidoResponse atualizarStatusPedido(Long pedidoId, PedidoPatchRequest pedidoPatchRequest, Map<String, String> errors) {
         Optional<PedidoEntity> pedidoEntity = pedidoRepository.findById(pedidoId);
 
@@ -159,6 +163,7 @@ public class AdminService {
     }
 
 //    @CachePut(value = "enderecos-Admin", key = "#userId")
+    @Transactional
     public EnderecoResponse cadastrarEnderecoUsuario(Long userId, EnderecoRequest enderecoRequest, Map<String, String> errors) {
         Optional<UsersEntity> usersEntity = usersRepository.findById(userId);
 
@@ -187,6 +192,7 @@ public class AdminService {
     }
 
 //    @CachePut(value = "enderecos-Admin", key = "#userId")
+    @Transactional
     public EnderecoResponse atualizarEnderecoUsuario(Long userId, EnderecoRequest enderecoRequest, Map<String, String> errors) {
         Optional<UsersEntity> usersEntity = usersRepository.findById(userId);
 
@@ -204,6 +210,7 @@ public class AdminService {
     }
 
 //    @CacheEvict(value = "enderecos-Admin", key = "#userId")
+    @Transactional
     public String deletarEnderecoUsuario(Long userId, Map<String, String> errors) {
         Optional<UsersEntity> usersEntity = usersRepository.findById(userId);
 
@@ -224,6 +231,7 @@ public class AdminService {
     }
 
 //    @CacheEvict(value = "categorias", allEntries = true)
+    @Transactional
     public CategoriaResponse atualizarCategoria(Long categoriaId, CategoriaRequest categoriaRequest, Map<String, String> errors) {
         Optional<CategoriaEntity> categoriaEntity = categoriaRepository.findById(categoriaId);
 
@@ -239,6 +247,7 @@ public class AdminService {
     }
 
 //    @CacheEvict(value = "categorias", allEntries = true)
+    @Transactional
     public String deletarCategoria(Long categoriaId, Map<String, String> errors) {
         Optional<CategoriaEntity> categoriaEntity = categoriaRepository.findById(categoriaId);
 
