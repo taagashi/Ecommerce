@@ -1,33 +1,28 @@
 package br.com.thaua.Ecommerce.services;
 
-import br.com.thaua.Ecommerce.domain.entity.CategoriaEntity;
-import br.com.thaua.Ecommerce.domain.entity.ProdutoEntity;
-import br.com.thaua.Ecommerce.domain.entity.UsersEntity;
+import br.com.thaua.Ecommerce.domain.entity.*;
 import br.com.thaua.Ecommerce.dto.fornecedor.FornecedorCNPJTelefoneRequest;
 import br.com.thaua.Ecommerce.dto.fornecedor.FornecedorResponse;
 import br.com.thaua.Ecommerce.dto.pagina.Pagina;
 import br.com.thaua.Ecommerce.dto.produto.ProdutoNovoEstoqueRequest;
 import br.com.thaua.Ecommerce.dto.produto.ProdutoRequest;
 import br.com.thaua.Ecommerce.dto.produto.ProdutoResponse;
+import br.com.thaua.Ecommerce.exceptions.ItemPedidoNotFoundException;
 import br.com.thaua.Ecommerce.exceptions.ProdutoException;
 import br.com.thaua.Ecommerce.exceptions.ProdutoNotFoundException;
 import br.com.thaua.Ecommerce.mappers.FornecedorMapper;
 import br.com.thaua.Ecommerce.mappers.PaginaMapper;
 import br.com.thaua.Ecommerce.mappers.ProdutoMapper;
-import br.com.thaua.Ecommerce.repositories.CategoriaRepository;
-import br.com.thaua.Ecommerce.repositories.ProdutoRepository;
-import br.com.thaua.Ecommerce.repositories.UsersRepository;
+import br.com.thaua.Ecommerce.repositories.*;
 import br.com.thaua.Ecommerce.services.returnTypeUsers.ExtractTypeUserContextHolder;
 import br.com.thaua.Ecommerce.services.validators.ValidationService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.cache.annotation.CachePut;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -42,6 +37,8 @@ public class FornecedorService {
     private final CategoriaRepository categoriaRepository;
     private final ValidationService validationService;
     private final PaginaMapper paginaMapper;
+    private final PedidoRepository pedidoRepository;
+    private final ItemPedidoRepository itemPedidoRepository;
 
 //    @CachePut(value = "forneceedores", key = "T(org.springframework.security.core.context.SecurityContextHolder).getContext().getAuthentication().getPrincipal().getUsername()")
     @Transactional
@@ -195,4 +192,19 @@ public class FornecedorService {
         log.info("EXECUTANDO SERVICE-FORNECEDOR REMOVER PRODUTO CATEGORIA");
         return produtoEntity.get().getNome() + " foi removido com sucesso da categoria" + categoriaEntity.get().getNome();
     }
+
+//    @Transactional
+//    public String enviarProduto(Long produtoId, Map<String, String> errors) {
+//        UsersEntity usersEntity = ExtractTypeUserContextHolder.extractUser();
+//
+//        Optional<ProdutoEntity> produtoEntity = produtoRepository.findById(produtoId);
+//
+//        validationService.validarExistenciaEntidade(produtoEntity.orElse(null), errors);
+//        validationService.validarItemPedidoProduto(produtoEntity.orElse(null), errors);
+//        validationService.analisarException(usersEntity.getName() + " houve um erro ao tentar enviar produto", ItemPedidoNotFoundException.class, errors);
+//
+//        List<ItemPedidoEntity> itemPedidoEntities = produtoEntity.get().getItensPedidos();
+//
+//        return null;
+//    }
 }

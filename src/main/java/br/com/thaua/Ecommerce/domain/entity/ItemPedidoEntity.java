@@ -1,10 +1,10 @@
 package br.com.thaua.Ecommerce.domain.entity;
 
 import br.com.thaua.Ecommerce.domain.abstracts.AbstractEntity;
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Entity;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
+import br.com.thaua.Ecommerce.domain.enums.StatusItemPedido;
+import br.com.thaua.Ecommerce.domain.enums.StatusPedido;
+import jakarta.persistence.*;
+import jdk.jshell.Snippet;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -24,4 +24,7 @@ public class ItemPedidoEntity extends AbstractEntity {
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name="produto_id")
     private ProdutoEntity produto;
+
+    @Enumerated(EnumType.STRING)
+    private StatusItemPedido statusItemPedido;
 }
