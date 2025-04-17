@@ -21,10 +21,9 @@ public class ItemPedidoEntity extends AbstractEntity {
     @JoinColumn(name="pedido_id")
     private PedidoEntity pedido;
 
-    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name="produto_id")
     private ProdutoEntity produto;
 
     @Enumerated(EnumType.STRING)
-    private StatusItemPedido statusItemPedido;
+    private StatusItemPedido statusItemPedido = StatusItemPedido.PENDENTE;
 }
