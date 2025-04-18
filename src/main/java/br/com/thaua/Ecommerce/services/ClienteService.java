@@ -1,6 +1,7 @@
 package br.com.thaua.Ecommerce.services;
 
 import br.com.thaua.Ecommerce.domain.entity.*;
+import br.com.thaua.Ecommerce.domain.enums.StatusItemPedido;
 import br.com.thaua.Ecommerce.domain.enums.StatusPedido;
 import br.com.thaua.Ecommerce.dto.cliente.ClienteComPedidoResponse;
 import br.com.thaua.Ecommerce.dto.cliente.ClienteCpfTelefoneRequest;
@@ -174,6 +175,7 @@ public class ClienteService {
 
         for(ItemPedidoEntity itemPedido : pedidoEntity.get().getItensPedidos()) {
             itemPedido.getProduto().setEstoque(itemPedido.getProduto().getEstoque() - itemPedido.getQuantidade());
+            itemPedido.setStatusItemPedido(StatusItemPedido.PROCESSANDO);
             itemPedidoRepository.save(itemPedido);
         }
 
