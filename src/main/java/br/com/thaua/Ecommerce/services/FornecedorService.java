@@ -1,6 +1,8 @@
 package br.com.thaua.Ecommerce.services;
 
 import br.com.thaua.Ecommerce.domain.entity.*;
+import br.com.thaua.Ecommerce.domain.enums.StatusItemPedido;
+import br.com.thaua.Ecommerce.domain.enums.StatusPedido;
 import br.com.thaua.Ecommerce.dto.fornecedor.FornecedorCNPJTelefoneRequest;
 import br.com.thaua.Ecommerce.dto.fornecedor.FornecedorResponse;
 import br.com.thaua.Ecommerce.dto.pagina.Pagina;
@@ -193,18 +195,34 @@ public class FornecedorService {
         return produtoEntity.get().getNome() + " foi removido com sucesso da categoria" + categoriaEntity.get().getNome();
     }
 
-//    @Transactional
-//    public String enviarProduto(Long produtoId, Map<String, String> errors) {
-//        UsersEntity usersEntity = ExtractTypeUserContextHolder.extractUser();
-//
-//        Optional<ProdutoEntity> produtoEntity = produtoRepository.findById(produtoId);
-//
-//        validationService.validarExistenciaEntidade(produtoEntity.orElse(null), errors);
-//        validationService.validarItemPedidoProduto(produtoEntity.orElse(null), errors);
-//        validationService.analisarException(usersEntity.getName() + " houve um erro ao tentar enviar produto", ItemPedidoNotFoundException.class, errors);
-//
-//        List<ItemPedidoEntity> itemPedidoEntities = produtoEntity.get().getItensPedidos();
-//
-//        return null;
-//    }
+    @Transactional
+    public String enviarProduto(Long produtoId, Map<String, String> errors) {
+        UsersEntity usersEntity = ExtractTypeUserContextHolder.extractUser();
+
+        Optional<ProdutoEntity> produtoEntity = produtoRepository.findById(produtoId);
+
+        validationService.validarExistenciaEntidade(produtoEntity.orElse(null), errors);
+        validationService.validarDemandaProduto(produtoEntity.orElse(null), errors);
+
+        List<ItemPedidoEntity> itensPedidosEnviar = produtoEntity.get().getItensPedidos()
+                .stream()
+                .filter(item -> item.getPedido().getStatusPedido() == StatusPedido.PAGO)
+                .toList();
+
+        validationService.validarStatusPedidoEnviar(itensPedidosEnviar, errors);
+        validationService.analisarException(usersEntity.getName() + " houve um erro ao tentar enviar produto", ItemPedidoNotFoundException.class, errors);
+
+        for(ItemPedidoEntity item : itensPedidosEnviar) {
+            item.setStatusItemPedido(StatusItemPedido.ENVIADO);
+            item.getPedido().setProdutosEnviados(item.getPedido().getProdutosEnviados() + 1);
+
+            if(item.getPedido().getProdutosEnviados() == item.getPedido().getItensPedidos().size()) {
+                item.getPedido().setStatusPedido(StatusPedido.PAGO_PROCESSANDO);
+            }
+        }
+
+        produtoRepository.save(produtoEntity.get());
+
+        return produtoEntity.get().getNome() + " foi enviado com sucesso para os clientes";
+    }
 }

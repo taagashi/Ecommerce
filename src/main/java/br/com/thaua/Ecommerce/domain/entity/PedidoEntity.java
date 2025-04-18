@@ -28,4 +28,6 @@ public class PedidoEntity extends AbstractEntity {
 
     @OneToMany(mappedBy = "pedido", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<ItemPedidoEntity> itensPedidos;
+
+    private int produtosEnviados;
 }

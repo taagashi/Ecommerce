@@ -1,6 +1,8 @@
 package br.com.thaua.Ecommerce.services.validators;
 
+import br.com.thaua.Ecommerce.domain.entity.ItemPedidoEntity;
 import br.com.thaua.Ecommerce.domain.entity.PedidoEntity;
+import br.com.thaua.Ecommerce.domain.entity.ProdutoEntity;
 import br.com.thaua.Ecommerce.domain.entity.UsersEntity;
 import br.com.thaua.Ecommerce.domain.enums.Estado;
 import br.com.thaua.Ecommerce.domain.enums.StatusPedido;
@@ -15,7 +17,6 @@ import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 
 @RequiredArgsConstructor
 @Service
@@ -120,8 +121,15 @@ public class ValidationService {
         }
     }
 
+    public void validarDemandaProduto(ProdutoEntity produtoEntity, Map<String, String> errors) {
+        if(produtoEntity.getItensPedidos().isEmpty()) {
+            errors.put("Demanda", "Não existe nenhuma demanda para esse produto");
+        }
+    }
 
-//    public void validarItemPedidoProduto(ProdutoEntity produtoEntity, Map<String, String> errors) {
-//
-//    }
+    public void validarStatusPedidoEnviar(List<ItemPedidoEntity> itensPedidosEnviar, Map<String, String> errors) {
+        if(itensPedidosEnviar.isEmpty()) {
+            errors.put("Pedido", "Não é possível enviar o produto porque o pedido ainda nao foi pago");
+        }
+    }
 }
