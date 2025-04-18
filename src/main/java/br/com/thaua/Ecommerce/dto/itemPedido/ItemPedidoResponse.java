@@ -1,5 +1,6 @@
 package br.com.thaua.Ecommerce.dto.itemPedido;
 
+import br.com.thaua.Ecommerce.domain.enums.StatusItemPedido;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -13,4 +14,5 @@ public class ItemPedidoResponse {
     private String produto;
     private Integer quantidade;
     private BigDecimal valorTotal;
+    private StatusItemPedido statusItemPedido;
 }

@@ -21,6 +21,7 @@ public class ItemPedidoEntity extends AbstractEntity {
     @JoinColumn(name="pedido_id")
     private PedidoEntity pedido;
 
+    @ManyToOne
     @JoinColumn(name="produto_id")
     private ProdutoEntity produto;
 

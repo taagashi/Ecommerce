@@ -20,6 +20,5 @@ public class CategoriaEntity extends AbstractEntity {
             joinColumns = @JoinColumn(name = "categoria_id"),
             inverseJoinColumns = @JoinColumn(name = "produto_id")
     )
-
     private List<ProdutoEntity> produtos;
 }
