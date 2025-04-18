@@ -97,10 +97,10 @@ public class FornecedorController {
         return ResponseEntity.ok(fornecedorService.removerProdutoDeCategoria(categoriaId, produtoId, ConstructorErrors.returnMapErrors()));
     }
 
-    @Operation(summary = "enviar pedido", description = "fornecedor acessa pedidos recebidos que estao como pagos para envialos para o cliente")
-    @PatchMapping("/produtos/{produtoId}/enviar")
-    public ResponseEntity<String> enviarProduto(@PathVariable Long produtoId) {
-        log.info("ENVIAR PEDIDO");
-        return ResponseEntity.ok(fornecedorService.enviarProduto(produtoId, ConstructorErrors.returnMapErrors()));
-    }
+//    @Operation(summary = "enviar pedido", description = "fornecedor acessa pedidos recebidos que estao como pagos para envialos para o cliente")
+//    @PatchMapping("/produtos/{produtoId}/enviar")
+//    public ResponseEntity<String> enviarProduto(@PathVariable Long produtoId) {
+//        log.info("ENVIAR PEDIDO");
+//        return ResponseEntity.ok(fornecedorService.enviarProduto(produtoId, ConstructorErrors.returnMapErrors()));
+//    }
 }
