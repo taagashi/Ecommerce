@@ -214,11 +214,7 @@ public class FornecedorService {
 
         for(ItemPedidoEntity item : itensPedidosEnviar) {
             item.setStatusItemPedido(StatusItemPedido.ENVIADO);
-            item.getPedido().setProdutosEnviados(item.getPedido().getProdutosEnviados() + 1);
-
-            if(item.getPedido().getProdutosEnviados() == item.getPedido().getItensPedidos().size()) {
-                item.getPedido().setStatusPedido(StatusPedido.PAGO_PROCESSANDO);
-            }
+            item.getPedido().setStatusPedido(StatusPedido.PAGO_ENVIANDO);
         }
 
         produtoRepository.save(produtoEntity.get());
