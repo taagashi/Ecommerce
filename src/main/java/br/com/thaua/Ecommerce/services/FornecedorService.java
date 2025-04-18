@@ -5,6 +5,7 @@ import br.com.thaua.Ecommerce.domain.enums.StatusItemPedido;
 import br.com.thaua.Ecommerce.domain.enums.StatusPedido;
 import br.com.thaua.Ecommerce.dto.fornecedor.FornecedorCNPJTelefoneRequest;
 import br.com.thaua.Ecommerce.dto.fornecedor.FornecedorResponse;
+import br.com.thaua.Ecommerce.dto.itemPedido.ItemPedidoResponse;
 import br.com.thaua.Ecommerce.dto.pagina.Pagina;
 import br.com.thaua.Ecommerce.dto.produto.ProdutoNovoEstoqueRequest;
 import br.com.thaua.Ecommerce.dto.produto.ProdutoRequest;
@@ -13,6 +14,7 @@ import br.com.thaua.Ecommerce.exceptions.ItemPedidoNotFoundException;
 import br.com.thaua.Ecommerce.exceptions.ProdutoException;
 import br.com.thaua.Ecommerce.exceptions.ProdutoNotFoundException;
 import br.com.thaua.Ecommerce.mappers.FornecedorMapper;
+import br.com.thaua.Ecommerce.mappers.ItemPedidoMapper;
 import br.com.thaua.Ecommerce.mappers.PaginaMapper;
 import br.com.thaua.Ecommerce.mappers.ProdutoMapper;
 import br.com.thaua.Ecommerce.repositories.*;
@@ -24,6 +26,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.swing.text.html.Option;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -40,7 +43,7 @@ public class FornecedorService {
     private final ValidationService validationService;
     private final PaginaMapper paginaMapper;
     private final PedidoRepository pedidoRepository;
-    private final ItemPedidoRepository itemPedidoRepository;
+    private final ItemPedidoMapper itemPedidoMapper;
 
 //    @CachePut(value = "forneceedores", key = "T(org.springframework.security.core.context.SecurityContextHolder).getContext().getAuthentication().getPrincipal().getUsername()")
     @Transactional
@@ -220,5 +223,16 @@ public class FornecedorService {
         produtoRepository.save(produtoEntity.get());
 
         return produtoEntity.get().getNome() + " foi enviado com sucesso para os clientes";
+    }
+
+    public List<ItemPedidoResponse> listarDemandaProduto(Long produtoId, Map<String, String> errors) {
+        Optional<ProdutoEntity> produtoEntity = produtoRepository.findById(produtoId);
+
+        validationService.validarExistenciaEntidade(produtoEntity.orElse(null), errors);
+        validationService.validarDemandaProduto(produtoEntity.orElse(null),
+                errors);
+        validationService.analisarException("Houve um erro ao tentar listar demanda de produto", ProdutoException.class, errors);
+
+        return produtoEntity.get().getItensPedidos().stream().filter(item -> item.getStatusItemPedido() == StatusItemPedido.PROCESSANDO).map(itemPedidoMapper::toItemPedidoResponse).toList();
     }
 }

@@ -13,7 +13,7 @@ public class ProdutoResponse {
     private String descricao;
     private BigDecimal preco;
     private Integer estoque;
-    private Integer quantidadePedidos;
+    private Integer quantidadeDemanda;
     private Integer categoriasAssociadas;
 
 }

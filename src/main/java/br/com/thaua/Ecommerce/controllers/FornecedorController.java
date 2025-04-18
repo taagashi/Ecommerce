@@ -3,6 +3,7 @@ package br.com.thaua.Ecommerce.controllers;
 import br.com.thaua.Ecommerce.controllers.handler.ConstructorErrors;
 import br.com.thaua.Ecommerce.dto.fornecedor.FornecedorCNPJTelefoneRequest;
 import br.com.thaua.Ecommerce.dto.fornecedor.FornecedorResponse;
+import br.com.thaua.Ecommerce.dto.itemPedido.ItemPedidoResponse;
 import br.com.thaua.Ecommerce.dto.pagina.Pagina;
 import br.com.thaua.Ecommerce.dto.produto.ProdutoNovoEstoqueRequest;
 import br.com.thaua.Ecommerce.dto.produto.ProdutoRequest;
@@ -15,6 +16,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @Slf4j
 @SecurityRequirement(name = "bearerAuth")
@@ -102,5 +105,12 @@ public class FornecedorController {
     public ResponseEntity<String> enviarProduto(@PathVariable Long produtoId) {
         log.info("ENVIAR PEDIDO");
         return ResponseEntity.ok(fornecedorService.enviarProduto(produtoId, ConstructorErrors.returnMapErrors()));
+    }
+
+    @Operation(summary = "listar demanda de produto", description = "fornecedor pode listar todos os itens pedidos de um determinado produto")
+    @GetMapping("/produtos/{produtoId}/demanda/list")
+    public ResponseEntity<List<ItemPedidoResponse>> listarDemandaProduto(@PathVariable Long produtoId) {
+        log.info("LISTAR DEMANDA PRODUTO");
+        return ResponseEntity.ok(fornecedorService.listarDemandaProduto(produtoId, ConstructorErrors.returnMapErrors()));
     }
 }
