@@ -1,8 +1,9 @@
 package br.com.thaua.Ecommerce.controllers;
 
+import br.com.thaua.Ecommerce.controllers.handler.ConstructorErrors;
+import br.com.thaua.Ecommerce.dto.users.UserRequestGenerateCode;
 import br.com.thaua.Ecommerce.dto.users.UsersLoginRequest;
 import br.com.thaua.Ecommerce.dto.users.UsersRequest;
-import br.com.thaua.Ecommerce.dto.users.UsersResponse;
 import br.com.thaua.Ecommerce.services.UsersService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
@@ -32,5 +33,11 @@ public class UsersController {
     @DeleteMapping("/delete")
     public ResponseEntity<String> deletarConta() {
         return ResponseEntity.ok(userService.deletarConta());
+    }
+
+    @Operation(summary = "gerar codigo de verificao", description = "usuario nao autenticado pode gerar um codigo de vericacao para poder mudar sua senha, tudo a partir de seu email")
+    @PostMapping("/gerar-codigo")
+    public ResponseEntity<String> gerarCodigoVerificacao(@RequestBody UserRequestGenerateCode userRequestGenerateCode) {
+        return ResponseEntity.ok(userService.gerarCodigoRedefinirSenha(userRequestGenerateCode, ConstructorErrors.returnMapErrors()));
     }
 }

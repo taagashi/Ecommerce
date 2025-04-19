@@ -37,7 +37,8 @@ public class Config {
                                 "/h2-console/**",
                                 "/swagger-ui.html",
                                 "/swagger-ui/**",
-                                "/v3/api-docs/**"
+                                "/v3/api-docs/**",
+                                "/api/v1/users/gerar-codigo"
                         ).permitAll()
                         .requestMatchers(
                                 "/api/v1/admin/**"

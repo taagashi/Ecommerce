@@ -1,14 +1,13 @@
 package br.com.thaua.Ecommerce.services.validators;
 
-import br.com.thaua.Ecommerce.domain.entity.ItemPedidoEntity;
-import br.com.thaua.Ecommerce.domain.entity.PedidoEntity;
-import br.com.thaua.Ecommerce.domain.entity.ProdutoEntity;
-import br.com.thaua.Ecommerce.domain.entity.UsersEntity;
+import br.com.thaua.Ecommerce.domain.entity.*;
 import br.com.thaua.Ecommerce.domain.enums.Estado;
 import br.com.thaua.Ecommerce.domain.enums.StatusPedido;
 import br.com.thaua.Ecommerce.dto.endereco.EnderecoRequest;
 import br.com.thaua.Ecommerce.dto.itemPedido.ItemPedidoRequest;
 import br.com.thaua.Ecommerce.dto.produto.ProdutoRequest;
+import br.com.thaua.Ecommerce.repositories.CodigoVerificacaoRepository;
+import br.com.thaua.Ecommerce.repositories.UsersRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -21,6 +20,9 @@ import java.util.Map;
 @RequiredArgsConstructor
 @Service
 public class ValidationService {
+
+    private final UsersRepository usersRepository;
+    private final CodigoVerificacaoRepository codigoVerificacaoRepository;
 
     public void validarCadastroEndereco(UsersEntity usersEntity, Map<String, String> errors) {
         if (usersEntity.getEndereco() != null) {
@@ -132,4 +134,15 @@ public class ValidationService {
             errors.put("Pedido", "Não é possível enviar o produto porque o pedido ainda nao foi pago");
         }
     }
+
+    public UsersEntity validarExistenciaEmail(String email, Map<String, String> errors) {
+        UsersEntity usersEntity = usersRepository.findByEmail(email);
+
+        if(usersEntity == null) {
+            errors.put("Email", "Email não foi encontrado");
+        }
+
+        return usersEntity;
+    }
+    
 }

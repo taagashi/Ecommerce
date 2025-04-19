@@ -19,11 +19,13 @@ public class EmailMessageService {
         enviarEmails("REGISTRO ECOMMERCE", "Parabéns " + nome + ", você acaba de se registrar no nosso Ecommerce :)", destinatario);
     }
 
-    public void redefinirSenha(String nome, String destinatario) {
+    public int gerarCodigoRedefinirSenha(String destinatario) {
         Random random = new Random();
         int codigo = 100000 + random.nextInt(999999);
 
-        enviarEmails("REDEFINIR SENHA", nome + " seu código de verificação para mudança de senha é: " + codigo, destinatario);
+        enviarEmails("REDEFINIR SENHA",  "seu código de verificação para mudança de senha é: " + codigo, destinatario);
+
+        return codigo;
     }
 
     private void enviarEmails(String assunto, String texto, String destinatario) {

@@ -1,22 +1,24 @@
 package br.com.thaua.Ecommerce.services;
 
+import br.com.thaua.Ecommerce.domain.entity.CodigoVerificacaoEntity;
 import br.com.thaua.Ecommerce.domain.entity.EnderecoEntity;
 import br.com.thaua.Ecommerce.domain.entity.UsersEntity;
 import br.com.thaua.Ecommerce.dto.endereco.EnderecoRequest;
 import br.com.thaua.Ecommerce.dto.endereco.EnderecoResponse;
+import br.com.thaua.Ecommerce.dto.users.UserRequestGenerateCode;
 import br.com.thaua.Ecommerce.dto.users.UsersRequest;
 import br.com.thaua.Ecommerce.exceptions.AddressException;
+import br.com.thaua.Ecommerce.exceptions.UserNotFoundException;
 import br.com.thaua.Ecommerce.mappers.EnderecoMapper;
 import br.com.thaua.Ecommerce.mappers.UserMapper;
+import br.com.thaua.Ecommerce.repositories.CodigoVerificacaoRepository;
 import br.com.thaua.Ecommerce.repositories.EnderecoRepository;
+import br.com.thaua.Ecommerce.repositories.FornecedorRepository;
 import br.com.thaua.Ecommerce.repositories.UsersRepository;
 import br.com.thaua.Ecommerce.services.resolvers.ResolverGeralUsers;
 import br.com.thaua.Ecommerce.services.returnTypeUsers.ExtractTypeUserContextHolder;
 import br.com.thaua.Ecommerce.userDetails.MyUserDetails;
 import lombok.RequiredArgsConstructor;
-import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.cache.annotation.CachePut;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -40,6 +42,7 @@ public class UsersService {
     private final EnderecoMapper enderecoMapper;
     private final EnderecoRepository enderecoRepository;
     private final ValidationService validationService;
+    private final CodigoVerificacaoRepository codigoVerificacaoRepository;
 
     @Transactional
     public String cadastrarUsuario(UsersRequest usuario) {
@@ -131,4 +134,15 @@ public class UsersService {
 
         return enderecoMapper.toEnderecoResponse(usersRepository.save(usersEntity).getEndereco());
     }
+
+    @Transactional
+    public String gerarCodigoRedefinirSenha(UserRequestGenerateCode userRequestGenerateCode, Map<String, String> errors) {
+        validationService.validarExistenciaEmail(userRequestGenerateCode.getEmail(), errors);
+        validationService.analisarException("Houve um erro ao tentar gerar codigo para redefinir senha", UserNotFoundException.class, errors);
+
+        codigoVerificacaoRepository.save(new CodigoVerificacaoEntity(emailMessageService.gerarCodigoRedefinirSenha(userRequestGenerateCode.getEmail())));
+
+        return "Foi enviado um codigo de verificação para " + userRequestGenerateCode.getEmail();
+    }
+
 }
