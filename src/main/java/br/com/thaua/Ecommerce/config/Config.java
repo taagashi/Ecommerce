@@ -34,11 +34,12 @@ public class Config {
                         .requestMatchers(
                                 "/api/v1/users/login",
                                 "/api/v1/users/register",
+                                "/api/v1/users/gerar-codigo",
+                                "/api/v1/users/redefinir-senha",
                                 "/h2-console/**",
                                 "/swagger-ui.html",
                                 "/swagger-ui/**",
-                                "/v3/api-docs/**",
-                                "/api/v1/users/gerar-codigo"
+                                "/v3/api-docs/**"
                         ).permitAll()
                         .requestMatchers(
                                 "/api/v1/admin/**"

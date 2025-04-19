@@ -6,8 +6,10 @@ import br.com.thaua.Ecommerce.domain.entity.UsersEntity;
 import br.com.thaua.Ecommerce.dto.endereco.EnderecoRequest;
 import br.com.thaua.Ecommerce.dto.endereco.EnderecoResponse;
 import br.com.thaua.Ecommerce.dto.users.UserRequestGenerateCode;
+import br.com.thaua.Ecommerce.dto.users.UserRequestGenerateNewPassword;
 import br.com.thaua.Ecommerce.dto.users.UsersRequest;
 import br.com.thaua.Ecommerce.exceptions.AddressException;
+import br.com.thaua.Ecommerce.exceptions.CodeNotValidException;
 import br.com.thaua.Ecommerce.exceptions.UserNotFoundException;
 import br.com.thaua.Ecommerce.mappers.EnderecoMapper;
 import br.com.thaua.Ecommerce.mappers.UserMapper;
@@ -143,6 +145,19 @@ public class UsersService {
         codigoVerificacaoRepository.save(new CodigoVerificacaoEntity(emailMessageService.gerarCodigoRedefinirSenha(userRequestGenerateCode.getEmail())));
 
         return "Foi enviado um codigo de verificação para " + userRequestGenerateCode.getEmail();
+    }
+
+    @Transactional
+    public String verificarCodigoRedefirnirSenha(UserRequestGenerateNewPassword userRequestGenerateNewPassword, Map<String, String> errors) {
+        UsersEntity usersEntity = validationService.validarExistenciaEmail(userRequestGenerateNewPassword.getEmail(), errors);
+        CodigoVerificacaoEntity codigoVerificacaoEntity = validationService.validarCodigoVerificacao(userRequestGenerateNewPassword.getCode(), errors);
+        validationService.analisarException("Houve um erro ao tentar redefinir senha", CodeNotValidException.class, errors);
+
+        usersEntity.setPassword(passwordEncoder.encode(userRequestGenerateNewPassword.getNewPassword()));
+        usersRepository.save(usersEntity);
+        codigoVerificacaoRepository.delete(codigoVerificacaoEntity);
+
+        return usersEntity.getName() + " sua senha foi redefinida com sucesso";
     }
 
 }

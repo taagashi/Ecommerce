@@ -144,5 +144,14 @@ public class ValidationService {
 
         return usersEntity;
     }
-    
+
+    public CodigoVerificacaoEntity validarCodigoVerificacao(int codigo, Map<String, String> errors) {
+        CodigoVerificacaoEntity codigoVerificacao = codigoVerificacaoRepository.findByCodigo(codigo);
+
+        if(codigoVerificacao == null) {
+            errors.put("Código", "Código de verificação inválido");
+        }
+
+        return codigoVerificacao;
+    }
 }

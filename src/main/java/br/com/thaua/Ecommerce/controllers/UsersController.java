@@ -2,6 +2,7 @@ package br.com.thaua.Ecommerce.controllers;
 
 import br.com.thaua.Ecommerce.controllers.handler.ConstructorErrors;
 import br.com.thaua.Ecommerce.dto.users.UserRequestGenerateCode;
+import br.com.thaua.Ecommerce.dto.users.UserRequestGenerateNewPassword;
 import br.com.thaua.Ecommerce.dto.users.UsersLoginRequest;
 import br.com.thaua.Ecommerce.dto.users.UsersRequest;
 import br.com.thaua.Ecommerce.services.UsersService;
@@ -39,5 +40,11 @@ public class UsersController {
     @PostMapping("/gerar-codigo")
     public ResponseEntity<String> gerarCodigoVerificacao(@RequestBody UserRequestGenerateCode userRequestGenerateCode) {
         return ResponseEntity.ok(userService.gerarCodigoRedefinirSenha(userRequestGenerateCode, ConstructorErrors.returnMapErrors()));
+    }
+
+    @Operation(summary = "redefinir senha", description = "usuario nao autenticado pode redefinir sua senha atraves do codigo de verificacao")
+    @PatchMapping("/redefinir-senha")
+    public ResponseEntity<String> redefinirSenha(@RequestBody UserRequestGenerateNewPassword userRequestGenerateNewPassword) {
+        return ResponseEntity.ok(userService.verificarCodigoRedefirnirSenha(userRequestGenerateNewPassword, ConstructorErrors.returnMapErrors()));
     }
 }
