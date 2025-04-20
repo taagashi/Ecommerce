@@ -22,6 +22,7 @@ import br.com.thaua.Ecommerce.mappers.PedidoMapper;
 import br.com.thaua.Ecommerce.repositories.*;
 import br.com.thaua.Ecommerce.services.returnTypeUsers.ExtractTypeUserContextHolder;
 import br.com.thaua.Ecommerce.services.validators.ValidationService;
+import br.com.thaua.Ecommerce.userDetails.MyUserDetails;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
@@ -49,6 +50,7 @@ public class ClienteService {
     private final ItemPedidoRepository itemPedidoRepository;
     private final ValidationService validationService;
     private final PaginaMapper paginaMapper;
+    private final JWTService jwtService;
 
 //    @CachePut(value = "clientes", key = "T(org.springframework.security.core.context.SecurityContextHolder).getContext().getAuthentication().getPrincipal().getUsername()")
     @Transactional
@@ -74,16 +76,17 @@ public class ClienteService {
 
 //    @CachePut(value = "clientes", key = "T(org.springframework.security.core.context.SecurityContextHolder).getContext().getAuthentication().getPrincipal().getUsername()")
     @Transactional
-    public ClienteResponse atualizarDados(ClienteUpdateRequest clienteUpdateRequest) {
+    public String atualizarDados(ClienteUpdateRequest clienteUpdateRequest) {
         UsersEntity usersEntity = ExtractTypeUserContextHolder.extractUser();
         usersEntity.setName(clienteUpdateRequest.getName());
         usersEntity.setEmail(clienteUpdateRequest.getEmail());
         usersEntity.getCliente().setCpf(clienteUpdateRequest.getCpf());
         usersEntity.setTelefone(clienteUpdateRequest.getTelefone());
 
+        usersRepository.save(usersEntity);
 
         log.info("EXECUTANDO SERVICE-CLIENTE ATUALIZAR DADOS");
-        return clienteMapper.toResponse(usersRepository.save(usersEntity).getCliente());
+        return jwtService.generateToken(new MyUserDetails(usersEntity.getId(), usersEntity.getEmail(), usersEntity.getRole().toString(), usersEntity.getPassword(), usersEntity));
     }
 
 //    @CachePut(value = "pedidos", key = "T(org.springframework.security.core.context.SecurityContexHolder).getContext().getAuthentication().getPrincipal().getUsername()")

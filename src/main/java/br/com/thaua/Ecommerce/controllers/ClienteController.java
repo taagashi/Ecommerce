@@ -47,7 +47,7 @@ public class ClienteController {
 //    PUT /api/v1/clientes/update - Atualizar meus dados [ROLE: CLIENTE]1
     @Operation(summary = "atualizar dados", description = "cliente atualiza dados como: nome, email, telefone e cpf")
     @PutMapping("/update")
-    public ResponseEntity<ClienteResponse> atualizarDados(@RequestBody ClienteUpdateRequest clienteUpdateRequest) {
+    public ResponseEntity<String> atualizarDados(@RequestBody ClienteUpdateRequest clienteUpdateRequest) {
         log.info("ATUALIZAR DADOS CLIENTE");
         return ResponseEntity.ok(clienteService.atualizarDados(clienteUpdateRequest));
     }
