@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.validator.constraints.br.CNPJ;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 @Entity
@@ -19,4 +20,5 @@ public class FornecedorEntity extends AbstractRelationWithUsers {
     @OneToMany(mappedBy = "fornecedor", fetch = FetchType.EAGER)
     private List<ProdutoEntity> produto;
 
+    private BigDecimal saldo = BigDecimal.valueOf(0);
 }
