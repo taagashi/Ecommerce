@@ -216,6 +216,7 @@ public class FornecedorService {
         validationService.analisarException(usersEntity.getName() + " houve um erro ao tentar enviar produto", ItemPedidoNotFoundException.class, errors);
 
         for(ItemPedidoEntity item : itensPedidosEnviar) {
+            usersEntity.getFornecedor().setSaldo(usersEntity.getFornecedor().getSaldo().add(item.getValorTotal()));
             item.setStatusItemPedido(StatusItemPedido.ENVIADO);
             item.getPedido().setStatusPedido(StatusPedido.PAGO_ENVIANDO);
         }
