@@ -5,6 +5,7 @@ import br.com.thaua.Ecommerce.domain.enums.StatusItemPedido;
 import br.com.thaua.Ecommerce.domain.enums.StatusPedido;
 import br.com.thaua.Ecommerce.dto.fornecedor.FornecedorCNPJTelefoneRequest;
 import br.com.thaua.Ecommerce.dto.fornecedor.FornecedorResponse;
+import br.com.thaua.Ecommerce.dto.fornecedor.FornecedorSaldoResponse;
 import br.com.thaua.Ecommerce.dto.itemPedido.ItemPedidoResponse;
 import br.com.thaua.Ecommerce.dto.pagina.Pagina;
 import br.com.thaua.Ecommerce.dto.produto.ProdutoNovoEstoqueRequest;
@@ -235,5 +236,11 @@ public class FornecedorService {
         validationService.analisarException("Houve um erro ao tentar listar demanda de produto", ProdutoException.class, errors);
 
         return produtoEntity.get().getItensPedidos().stream().filter(item -> item.getStatusItemPedido() == StatusItemPedido.PROCESSANDO).map(itemPedidoMapper::toItemPedidoResponse).toList();
+    }
+
+    public FornecedorSaldoResponse exibirSaldoAtual() {
+        UsersEntity usersEntity = ExtractTypeUserContextHolder.extractUser();
+
+        return fornecedorMapper.fornecedorEntityToFornecedorSaldoResponse(usersEntity.getFornecedor());
     }
 }

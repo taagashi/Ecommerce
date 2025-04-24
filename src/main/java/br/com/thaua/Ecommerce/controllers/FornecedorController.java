@@ -3,6 +3,7 @@ package br.com.thaua.Ecommerce.controllers;
 import br.com.thaua.Ecommerce.controllers.handler.ConstructorErrors;
 import br.com.thaua.Ecommerce.dto.fornecedor.FornecedorCNPJTelefoneRequest;
 import br.com.thaua.Ecommerce.dto.fornecedor.FornecedorResponse;
+import br.com.thaua.Ecommerce.dto.fornecedor.FornecedorSaldoResponse;
 import br.com.thaua.Ecommerce.dto.itemPedido.ItemPedidoResponse;
 import br.com.thaua.Ecommerce.dto.pagina.Pagina;
 import br.com.thaua.Ecommerce.dto.produto.ProdutoNovoEstoqueRequest;
@@ -112,5 +113,12 @@ public class FornecedorController {
     public ResponseEntity<List<ItemPedidoResponse>> listarDemandaProduto(@PathVariable Long produtoId) {
         log.info("LISTAR DEMANDA PRODUTO");
         return ResponseEntity.ok(fornecedorService.listarDemandaProduto(produtoId, ConstructorErrors.returnMapErrors()));
+    }
+
+    @Operation(summary = "Exibir saldo", description = "forneecedor pode visualizar seu saldo atual")
+    @GetMapping("/saldo/view")
+    public ResponseEntity<FornecedorSaldoResponse> exibirSaldo() {
+        log.info("EXIBIR SALDO FORNECEDOR");
+        return ResponseEntity.ok(fornecedorService.exibirSaldoAtual());
     }
 }

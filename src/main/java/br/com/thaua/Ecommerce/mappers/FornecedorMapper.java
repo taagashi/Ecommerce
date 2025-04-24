@@ -3,6 +3,7 @@ package br.com.thaua.Ecommerce.mappers;
 import br.com.thaua.Ecommerce.domain.entity.FornecedorEntity;
 import br.com.thaua.Ecommerce.domain.entity.UsersEntity;
 import br.com.thaua.Ecommerce.dto.fornecedor.FornecedorResponse;
+import br.com.thaua.Ecommerce.dto.fornecedor.FornecedorSaldoResponse;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
@@ -15,4 +16,6 @@ public interface FornecedorMapper {
     @Mapping(target = "telefone", source = "users.telefone")
     FornecedorResponse FornecedorToResponse(FornecedorEntity fornecedorEntity);
     List<FornecedorResponse> toFornecedorResponseListResponse(List<FornecedorEntity> fornecedorEntityList);
+
+    FornecedorSaldoResponse fornecedorEntityToFornecedorSaldoResponse(FornecedorEntity fornecedorEntity);
 }
