@@ -222,7 +222,7 @@ public class FornecedorService {
         }
 
         produtoRepository.save(produtoEntity.get());
-
+        usersRepository.save(usersEntity);
         return produtoEntity.get().getNome() + " foi enviado com sucesso para os clientes";
     }
 
