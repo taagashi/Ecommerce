@@ -16,6 +16,5 @@ public interface ItemPedidoMapper {
     @Mapping(target = "produtoId", source = "produto.id")
     @Mapping(target = "produto", expression = "java(itemPedidoEntity.getProduto().getNome())")
     @Mapping(target = "itemPedidoId", source = "id")
-    @Mapping(target = "statusItemPedido", expression = "java(itemPedidoEntity.getStatusItemPedido().getMessage())")
     ItemPedidoResponse toItemPedidoResponse(ItemPedidoEntity itemPedidoEntity);
 }

@@ -14,5 +14,5 @@ public class ItemPedidoResponse {
     private String produto;
     private Integer quantidade;
     private BigDecimal valorTotal;
-    private String statusItemPedido;
+    private StatusItemPedido statusItemPedido;
 }
