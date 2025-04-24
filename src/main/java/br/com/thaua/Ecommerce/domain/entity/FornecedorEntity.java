@@ -21,4 +21,6 @@ public class FornecedorEntity extends AbstractRelationWithUsers {
     private List<ProdutoEntity> produto;
 
     private BigDecimal saldo = BigDecimal.valueOf(0);
+
+    private int produtosEnviados;
 }

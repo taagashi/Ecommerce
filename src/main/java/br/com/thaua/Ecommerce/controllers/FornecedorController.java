@@ -4,6 +4,7 @@ import br.com.thaua.Ecommerce.controllers.handler.ConstructorErrors;
 import br.com.thaua.Ecommerce.dto.fornecedor.FornecedorCNPJTelefoneRequest;
 import br.com.thaua.Ecommerce.dto.fornecedor.FornecedorResponse;
 import br.com.thaua.Ecommerce.dto.fornecedor.FornecedorSaldoResponse;
+import br.com.thaua.Ecommerce.dto.fornecedor.FornecedorViewProfileResponse;
 import br.com.thaua.Ecommerce.dto.itemPedido.ItemPedidoResponse;
 import br.com.thaua.Ecommerce.dto.pagina.Pagina;
 import br.com.thaua.Ecommerce.dto.produto.ProdutoNovoEstoqueRequest;
@@ -120,5 +121,12 @@ public class FornecedorController {
     public ResponseEntity<FornecedorSaldoResponse> exibirSaldo() {
         log.info("EXIBIR SALDO FORNECEDOR");
         return ResponseEntity.ok(fornecedorService.exibirSaldoAtual());
+    }
+
+    @Operation(summary = "exibir perfil", description = "fornecedor poded visualizar seu perfil")
+    @GetMapping("/view-profile")
+    public ResponseEntity<FornecedorViewProfileResponse> exibirPerfil() {
+        log.info("EXIBIR PERFIL FORNECEDOR");
+        return ResponseEntity.ok(fornecedorService.exibirPerfil());
     }
 }

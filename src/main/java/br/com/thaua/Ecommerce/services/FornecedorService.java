@@ -6,6 +6,7 @@ import br.com.thaua.Ecommerce.domain.enums.StatusPedido;
 import br.com.thaua.Ecommerce.dto.fornecedor.FornecedorCNPJTelefoneRequest;
 import br.com.thaua.Ecommerce.dto.fornecedor.FornecedorResponse;
 import br.com.thaua.Ecommerce.dto.fornecedor.FornecedorSaldoResponse;
+import br.com.thaua.Ecommerce.dto.fornecedor.FornecedorViewProfileResponse;
 import br.com.thaua.Ecommerce.dto.itemPedido.ItemPedidoResponse;
 import br.com.thaua.Ecommerce.dto.pagina.Pagina;
 import br.com.thaua.Ecommerce.dto.produto.ProdutoNovoEstoqueRequest;
@@ -219,6 +220,7 @@ public class FornecedorService {
         for(ItemPedidoEntity item : itensPedidosEnviar) {
             usersEntity.getFornecedor().setSaldo(usersEntity.getFornecedor().getSaldo().add(item.getValorTotal()));
             item.setStatusItemPedido(StatusItemPedido.ENVIADO);
+            usersEntity.getFornecedor().setProdutosEnviados(usersEntity.getFornecedor().getProdutosEnviados() + 1);
             item.getPedido().setStatusPedido(StatusPedido.PAGO_ENVIANDO);
         }
 
@@ -242,5 +244,11 @@ public class FornecedorService {
         UsersEntity usersEntity = ExtractTypeUserContextHolder.extractUser();
 
         return fornecedorMapper.fornecedorEntityToFornecedorSaldoResponse(usersEntity.getFornecedor());
+    }
+
+    public FornecedorViewProfileResponse exibirPerfil() {
+        UsersEntity usersEntity = ExtractTypeUserContextHolder.extractUser();
+
+        return fornecedorMapper.fornecedorEntityToFornecedorViiewProfileResponse(usersEntity.getFornecedor());
     }
 }
