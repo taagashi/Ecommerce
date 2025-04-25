@@ -93,4 +93,11 @@ public class ClienteController {
         log.info("EDITAR PEDIDO");
         return ResponseEntity.ok(clienteService.editarPedido(pedidoId, itemPedidoRequest, ConstructorErrors.returnMapErrors()));
     }
+
+    @Operation(summary = "acrescentar produto a pedido", description = "cliente pode acrescentar mais um item pedido a um pedido que ja foi feito antes")
+    @PostMapping("/pedidos/{pedidoId}/update/register")
+    public ResponseEntity<PedidoResponse> adicionarProdutoAPedido(@PathVariable Long pedidoId, @RequestParam List<ItemPedidoRequest> itemPedidoRequest) {
+        log.info("ADICIONAR PRODUTO A PEDIDO");
+        return ResponseEntity.ok(clienteService.adicionarProdutoAPedido(pedidoId, itemPedidoRequest, ConstructorErrors.returnMapErrors()));
+    }
 }

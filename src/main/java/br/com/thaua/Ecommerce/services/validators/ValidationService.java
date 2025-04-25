@@ -161,4 +161,10 @@ public class ValidationService {
 
         return codigoVerificacao;
     }
+
+    public void validarStatusPedidoAdicionarProduto(PedidoEntity pedidoEntity, Map<String, String> errors) {
+        if(pedidoEntity.getStatusPedido() == StatusPedido.ENVIADO || pedidoEntity.getStatusPedido() == StatusPedido.CANCELADO) {
+            errors.put("Status", "Status do pedido inválido para realizar essa operação");
+        }
+    }
 }

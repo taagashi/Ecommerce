@@ -12,10 +12,7 @@ import br.com.thaua.Ecommerce.dto.itemPedido.ItemPedidoRequest;
 import br.com.thaua.Ecommerce.dto.itemPedido.ItemPedidoResponse;
 import br.com.thaua.Ecommerce.dto.pagina.Pagina;
 import br.com.thaua.Ecommerce.dto.pedido.PedidoResponse;
-import br.com.thaua.Ecommerce.exceptions.ClienteException;
-import br.com.thaua.Ecommerce.exceptions.ItemPedidoNotFoundException;
-import br.com.thaua.Ecommerce.exceptions.PedidoException;
-import br.com.thaua.Ecommerce.exceptions.PedidoNotFoundException;
+import br.com.thaua.Ecommerce.exceptions.*;
 import br.com.thaua.Ecommerce.mappers.ClienteMapper;
 import br.com.thaua.Ecommerce.mappers.ItemPedidoMapper;
 import br.com.thaua.Ecommerce.mappers.PaginaMapper;
@@ -30,6 +27,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.swing.text.html.Option;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -217,6 +215,35 @@ public class ClienteService {
                 pedidoEntity.get().setValorPedido(pedidoEntity.get().getValorPedido().add(itemPedidoEntityList.get(i).getValorTotal()));
             }
 
+        }
+
+        return pedidoMapper.toPedidoResponse(pedidoRepository.save(pedidoEntity.get()));
+    }
+
+    public PedidoResponse adicionarProdutoAPedido(Long pedidoId, List<ItemPedidoRequest> itemPedidoRequest, Map<String, String> errors) {
+        UsersEntity usersEntity = ExtractTypeUserContextHolder.extractUser();
+
+        Optional<PedidoEntity> pedidoEntity = pedidoRepository.findById(pedidoId);
+
+        validationService.validarExistenciaEntidade(pedidoEntity.orElse(null), errors);
+        validationService.validarStatusPedidoAdicionarProduto(pedidoEntity.orElse(null), errors);
+        validationService.analisarException(usersEntity.getName() + " houve um erro ao tentar adicionar produto a um pedido", PedidoNotFoundException.class, errors);
+
+        List<ItemPedidoEntity> itemPedidoEntityList = itemPedidoMapper.toItemPedidoEntityList(itemPedidoRequest);
+        List<Long> produtosIds = itemPedidoRequest.stream().map(ItemPedidoRequest::getProdutoId).toList();
+        Map<Long, ProdutoEntity> produtoEntityMap = produtoRepository.findAllById(produtosIds).stream().collect(Collectors.toMap(AbstractEntity::getId, produto -> produto));
+
+        validationService.validarExistenciaEntidade(produtoEntityMap, errors);
+        validationService.analisarException(usersEntity.getName() + " houve um erro ao tentar adicionar produto a um pedido", ProdutoNotFoundException.class, errors);
+
+        for(int i=0 ; i<itemPedidoEntityList.size() ; i++) {
+            Long produtoId = produtosIds.get(i);
+            ProdutoEntity produtoEntity =  produtoEntityMap.get(produtoId);
+            itemPedidoEntityList.get(i).setPedido(pedidoEntity.get());
+            itemPedidoEntityList.get(i).setProduto(produtoEntity);
+            itemPedidoEntityList.get(i).setValorTotal(produtoEntity.getPreco().multiply(BigDecimal.valueOf(itemPedidoEntityList.get(i).getQuantidade())));
+            pedidoEntity.get().setValorPedido(pedidoEntity.get().getValorPedido().add(itemPedidoEntityList.get(i).getValorTotal()));
+            pedidoEntity.get().getItensPedidos().add(itemPedidoEntityList.get(i));
         }
 
         return pedidoMapper.toPedidoResponse(pedidoRepository.save(pedidoEntity.get()));
