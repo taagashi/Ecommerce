@@ -211,7 +211,7 @@ public class FornecedorService {
 
         List<ItemPedidoEntity> itensPedidosEnviar = produtoEntity.get().getItensPedidos()
                 .stream()
-                .filter(item -> item.getPedido().getStatusPedido() == StatusPedido.PAGO)
+                .filter(item -> item.getPedido().getStatusPedido() == StatusPedido.PAGO || item.getPedido().getStatusPedido() == StatusPedido.PAGO_ENVIANDO)
                 .toList();
 
         validationService.validarStatusPedidoEnviar(itensPedidosEnviar, errors);
@@ -248,7 +248,6 @@ public class FornecedorService {
 
     public FornecedorViewProfileResponse exibirPerfil() {
         UsersEntity usersEntity = ExtractTypeUserContextHolder.extractUser();
-
         return fornecedorMapper.fornecedorEntityToFornecedorViiewProfileResponse(usersEntity.getFornecedor());
     }
 }

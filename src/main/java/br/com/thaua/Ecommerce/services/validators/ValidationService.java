@@ -8,6 +8,7 @@ import br.com.thaua.Ecommerce.dto.itemPedido.ItemPedidoRequest;
 import br.com.thaua.Ecommerce.dto.produto.ProdutoRequest;
 import br.com.thaua.Ecommerce.repositories.CodigoVerificacaoRepository;
 import br.com.thaua.Ecommerce.repositories.UsersRepository;
+import jdk.jshell.Snippet;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -120,6 +121,12 @@ public class ValidationService {
     public void validarStatusPedidoPagamento(PedidoEntity pedidoEntity, Map<String, String> errors) {
         if(pedidoEntity.getStatusPedido() != StatusPedido.AGUARDANDO_PAGAMENTO) {
             errors.put("Status", "O pedido já foi pago");
+        }
+    }
+
+    public void validarStatusPedidoEditar(PedidoEntity pedidoEntity, Map<String, String> errors) {
+        if(pedidoEntity.getStatusPedido() != StatusPedido.AGUARDANDO_PAGAMENTO) {
+            errors.put("Status", "Só é possível editar um pedido que ainda não foi pago");
         }
     }
 

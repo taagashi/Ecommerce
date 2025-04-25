@@ -1,5 +1,6 @@
 package br.com.thaua.Ecommerce.services;
 
+import br.com.thaua.Ecommerce.domain.abstracts.AbstractEntity;
 import br.com.thaua.Ecommerce.domain.entity.*;
 import br.com.thaua.Ecommerce.domain.enums.StatusItemPedido;
 import br.com.thaua.Ecommerce.domain.enums.StatusPedido;
@@ -100,12 +101,8 @@ public class ClienteService {
         validationService.analisarException(usersEntity.getName() + ", houve um erro na hora de fazer um pedido", ClienteException.class, errors);
 
         List<ItemPedidoEntity> itemPedidoEntityList = itemPedidoMapper.toItemPedidoEntityList(itemPedidoRequest);
-
-//        coletando todos os ids dos produtos
         List<Long> produtosIds = itemPedidoRequest.stream().map(ItemPedidoRequest::getProdutoId).toList();
-
-//        buscando todos os produtos de uma so vez
-        Map<Long, ProdutoEntity> produtoEntityMap = produtoRepository.findAllById(produtosIds).stream().collect(Collectors.toMap(produto -> produto.getId(), produto -> produto));
+        Map<Long, ProdutoEntity> produtoEntityMap = produtoRepository.findAllById(produtosIds).stream().collect(Collectors.toMap(AbstractEntity::getId, produto -> produto));
 
         PedidoEntity pedidoEntity = new PedidoEntity();
         pedidoEntity.setValorPedido(BigDecimal.ZERO);
@@ -119,7 +116,6 @@ public class ClienteService {
             itemPedidoEntityList.get(i).setValorTotal(produtoEntity.getPreco().multiply(BigDecimal.valueOf(itemPedidoEntityList.get(i).getQuantidade())));
             itemPedidoEntityList.get(i).setPedido(pedidoEntity);
             pedidoEntity.setValorPedido(pedidoEntity.getValorPedido().add(itemPedidoEntityList.get(i).getValorTotal()));
-
         }
 
         pedidoEntity.setItensPedidos(itemPedidoEntityList);
@@ -127,7 +123,8 @@ public class ClienteService {
 
         log.info("EXECUTANDO SERVICE-CLIENTE FAZER PEDIDO");
         pedidoRepository.save(pedidoEntity);
-            return pedidoMapper.toPedidoResponse(pedidoEntity);
+
+        return pedidoMapper.toPedidoResponse(pedidoEntity);
     }
 
 //    @Cacheable(value = "pedidos", key = "T(org.springframework.security.core.context.SecurityContextHolder).getContext().getAuthentication().getPrincipal().getUsername()")
@@ -185,5 +182,43 @@ public class ClienteService {
         pedidoEntity.get().setStatusPedido(StatusPedido.PAGO);
 
         return usersEntity.getName() + " seu pedido foi pago com sucesso";
+    }
+
+    public PedidoResponse editarPedido(Long pedidoId, List<ItemPedidoRequest> itemPedidoRequest, Map<String, String> errors) {
+        UsersEntity usersEntity = ExtractTypeUserContextHolder.extractUser();
+
+        Optional<PedidoEntity> pedidoEntity = pedidoRepository.findById(pedidoId);
+
+        validationService.validarExistenciaEntidade(pedidoEntity.orElse(null), errors);
+        validationService.validarStatusPedidoEditar(pedidoEntity.orElse(null), errors);
+        validationService.analisarException(usersEntity.getName() + " houve um erro ao tentar atualizar seu pedido", PedidoException.class, errors);
+
+        List<ItemPedidoEntity> itemPedidoEntityList = itemPedidoMapper.toItemPedidoEntityList(itemPedidoRequest);
+        List<Long> produtosIds = itemPedidoRequest.stream().map(ItemPedidoRequest::getProdutoId).toList();
+        Map<Long, ProdutoEntity> produtoEntityMap = produtoRepository.findAllById(produtosIds).stream().collect(Collectors.toMap(AbstractEntity::getId, produto -> produto));
+
+        pedidoEntity.get().setValorPedido(BigDecimal.valueOf(0));
+
+        for(int i=0 ; i<itemPedidoEntityList.size() ; i++) {
+            Long idProduto = produtosIds.get(i);
+            ProdutoEntity produtoEntity = produtoEntityMap.get(idProduto);
+
+            if(i <= pedidoEntity.get().getItensPedidos().size()-1) {
+                pedidoEntity.get().getItensPedidos().get(i).setProduto(produtoEntity);
+                pedidoEntity.get().getItensPedidos().get(i).setPedido(pedidoEntity.get());
+                pedidoEntity.get().getItensPedidos().get(i).setValorTotal(produtoEntity.getPreco().multiply(BigDecimal.valueOf(itemPedidoEntityList.get(i).getQuantidade())));
+                pedidoEntity.get().getItensPedidos().get(i).setQuantidade(itemPedidoEntityList.get(i).getQuantidade());
+                pedidoEntity.get().setValorPedido(pedidoEntity.get().getValorPedido().add(pedidoEntity.get().getItensPedidos().get(i).getValorTotal()));
+            } else {
+                itemPedidoEntityList.get(i).setProduto(produtoEntity);
+                itemPedidoEntityList.get(i).setPedido(pedidoEntity.get());
+                itemPedidoEntityList.get(i).setValorTotal(produtoEntity.getPreco().multiply(BigDecimal.valueOf(itemPedidoEntityList.get(i).getQuantidade())));
+                pedidoEntity.get().getItensPedidos().add(itemPedidoEntityList.get(i));
+                pedidoEntity.get().setValorPedido(pedidoEntity.get().getValorPedido().add(itemPedidoEntityList.get(i).getValorTotal()));
+            }
+
+        }
+
+        return pedidoMapper.toPedidoResponse(pedidoRepository.save(pedidoEntity.get()));
     }
 }

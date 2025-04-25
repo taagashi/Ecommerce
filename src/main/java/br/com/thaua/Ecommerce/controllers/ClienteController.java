@@ -86,4 +86,11 @@ public class ClienteController {
     public ResponseEntity<String> pagarPedido(@PathVariable Long pedidoId, @RequestParam("valor") BigDecimal valorPedido) {
         return ResponseEntity.ok(clienteService.pagarPedido(pedidoId, valorPedido, ConstructorErrors.returnMapErrors()));
     }
+
+    @Operation(summary = "editar pedido", description = "cliente pode editar um pedido")
+    @PutMapping("/pedidos/{pedidoId}/update")
+    public ResponseEntity<PedidoResponse> editarPedido(@PathVariable Long pedidoId, @RequestBody List<ItemPedidoRequest> itemPedidoRequest) {
+        log.info("EDITAR PEDIDO");
+        return ResponseEntity.ok(clienteService.editarPedido(pedidoId, itemPedidoRequest, ConstructorErrors.returnMapErrors()));
+    }
 }
