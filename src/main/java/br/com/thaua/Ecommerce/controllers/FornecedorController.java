@@ -40,7 +40,7 @@ public class FornecedorController {
 //    POST /api/V1/funcionarios/produtos/register - Cadastrar novo produto [ROLE FUNCIONARIO]
     @Operation(summary = "cadastrar produto", description = "fornecedor só pode cadastrar produtos se tiver com CNPJ, telefone e endereço cadastrados")
     @PostMapping("/produtos/register")
-    public ResponseEntity<ProdutoResponse> cadastrarProduto(@RequestBody ProdutoRequest produtoRequest) {
+    public ResponseEntity<List<ProdutoResponse>> cadastrarProduto(@RequestBody List<ProdutoRequest> produtoRequest) {
         log.info("CADASTRAR PRODUTO");
         return ResponseEntity.ok(fornecedorService.cadastrarProduto(produtoRequest, ConstructorErrors.returnMapErrors()));
     }
