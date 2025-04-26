@@ -107,4 +107,11 @@ public class ClienteController {
         log.info("DELETAR ITEM PEDIDO");
         return ResponseEntity.ok(clienteService.deletarItemPedido(itemPedidoId, ConstructorErrors.returnMapErrors()));
     }
+
+    @Operation(summary = "deletar pedido", description = "cliente pode deletar pedido")
+    @DeleteMapping("/pedidos/{pedidoId}/delete")
+    public ResponseEntity<String> deletarPedido(@PathVariable Long pedidoId) {
+        log.info("DELETAR PEDIDO");
+        return ResponseEntity.ok(clienteService.deletarPedido(pedidoId, ConstructorErrors.returnMapErrors()));
+    }
 }

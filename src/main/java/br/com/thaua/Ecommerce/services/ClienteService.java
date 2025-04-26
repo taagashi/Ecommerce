@@ -27,7 +27,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.swing.text.html.Option;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -257,7 +256,7 @@ public class ClienteService {
 
         PedidoEntity pedidoEntity = itemPedidoEntity.get().getPedido();
 
-        validationService.validarStatusPedidoDeletarItemPedido(pedidoEntity, errors);
+        validationService.validarStatusPedidoDeletar(pedidoEntity, errors);
         validationService.analisarException(usersEntity.getName() + " houve um erro ao tentar deletar seu item pedido", ItemPedidoNotFoundException.class, errors);
 
         pedidoEntity.getItensPedidos().remove(itemPedidoEntity.get());
@@ -266,5 +265,19 @@ public class ClienteService {
         itemPedidoRepository.delete(itemPedidoEntity.get());
 
         return usersEntity.getName() + " seu item pedido foi deletado com sucesso";
+    }
+
+    public String deletarPedido(Long pedidoId, Map<String, String> errors) {
+        UsersEntity usersEntity = ExtractTypeUserContextHolder.extractUser();
+
+        Optional<PedidoEntity> pedidoEntity = pedidoRepository.findById(pedidoId);
+
+        validationService.validarExistenciaEntidade(pedidoEntity.orElse(null), errors);
+        validationService.validarStatusPedidoDeletar(pedidoEntity.orElse(null), errors);
+        validationService.analisarException(usersEntity.getName() + " houve um erro ao tentar deletar seu pedido", PedidoNotFoundException.class, errors);
+
+        pedidoRepository.delete(pedidoEntity.get());
+
+        return usersEntity.getName() + " seu pedido foi deletado com sucesso";
     }
 }

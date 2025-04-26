@@ -8,7 +8,6 @@ import br.com.thaua.Ecommerce.dto.itemPedido.ItemPedidoRequest;
 import br.com.thaua.Ecommerce.dto.produto.ProdutoRequest;
 import br.com.thaua.Ecommerce.repositories.CodigoVerificacaoRepository;
 import br.com.thaua.Ecommerce.repositories.UsersRepository;
-import jdk.jshell.Snippet;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -168,7 +167,7 @@ public class ValidationService {
         }
     }
 
-    public void validarStatusPedidoDeletarItemPedido(PedidoEntity pedidoEntity, Map<String, String> errors) {
+    public void validarStatusPedidoDeletar(PedidoEntity pedidoEntity, Map<String, String> errors) {
         if(pedidoEntity.getStatusPedido() == StatusPedido.PAGO || pedidoEntity.getStatusPedido() == StatusPedido.PAGO_ENVIANDO) {
             errors.put("Status", "Status do pedido inválido para deletar item pedido");
         }
