@@ -14,7 +14,6 @@ public interface ProdutoMapper {
     ProdutoEntity produtoEstoqueRequestToEntity(ProdutoNovoEstoqueRequest produtoNovoEstoqueRequest);
     ProdutoEntity produtoRequestToEntity(ProdutoRequest produtoRequest);
     @Mapping(target = "produtoId", source = "id")
-    @Mapping(target = "quantidadeDemanda", expression = "java(produtoEntity.getItensPedidos() == null ? 0 : produtoEntity.getItensPedidos().size())")
     @Mapping(target = "categoriasAssociadas", expression = "java(produtoEntity.getCategorias() == null ? 0 : produtoEntity.getCategorias().size())")
     ProdutoResponse produtoToResponse(ProdutoEntity produtoEntity);
 

@@ -172,6 +172,7 @@ public class ClienteService {
 
         for(ItemPedidoEntity itemPedido : pedidoEntity.get().getItensPedidos()) {
             itemPedido.getProduto().setEstoque(itemPedido.getProduto().getEstoque() - itemPedido.getQuantidade());
+            itemPedido.getProduto().setQuantidadeDemanda(itemPedido.getProduto().getQuantidadeDemanda() + 1);
             itemPedido.setStatusItemPedido(StatusItemPedido.PROCESSANDO);
             itemPedidoRepository.save(itemPedido);
         }

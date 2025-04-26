@@ -31,6 +31,8 @@ public class ProdutoEntity extends AbstractEntity {
     @OneToMany(mappedBy = "produto", fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
     private List<ItemPedidoEntity> itensPedidos;
 
+    private int quantidadeDemanda;
+
     @ManyToOne
     @JoinColumn(name = "fornecedor_id")
     private FornecedorEntity fornecedor;

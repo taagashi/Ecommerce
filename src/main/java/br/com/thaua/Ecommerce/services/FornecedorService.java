@@ -28,7 +28,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.swing.text.html.Option;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -224,6 +223,7 @@ public class FornecedorService {
             item.getPedido().setStatusPedido(StatusPedido.PAGO_ENVIANDO);
         }
 
+        produtoEntity.get().setQuantidadeDemanda(produtoEntity.get().getQuantidadeDemanda() - itensPedidosEnviar.size());
         produtoRepository.save(produtoEntity.get());
         usersRepository.save(usersEntity);
         return produtoEntity.get().getNome() + " foi enviado com sucesso para os clientes";
@@ -249,5 +249,11 @@ public class FornecedorService {
     public FornecedorViewProfileResponse exibirPerfil() {
         UsersEntity usersEntity = ExtractTypeUserContextHolder.extractUser();
         return fornecedorMapper.fornecedorEntityToFornecedorViiewProfileResponse(usersEntity.getFornecedor());
+    }
+
+    public Pagina<ProdutoResponse> listarProdutosComDemanda(Pageable pageable) {
+        UsersEntity usersEntity = ExtractTypeUserContextHolder.extractUser();
+
+        return paginaMapper.toPagina(produtoRepository.findAllByFornecedorIdAndQuantidadeDemandaGreaterThan(usersEntity.getId(), 0, pageable).map(produtoMapper::produtoToResponse));
     }
 }

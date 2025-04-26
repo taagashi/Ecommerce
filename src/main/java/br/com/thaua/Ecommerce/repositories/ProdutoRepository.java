@@ -16,4 +16,5 @@ public interface ProdutoRepository extends JpaRepository<ProdutoEntity, Long> {
     Page<ProdutoEntity> findAllByPrecoGreaterThan(BigDecimal min, Pageable pageable);
     Page<ProdutoEntity> findAllByPrecoLessThan(BigDecimal max, Pageable pageable);
     Page<ProdutoEntity> findAllByPrecoBetween(BigDecimal min, BigDecimal max, Pageable pageable);
+    Page<ProdutoEntity> findAllByFornecedorIdAndQuantidadeDemandaGreaterThan(Long fornecedorId, Integer quantidadeDemanda, Pageable pageable);
 }

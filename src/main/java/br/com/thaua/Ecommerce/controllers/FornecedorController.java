@@ -123,10 +123,17 @@ public class FornecedorController {
         return ResponseEntity.ok(fornecedorService.exibirSaldoAtual());
     }
 
-    @Operation(summary = "exibir perfil", description = "fornecedor poded visualizar seu perfil")
+    @Operation(summary = "exibir perfil", description = "fornecedor pode visualizar seu perfil")
     @GetMapping("/view-profile")
     public ResponseEntity<FornecedorViewProfileResponse> exibirPerfil() {
         log.info("EXIBIR PERFIL FORNECEDOR");
         return ResponseEntity.ok(fornecedorService.exibirPerfil());
+    }
+
+    @Operation(summary = "listar produtos com demanda", description = "fornecedor pode listar todos os produtos que possuem alguma demanda")
+    @GetMapping("produtos/demanda/list")
+    public ResponseEntity<Pagina<ProdutoResponse>> listarProdutosComDemanda(Pageable pageable) {
+        log.info("LISTAR PRODUTOS COM DEMANDA");
+        return ResponseEntity.ok(fornecedorService.listarProdutosComDemanda(pageable));
     }
 }
