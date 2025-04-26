@@ -248,4 +248,23 @@ public class ClienteService {
 
         return pedidoMapper.toPedidoResponse(pedidoRepository.save(pedidoEntity.get()));
     }
+
+    public String deletarItemPedido(Long itemPedidoId, Map<String, String> errors) {
+        UsersEntity usersEntity = ExtractTypeUserContextHolder.extractUser();
+
+        Optional<ItemPedidoEntity> itemPedidoEntity = itemPedidoRepository.findById(itemPedidoId);
+        validationService.validarExistenciaEntidade(itemPedidoEntity.orElse(null), errors);
+
+        PedidoEntity pedidoEntity = itemPedidoEntity.get().getPedido();
+
+        validationService.validarStatusPedidoDeletarItemPedido(pedidoEntity, errors);
+        validationService.analisarException(usersEntity.getName() + " houve um erro ao tentar deletar seu item pedido", ItemPedidoNotFoundException.class, errors);
+
+        pedidoEntity.getItensPedidos().remove(itemPedidoEntity.get());
+
+        pedidoRepository.save(pedidoEntity);
+        itemPedidoRepository.delete(itemPedidoEntity.get());
+
+        return usersEntity.getName() + " seu item pedido foi deletado com sucesso";
+    }
 }

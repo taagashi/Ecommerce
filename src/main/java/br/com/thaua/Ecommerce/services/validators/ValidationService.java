@@ -164,7 +164,13 @@ public class ValidationService {
 
     public void validarStatusPedidoAdicionarProduto(PedidoEntity pedidoEntity, Map<String, String> errors) {
         if(pedidoEntity.getStatusPedido() == StatusPedido.ENVIADO || pedidoEntity.getStatusPedido() == StatusPedido.CANCELADO) {
-            errors.put("Status", "Status do pedido inválido para realizar essa operação");
+            errors.put("Status", "Status do pedido inválido para adicionar produto");
+        }
+    }
+
+    public void validarStatusPedidoDeletarItemPedido(PedidoEntity pedidoEntity, Map<String, String> errors) {
+        if(pedidoEntity.getStatusPedido() == StatusPedido.PAGO || pedidoEntity.getStatusPedido() == StatusPedido.PAGO_ENVIANDO) {
+            errors.put("Status", "Status do pedido inválido para deletar item pedido");
         }
     }
 }
