@@ -80,9 +80,9 @@ public class ValidationService {
     }
 
 
-    public void validarQuantidadePedido(List<ItemPedidoRequest> itemPedidoRequest, Map<String, String> errors) {
-        if(itemPedidoRequest.stream().anyMatch(itemPedido -> itemPedido.getQuantidade() <= 0)) {
-            errors.put("Quantidade", "Quandiade inválida");
+    public void validarQuantidadePedido(ItemPedidoEntity itemPedidoEntity, ProdutoEntity produtoEntity, Map<String, String> errors) {
+        if(itemPedidoEntity.getQuantidade() <= 0 || itemPedidoEntity.getQuantidade() > produtoEntity.getEstoque()) {
+            errors.put(produtoEntity.getNome(), "Quantidade acima do estoque ou igual a 0 para este produto");
         }
     }
 

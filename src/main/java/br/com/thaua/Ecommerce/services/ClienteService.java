@@ -94,8 +94,6 @@ public class ClienteService {
 
         validationService.validarEnderecoNaoExistente(usersEntity, errors);
         validationService.validarTelefone(usersEntity, errors);
-        validationService.validarQuantidadePedido(itemPedidoRequest, errors);
-        validationService.analisarException(usersEntity.getName() + ", houve um erro na hora de fazer um pedido", ClienteException.class, errors);
 
         List<ItemPedidoEntity> itemPedidoEntityList = itemPedidoMapper.toItemPedidoEntityList(itemPedidoRequest);
         List<Long> produtosIds = itemPedidoRequest.stream().map(ItemPedidoRequest::getProdutoId).toList();
@@ -109,11 +107,16 @@ public class ClienteService {
         for(int i=0 ; i<itemPedidoEntityList.size() ; i++) {
             Long produtoId = produtosIds.get(i);
             ProdutoEntity produtoEntity = produtoEntityMap.get(produtoId);
+
+            validationService.validarQuantidadePedido(itemPedidoEntityList.get(i), produtoEntity, errors);
+
             itemPedidoEntityList.get(i).setProduto(produtoEntity);
             itemPedidoEntityList.get(i).setValorTotal(produtoEntity.getPreco().multiply(BigDecimal.valueOf(itemPedidoEntityList.get(i).getQuantidade())));
             itemPedidoEntityList.get(i).setPedido(pedidoEntity);
             pedidoEntity.setValorPedido(pedidoEntity.getValorPedido().add(itemPedidoEntityList.get(i).getValorTotal()));
         }
+
+        validationService.analisarException(usersEntity.getName() + ", houve um erro na hora de fazer um pedido", ClienteException.class, errors);
 
         pedidoEntity.setItensPedidos(itemPedidoEntityList);
         pedidoEntity.setStatusPedido(StatusPedido.AGUARDANDO_PAGAMENTO);
@@ -201,6 +204,8 @@ public class ClienteService {
             Long idProduto = produtosIds.get(i);
             ProdutoEntity produtoEntity = produtoEntityMap.get(idProduto);
 
+            validationService.validarQuantidadePedido(itemPedidoEntityList.get(i), produtoEntity, errors);
+
             if(i <= pedidoEntity.get().getItensPedidos().size()-1) {
                 pedidoEntity.get().getItensPedidos().get(i).setProduto(produtoEntity);
                 pedidoEntity.get().getItensPedidos().get(i).setPedido(pedidoEntity.get());
@@ -217,6 +222,7 @@ public class ClienteService {
 
         }
 
+        validationService.analisarException(usersEntity.getName() + " houve um erro ao tentar atualizar seu pedido", PedidoException.class, errors);
         return pedidoMapper.toPedidoResponse(pedidoRepository.save(pedidoEntity.get()));
     }
 
