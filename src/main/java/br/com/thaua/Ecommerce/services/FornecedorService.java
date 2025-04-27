@@ -60,20 +60,19 @@ public class FornecedorService {
 
 //    @CacheEvict(value = "produtos-Fornecedor", allEntries = true)
     @Transactional
-    public ProdutoResponse cadastrarProduto(ProdutoRequest produtoRequest, Map<String, String> errors) {
+    public List<ProdutoResponse> cadastrarProduto(List<ProdutoRequest> produtoRequest, Map<String, String> errors) {
         UsersEntity usersEntity = ExtractTypeUserContextHolder.extractUser();
 
         validationService.validarCNPJ(usersEntity, errors);
         validationService.validarTelefone(usersEntity, errors);
         validationService.validarEnderecoNaoExistente(usersEntity, errors);
-        validationService.analisarException(usersEntity.getName() + ", houve um erro ao tentar cadastrar o produto " + produtoRequest.getNome(), ProdutoException.class, errors);
+        validationService.analisarException(usersEntity.getName() + ", houve um erro ao tentar cadastrar o produto", ProdutoException.class, errors);
 
-        ProdutoEntity produtoEntity = produtoMapper.produtoRequestToEntity(produtoRequest);
-        produtoEntity.setFornecedor(usersEntity.getFornecedor());
-
+        List<ProdutoEntity> produtoEntity = produtoMapper.produtoRequestToProdutoEntity(produtoRequest);
+        produtoEntity.forEach(produto -> produto.setFornecedor(usersEntity.getFornecedor()));
 
         log.info("EXECUTANDO SERVICE-FORNECEDOR CADASTRAR PRODUTO");
-        return produtoMapper.produtoToResponse(produtoRepository.save(produtoEntity));
+        return produtoMapper.produtoToResponseList(produtoRepository.saveAll(produtoEntity));
     }
 
 //    @Cacheable(value = "produtos-Fornecedor", key = "T(org.springframework.security.core.context.SecurityContextHolder).getContext().getAuthentication().getPrincipal().getUsername() + '_' + #pageable.getPageNumber() + '_' + #pageable.getPageSize()")

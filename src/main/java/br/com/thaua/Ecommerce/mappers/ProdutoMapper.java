@@ -26,4 +26,6 @@ public interface ProdutoMapper {
 
     @Mapping(target = "categoriaId", source = "id")
     CategoriaComponentResponse toCategoriaComponentResponse(CategoriaEntity categoria);
+
+    List<ProdutoEntity> produtoRequestToProdutoEntity(List<ProdutoRequest> produtoRequest);
 }
