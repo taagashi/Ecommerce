@@ -29,7 +29,7 @@ public class EnderecoController {
     @Operation(summary = "cadastrar endereco", description = "o usuario autenticado pode cadastrar um endereco para si")
     @PostMapping("/register")
     public ResponseEntity<EnderecoResponse> cadastrarEndereco(@RequestBody EnderecoRequest enderecoRequest) {
-        log.info("CADASTRAR ENDERECO");
+        log.info("CONTROLLER ENDERECO - CADASTRAR ENDERECO");
         return ResponseEntity.ok(usersService.cadastrarEndereco(enderecoRequest, ConstructorErrors.returnMapErrors()));
     }
 
@@ -37,7 +37,7 @@ public class EnderecoController {
     @Operation(summary = "Exibir endereco", description = "usuario cadastrado pode ver o seu endereco completo")
     @GetMapping("/list")
     public ResponseEntity<EnderecoResponse> exibirEndereco() {
-        log.info("EXIBIR ENDERECO");
+        log.info("CONTROLLER ENDERECO - EXIBIR ENDERECO");
         return ResponseEntity.ok(usersService.exibirEndereco(ConstructorErrors.returnMapErrors()));
     }
 
@@ -45,7 +45,7 @@ public class EnderecoController {
     @Operation(summary = "remover endereco", description = "usuario autenticado pode limpar as informacoes de seu endereco")
     @DeleteMapping("/delete")
     public ResponseEntity<String> removerEndereco() {
-        log.info("REMOVER ENDERECO");
+        log.info("CONTROLLER ENDERECO - REMOVER ENDERECO");
         return ResponseEntity.ok(usersService.deletarEndereco(ConstructorErrors.returnMapErrors()));
     }
 
@@ -53,7 +53,7 @@ public class EnderecoController {
     @Operation(summary = "atualizar endereço", description = "usuario atualiza todas as informações do seu endereco")
     @PutMapping("/update")
     public ResponseEntity<EnderecoResponse> atualizarEndereco(@RequestBody EnderecoRequest enderecoRequest) {
-        log.info("ATUALIZAR ENDERECO");
+        log.info("CONTROLLER ENDERECO - ATUALIZAR ENDERECO");
         return ResponseEntity.ok(usersService.atualizarEndereco(enderecoRequest, ConstructorErrors.returnMapErrors()));
     }
 }
