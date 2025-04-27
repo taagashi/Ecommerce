@@ -4,7 +4,6 @@ import br.com.thaua.Ecommerce.controllers.handler.ConstructorErrors;
 import br.com.thaua.Ecommerce.dto.fornecedor.FornecedorCNPJTelefoneRequest;
 import br.com.thaua.Ecommerce.dto.fornecedor.FornecedorResponse;
 import br.com.thaua.Ecommerce.dto.fornecedor.FornecedorSaldoResponse;
-import br.com.thaua.Ecommerce.dto.fornecedor.FornecedorViewProfileResponse;
 import br.com.thaua.Ecommerce.dto.itemPedido.ItemPedidoResponse;
 import br.com.thaua.Ecommerce.dto.pagina.Pagina;
 import br.com.thaua.Ecommerce.dto.produto.ProdutoNovoEstoqueRequest;
@@ -34,7 +33,7 @@ public class FornecedorController {
     @Operation(summary = "atualizar CNPJ e telefone", description = "fornecedor pode atualizar dados como cnpj e telefone")
     @PatchMapping("/cnpj-telefone/update")
     public ResponseEntity<FornecedorResponse> atualizarCNPJeTelefone(@RequestBody FornecedorCNPJTelefoneRequest fornecedorCNPJTelefoneRequest) {
-        log.info("ATUALIZAR CNPJ E TELEFONE");
+        log.info("CONTROLLER FORNECEDOR - ATUALIZAR CNPJ E TELEFONE");
         return ResponseEntity.ok(fornecedorService.atualizarCNPJeTelefone(fornecedorCNPJTelefoneRequest));
     }
 
@@ -42,7 +41,7 @@ public class FornecedorController {
     @Operation(summary = "cadastrar produto", description = "fornecedor só pode cadastrar produtos se tiver com CNPJ, telefone e endereço cadastrados")
     @PostMapping("/produtos/register")
     public ResponseEntity<List<ProdutoResponse>> cadastrarProduto(@RequestBody List<ProdutoRequest> produtoRequest) {
-        log.info("CADASTRAR PRODUTO");
+        log.info("CONTROLLER FORNECEDOR - CADASTRAR PRODUTO");
         return ResponseEntity.ok(fornecedorService.cadastrarProduto(produtoRequest, ConstructorErrors.returnMapErrors()));
     }
 
@@ -50,7 +49,7 @@ public class FornecedorController {
     @Operation(summary = "listar produtos", description = "Fornecedor faz a listagem de todos os produtos que ele cadastrou")
     @GetMapping("produtos/list")
     public ResponseEntity<Pagina<ProdutoResponse>> exibirProdutos(@ParameterObject  Pageable pageable) {
-        log.info("EXIBINDO PRODUTOS");
+        log.info("CONTROLLER FORNECEDOR - EXIBINDO PRODUTOS");
         return ResponseEntity.ok(fornecedorService.exibirProdutos(pageable));
     }
 
@@ -58,7 +57,7 @@ public class FornecedorController {
     @Operation(summary = "exibir um produto do fornecedor", description = "Fornecedor pode olhar um produto especifico seu")
     @GetMapping("/produtos/{produtoId}")
     public ResponseEntity<ProdutoResponse> buscarProduto(@PathVariable Long produtoId) {
-        log.info("BUSCAR PRODUTO");
+        log.info("CONTROLLER FORNECEDOR - BUSCAR PRODUTO");
         return ResponseEntity.ok(fornecedorService.buscarProduto(produtoId, ConstructorErrors.returnMapErrors()));
     }
 
@@ -67,7 +66,7 @@ public class FornecedorController {
     @Operation(summary = "atualizar informacoes de produto", description = "fornecedor pode atualizar as informacoes de um produto especifico")
     @PutMapping("/produtos/{produtoId}/update")
     public ResponseEntity<ProdutoResponse> atualizarProduto(@PathVariable Long produtoId, @RequestBody ProdutoRequest produtoRequest) {
-        log.info("ATUALIZAR PRODUTO");
+        log.info("CONTROLLER FORNECEDOR - ATUALIZAR PRODUTO");
         return ResponseEntity.ok(fornecedorService.atualizarProduto(produtoId, produtoRequest, ConstructorErrors.returnMapErrors()));
     }
 
@@ -75,7 +74,7 @@ public class FornecedorController {
     @Operation(summary = "adicionar produto para uma categoria", description = "fornecedor pode adicionar um de seus produtos para alguma categoria")
     @PostMapping("/categorias/{categoriaId}/produtos/{produtoId}")
     public ResponseEntity<ProdutoResponse> adicionarProdutoACategoria(@PathVariable Long categoriaId, @PathVariable Long produtoId) {
-        log.info("ADICIONAR PRODUTO A CATEGORIA");
+        log.info("CONTROLLER FORNECEDOR - ADICIONAR PRODUTO A CATEGORIA");
         return ResponseEntity.ok(fornecedorService.adicionarProdutoACategoria(categoriaId, produtoId, ConstructorErrors.returnMapErrors()));
     }
 
@@ -83,7 +82,7 @@ public class FornecedorController {
     @Operation(summary = "atualizar estoque", description = "fornecedor pode atualizar o estoque de um produto especifico")
     @PatchMapping("/produtos/{id}/estoque/update")
     public ResponseEntity<ProdutoResponse> atualizarEstoqueProduto(@PathVariable Long id, @RequestBody ProdutoNovoEstoqueRequest produtoNovoEstoqueRequest) {
-        log.info("ATUALIZAR ESTOQUE");
+        log.info("CONTROLLER FORNECEDOR - ATUALIZAR ESTOQUE");
         return ResponseEntity.ok(fornecedorService.atualizarEstoqueProduto(id, produtoNovoEstoqueRequest, ConstructorErrors.returnMapErrors()));
     }
 
@@ -91,7 +90,7 @@ public class FornecedorController {
     @Operation(summary = "remover produto", description = "fornecedor pode remover um de seus produtos")
     @DeleteMapping("/produtos/{produtoId}/delete")
     public ResponseEntity<String> removerProduto(@PathVariable Long produtoId) {
-        log.info("REMOVER PRODUTO");
+        log.info("CONTROLLER FORNECEDOR - REMOVER PRODUTO");
         return ResponseEntity.ok(fornecedorService.removerProduto(produtoId, ConstructorErrors.returnMapErrors()));
     }
 
@@ -99,35 +98,35 @@ public class FornecedorController {
     @Operation(summary = "remover produto de uma categoria", description = "fornecedor pode remover um de seus produtos de uma categoria")
     @DeleteMapping("/categorias/{categoriaId}/produtos/{produtoId}/delete")
     public ResponseEntity<String> removerProdutoDeCategoria(@PathVariable Long categoriaId, @PathVariable Long produtoId) {
-        log.info("REMOVER PRODUTO DE CATEGORIA");
+        log.info("CONTROLLER FORNECEDOR - REMOVER PRODUTO DE CATEGORIA");
         return ResponseEntity.ok(fornecedorService.removerProdutoDeCategoria(categoriaId, produtoId, ConstructorErrors.returnMapErrors()));
     }
 
     @Operation(summary = "enviar produto", description = "fornecedor envia os produtos que ja possuem pedidos associados a eles")
     @PatchMapping("/produtos/{produtoId}/enviar")
     public ResponseEntity<String> enviarProduto(@PathVariable Long produtoId) {
-        log.info("ENVIAR PEDIDO");
+        log.info("CONTROLLER FORNECEDOR - ENVIAR PEDIDO");
         return ResponseEntity.ok(fornecedorService.enviarProduto(produtoId, ConstructorErrors.returnMapErrors()));
     }
 
     @Operation(summary = "listar demanda de produto", description = "fornecedor pode listar todos os itens pedidos de um determinado produto")
     @GetMapping("/produtos/{produtoId}/demanda/list")
     public ResponseEntity<List<ItemPedidoResponse>> listarDemandaProduto(@PathVariable Long produtoId) {
-        log.info("LISTAR DEMANDA PRODUTO");
+        log.info("CONTROLLER FORNECEDOR - LISTAR DEMANDA PRODUTO");
         return ResponseEntity.ok(fornecedorService.listarDemandaProduto(produtoId, ConstructorErrors.returnMapErrors()));
     }
 
     @Operation(summary = "Exibir saldo", description = "forneecedor pode visualizar seu saldo atual")
     @GetMapping("/saldo/view")
     public ResponseEntity<FornecedorSaldoResponse> exibirSaldo() {
-        log.info("EXIBIR SALDO FORNECEDOR");
+        log.info("CONTROLLER FORNECEDOR - EXIBIR SALDO FORNECEDOR");
         return ResponseEntity.ok(fornecedorService.exibirSaldoAtual());
     }
 
     @Operation(summary = "listar produtos com demanda", description = "fornecedor pode listar todos os produtos que possuem alguma demanda")
     @GetMapping("produtos/demanda/list")
     public ResponseEntity<Pagina<ProdutoResponse>> listarProdutosComDemanda(@ParameterObject Pageable pageable) {
-        log.info("LISTAR PRODUTOS COM DEMANDA");
+        log.info("CONTROLLER FORNECEDOR - LISTAR PRODUTOS COM DEMANDA");
         return ResponseEntity.ok(fornecedorService.listarProdutosComDemanda(pageable));
     }
 }
