@@ -4,14 +4,15 @@ import br.com.thaua.Ecommerce.domain.entity.*;
 import br.com.thaua.Ecommerce.domain.enums.Estado;
 import br.com.thaua.Ecommerce.domain.enums.StatusPedido;
 import br.com.thaua.Ecommerce.dto.endereco.EnderecoRequest;
-import br.com.thaua.Ecommerce.dto.itemPedido.ItemPedidoRequest;
 import br.com.thaua.Ecommerce.dto.produto.ProdutoRequest;
 import br.com.thaua.Ecommerce.repositories.CodigoVerificacaoRepository;
 import br.com.thaua.Ecommerce.repositories.UsersRepository;
+import jdk.jshell.Snippet;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.lang.reflect.Array;
 import java.lang.reflect.Constructor;
 import java.math.BigDecimal;
 import java.util.Arrays;
@@ -194,6 +195,12 @@ public class ValidationService {
             }catch (ReflectiveOperationException e) {
                 throw new RuntimeException("Erro ao lançar exceção personalizada", e);
             }
+        }
+    }
+
+    public void validarStatusPedidoListagem(String statusPedido, Map<String, String> errors) {
+        if(Arrays.stream(StatusPedido.values()).noneMatch(status -> status.toString().equals(statusPedido))) {
+            errors.put("Status", "O Status digitado não existe");
         }
     }
 }

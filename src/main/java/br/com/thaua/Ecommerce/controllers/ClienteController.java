@@ -59,7 +59,7 @@ public class ClienteController {
     @GetMapping("/pedidos/list")
     public ResponseEntity<Pagina<PedidoResponse>> listarPedidos(@ParameterObject  Pageable pageable, @RequestParam(required = false) String statusPedido) {
         log.info("CONTROLLER CLIENTE - LISTAR PEDIDOS");
-        return ResponseEntity.ok(clienteService.listarPedidos(pageable, statusPedido));
+        return ResponseEntity.ok(clienteService.listarPedidos(pageable, statusPedido, ConstructorErrors.returnMapErrors()));
     }
 
 //    GET /api/v1/clientes/pedidos/{id}/list - Buscar pedido por ID [ROLE: CLIENTES]

@@ -23,7 +23,6 @@ import br.com.thaua.Ecommerce.userDetails.MyUserDetails;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
-import org.springframework.scheduling.support.SimpleTriggerContext;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -38,7 +37,6 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 @Service
 public class ClienteService {
-    private final ClienteRepository clienteRepository;
     private final UsersRepository usersRepository;
     private final ClienteMapper clienteMapper;
     private final ProdutoRepository produtoRepository;
@@ -104,7 +102,7 @@ public class ClienteService {
             pedidoEntity.setValorPedido(pedidoEntity.getValorPedido().add(itemPedidoEntityList.get(i).getValorTotal()));
         }
 
-        validationService.analisarException(usersEntity.getName() + ", houve um erro na hora de fazer um pedido", ClienteException.class, errors);
+        validationService.analisarException(usersEntity.getName() + ", houve um erro na hora de fazer um pedido", FazerPedidoException.class, errors);
 
         pedidoEntity.setItensPedidos(itemPedidoEntityList);
         pedidoEntity.setStatusPedido(StatusPedido.AGUARDANDO_PAGAMENTO);
@@ -115,11 +113,13 @@ public class ClienteService {
         return pedidoMapper.toPedidoResponse(pedidoEntity);
     }
 
-    public Pagina<PedidoResponse> listarPedidos(Pageable pageable, String statusPedido) {
+    public Pagina<PedidoResponse> listarPedidos(Pageable pageable, String statusPedido, Map<String, String> errors) {
         UsersEntity usersEntity = ExtractTypeUserContextHolder.extractUser();
 
         if(statusPedido != null) {
             log.info("SERVICE CLIENTE - LISTAR PEDIDOS COM FILTRO");
+            validationService.validarStatusPedidoListagem(statusPedido, errors);
+            validationService.analisarException(usersEntity.getName() + " houve um erro ao tentar listar pedidos", InvalidStatusPedidoException.class, errors);
             return paginaMapper.toPagina(pedidoRepository.findAllByClienteIdAndStatusPedido(usersEntity.getId(), StatusPedido.valueOf(statusPedido), pageable).map(pedidoMapper::toPedidoResponse));
         }
 
@@ -160,7 +160,7 @@ public class ClienteService {
         validationService.validarExistenciaEntidade(pedidoEntity.orElse(null), errors);
         validationService.validarPagamentoPedido(pedidoEntity.get(), valorPedido, errors);
         validationService.validarStatusPedidoPagamento(pedidoEntity.get(), errors);
-        validationService.analisarException(usersEntity.getName() + " houve um erro ao tentar realizar pagamento de pedido", PedidoException.class, errors);
+        validationService.analisarException(usersEntity.getName() + " houve um erro ao tentar realizar pagamento de pedido", PagarPedidoException.class, errors);
 
         for(ItemPedidoEntity itemPedido : pedidoEntity.get().getItensPedidos()) {
             itemPedido.getProduto().setEstoque(itemPedido.getProduto().getEstoque() - itemPedido.getQuantidade());
@@ -182,7 +182,6 @@ public class ClienteService {
 
         validationService.validarExistenciaEntidade(pedidoEntity.orElse(null), errors);
         validationService.validarStatusPedidoEditar(pedidoEntity.orElse(null), errors);
-        validationService.analisarException(usersEntity.getName() + " houve um erro ao tentar atualizar seu pedido", PedidoException.class, errors);
 
         List<ItemPedidoEntity> itemPedidoEntityList = itemPedidoMapper.toItemPedidoEntityList(itemPedidoRequest);
         List<Long> produtosIds = itemPedidoRequest.stream().map(ItemPedidoRequest::getProdutoId).toList();
@@ -212,7 +211,7 @@ public class ClienteService {
 
         }
 
-        validationService.analisarException(usersEntity.getName() + " houve um erro ao tentar atualizar seu pedido", PedidoException.class, errors);
+        validationService.analisarException(usersEntity.getName() + " houve um erro ao tentar atualizar seu pedido", EditarPedidoException.class, errors);
 
         log.info("SERVICE CLIENTE - EDITAR PEDIDO");
         return pedidoMapper.toPedidoResponse(pedidoRepository.save(pedidoEntity.get()));
@@ -225,14 +224,13 @@ public class ClienteService {
 
         validationService.validarExistenciaEntidade(pedidoEntity.orElse(null), errors);
         validationService.validarStatusPedidoAdicionarProduto(pedidoEntity.orElse(null), errors);
-        validationService.analisarException(usersEntity.getName() + " houve um erro ao tentar adicionar produto a um pedido", PedidoNotFoundException.class, errors);
 
         List<ItemPedidoEntity> itemPedidoEntityList = itemPedidoMapper.toItemPedidoEntityList(itemPedidoRequest);
         List<Long> produtosIds = itemPedidoRequest.stream().map(ItemPedidoRequest::getProdutoId).toList();
         Map<Long, ProdutoEntity> produtoEntityMap = produtoRepository.findAllById(produtosIds).stream().collect(Collectors.toMap(AbstractEntity::getId, produto -> produto));
 
         validationService.validarExistenciaEntidade(produtoEntityMap, errors);
-        validationService.analisarException(usersEntity.getName() + " houve um erro ao tentar adicionar produto a um pedido", ProdutoNotFoundException.class, errors);
+        validationService.analisarException(usersEntity.getName() + " houve um erro ao tentar adicionar produto a um pedido", AdicionarProdutoAPedidoException.class, errors);
 
         for(int i=0 ; i<itemPedidoEntityList.size() ; i++) {
             Long produtoId = produtosIds.get(i);
@@ -252,12 +250,14 @@ public class ClienteService {
         UsersEntity usersEntity = ExtractTypeUserContextHolder.extractUser();
 
         Optional<ItemPedidoEntity> itemPedidoEntity = itemPedidoRepository.findById(itemPedidoId);
+
         validationService.validarExistenciaEntidade(itemPedidoEntity.orElse(null), errors);
+        validationService.analisarException(usersEntity.getName() + " houve um erro ao tentar buscar pelo item pedido", ItemPedidoNotFoundException.class, errors);
 
         PedidoEntity pedidoEntity = itemPedidoEntity.get().getPedido();
 
         validationService.validarStatusPedidoDeletar(pedidoEntity, errors);
-        validationService.analisarException(usersEntity.getName() + " houve um erro ao tentar deletar seu item pedido", ItemPedidoNotFoundException.class, errors);
+        validationService.analisarException(usersEntity.getName() + " houve um erro ao tentar deletar seu item pedido", InvalidStatusPedidoException.class, errors);
 
         pedidoEntity.getItensPedidos().remove(itemPedidoEntity.get());
 
@@ -275,7 +275,7 @@ public class ClienteService {
 
         validationService.validarExistenciaEntidade(pedidoEntity.orElse(null), errors);
         validationService.validarStatusPedidoDeletar(pedidoEntity.orElse(null), errors);
-        validationService.analisarException(usersEntity.getName() + " houve um erro ao tentar deletar seu pedido", PedidoNotFoundException.class, errors);
+        validationService.analisarException(usersEntity.getName() + " houve um erro ao tentar deletar seu pedido", DeletarPedidoException.class, errors);
 
         pedidoRepository.delete(pedidoEntity.get());
 
