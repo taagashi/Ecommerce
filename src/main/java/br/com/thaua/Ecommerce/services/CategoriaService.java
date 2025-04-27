@@ -27,13 +27,11 @@ public class CategoriaService {
     private final PaginaMapper paginaMapper;
     private final ValidationService validationService;
 
-//    @Cacheable(value = "categorias")
     public Pagina<CategoriaResponse> exibirCategorias(Pageable pageable) {
-        log.info("EXECUTANDO SERVICE-CATEGORIA EXIBIR CATEGORIAS");
+        log.info("SERVICE CATEGORIA - EXIBIR CATEGORIAS");
         return paginaMapper.toPagina(categoriaRepository.findAll(pageable).map(categoriaMapper::toResponse));
     }
 
-//    @Cacheable(value = "categorias")
     public CategoriaResponse exibirCategoria(Long categoriaId, Map<String, String> errors) {
         Optional<CategoriaEntity> categoriaEntity = categoriaRepository.findById(categoriaId);
 
@@ -41,11 +39,10 @@ public class CategoriaService {
         validationService.analisarException("Houve um erro ao tentar exibir categoria", CategoriaNotFoundException.class, errors);
 
 
-        log.info("EXECUTANDO SERVICE-CATEGORIA EXIBIR CATEGORIA");
+        log.info("SERVICE CATEGORIA - EXIBIR CATEGORIA");
         return categoriaMapper.toResponse(categoriaEntity.get());
     }
 
-//    @Cacheable(value = "categorias-Produtos", key = "#categoriaId")
     public CategoriaProdutosResponse listarProdutosPorCategoria(Long categoriaId, Map<String, String> errors) {
         Optional<CategoriaEntity> categoriaEntity = categoriaRepository.findById(categoriaId);
 
@@ -53,7 +50,7 @@ public class CategoriaService {
         validationService.analisarException("Houve um erro ao tentar listar produtos de uma categoria", CategoriaNotFoundException.class, errors);
 
 
-        log.info("EXECUTANDO SERVICE-CATEGORIA LISTAR PRODUTOS POR CATEGORIA");
+        log.info("SERVICE CATEGORIA - LISTAR PRODUTOS POR CATEGORIA");
         return categoriaMapper.toCategoriaProdutosResponse(categoriaEntity.get());
     }
 }
