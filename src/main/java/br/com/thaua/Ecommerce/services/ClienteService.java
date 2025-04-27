@@ -63,15 +63,6 @@ public class ClienteService {
         return clienteMapper.toResponse(usersRepository.save(usersEntity).getCliente());
     }
 
-//    @Cacheable(value = "clientes",key = "T(org.springframework.security.core.context.SecurityContextHolder).getContext().getAuthentication().getPrincipal().getUsername()")
-    public ClienteComPedidoResponse exibirPerfil() {
-        UsersEntity usersEntity = ExtractTypeUserContextHolder.extractUser();
-
-        log.info("EXECUTANDO SERVICE-CLIENTE EXIBIR PERFIL");
-        return clienteMapper.toResponseComPedido(usersEntity.getCliente());
-    }
-
-
 //    @CachePut(value = "clientes", key = "T(org.springframework.security.core.context.SecurityContextHolder).getContext().getAuthentication().getPrincipal().getUsername()")
     @Transactional
     public String atualizarDados(ClienteUpdateRequest clienteUpdateRequest) {

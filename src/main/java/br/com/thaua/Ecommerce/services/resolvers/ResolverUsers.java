@@ -9,4 +9,6 @@ public interface ResolverUsers {
     boolean roleEsperada(Role role);
     void trackUserForRegister(UsersEntity users);
     void cleanCache(UsersEntity usersEntity);
+    Object viewProfile(UsersEntity usersEntity);
+
 }

@@ -1,7 +1,6 @@
 package br.com.thaua.Ecommerce.mappers;
 
 import br.com.thaua.Ecommerce.domain.entity.FornecedorEntity;
-import br.com.thaua.Ecommerce.domain.entity.UsersEntity;
 import br.com.thaua.Ecommerce.dto.fornecedor.FornecedorResponse;
 import br.com.thaua.Ecommerce.dto.fornecedor.FornecedorSaldoResponse;
 import br.com.thaua.Ecommerce.dto.fornecedor.FornecedorViewProfileResponse;
@@ -24,5 +23,5 @@ public interface FornecedorMapper {
     @Mapping(target = "email", source = "users.email")
     @Mapping(target = "telefone", source = "users.telefone")
     @Mapping(target = "produtosCadastrados", expression = "java(fornecedorEntity.getProduto() == null ? 0 : fornecedorEntity.getProduto().size())")
-    FornecedorViewProfileResponse fornecedorEntityToFornecedorViiewProfileResponse(FornecedorEntity fornecedorEntity);
+    FornecedorViewProfileResponse fornecedorEntityToFornecedorViewProfileResponse(FornecedorEntity fornecedorEntity);
 }

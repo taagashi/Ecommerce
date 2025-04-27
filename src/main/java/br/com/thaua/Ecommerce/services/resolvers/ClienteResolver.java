@@ -3,6 +3,7 @@ package br.com.thaua.Ecommerce.services.resolvers;
 import br.com.thaua.Ecommerce.domain.entity.ClienteEntity;
 import br.com.thaua.Ecommerce.domain.entity.UsersEntity;
 import br.com.thaua.Ecommerce.domain.enums.Role;
+import br.com.thaua.Ecommerce.mappers.ClienteMapper;
 import br.com.thaua.Ecommerce.repositories.UsersRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -17,6 +18,7 @@ import java.util.Objects;
 public class ClienteResolver implements ResolverUsers{
     private final UsersRepository usersRepository;
     private final CacheManager cacheManager;
+    private final ClienteMapper clienteMapper;
 
     @Override
     public boolean roleEsperada(Role role) {
@@ -34,6 +36,11 @@ public class ClienteResolver implements ResolverUsers{
     public void cleanCache(UsersEntity usersEntity) {
         Objects.requireNonNull(cacheManager.getCache("clientesListagem")).clear();
         log.info("CACHE CLIENTESLISTAGEM LIMPO");
+    }
+
+    @Override
+    public Object viewProfile(UsersEntity usersEntity) {
+         return clienteMapper.toResponseComPedido(usersEntity.getCliente());
     }
 
 }

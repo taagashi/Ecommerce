@@ -37,14 +37,6 @@ public class ClienteController {
         return ResponseEntity.ok(clienteService.atualizarCpfETelefone(clienteCpfTelefoneRequest, ConstructorErrors.returnMapErrors()));
     }
 
-//    GET /api/v1/clientes/view-profile - Exibir meu perfl [ROLE: CLIENTE]
-    @Operation(summary = "exibir perfil", description = "cliente pode ver o seu perfil")
-    @GetMapping("/view-profile")
-    public ResponseEntity<ClienteComPedidoResponse> exibirPerfil() {
-        log.info("EXIBIR PERFIL CLIENTE");
-        return ResponseEntity.ok(clienteService.exibirPerfil());
-    }
-
 //    PUT /api/v1/clientes/update - Atualizar meus dados [ROLE: CLIENTE]1
     @Operation(summary = "atualizar dados", description = "cliente atualiza dados como: nome, email, telefone e cpf")
     @PutMapping("/update")
