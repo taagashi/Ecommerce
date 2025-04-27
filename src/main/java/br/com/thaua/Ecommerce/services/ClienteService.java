@@ -4,7 +4,6 @@ import br.com.thaua.Ecommerce.domain.abstracts.AbstractEntity;
 import br.com.thaua.Ecommerce.domain.entity.*;
 import br.com.thaua.Ecommerce.domain.enums.StatusItemPedido;
 import br.com.thaua.Ecommerce.domain.enums.StatusPedido;
-import br.com.thaua.Ecommerce.dto.cliente.ClienteComPedidoResponse;
 import br.com.thaua.Ecommerce.dto.cliente.ClienteCpfTelefoneRequest;
 import br.com.thaua.Ecommerce.dto.cliente.ClienteResponse;
 import br.com.thaua.Ecommerce.dto.cliente.ClienteUpdateRequest;
@@ -24,6 +23,7 @@ import br.com.thaua.Ecommerce.userDetails.MyUserDetails;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
+import org.springframework.scheduling.support.SimpleTriggerContext;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -119,9 +119,13 @@ public class ClienteService {
     }
 
 //    @Cacheable(value = "pedidos", key = "T(org.springframework.security.core.context.SecurityContextHolder).getContext().getAuthentication().getPrincipal().getUsername()")
-    public Pagina<PedidoResponse> listarPedidos(Pageable pageable) {
+    public Pagina<PedidoResponse> listarPedidos(Pageable pageable, String statusPedido) {
         UsersEntity usersEntity = ExtractTypeUserContextHolder.extractUser();
 
+        if(statusPedido != null) {
+            log.info("EXECUTANDO SERVICE-CLIENTE LISTAR PEDIDOS");
+            return paginaMapper.toPagina(pedidoRepository.findAllByClienteIdAndStatusPedido(usersEntity.getId(), StatusPedido.valueOf(statusPedido), pageable).map(pedidoMapper::toPedidoResponse));
+        }
 
         log.info("EXECUTANDO SERVICE-CLIENTE LISTAR PEDIDOS");
         return paginaMapper.toPagina(pedidoRepository.findAllByClienteId(usersEntity.getId(), pageable).map(pedidoMapper::toPedidoResponse));
