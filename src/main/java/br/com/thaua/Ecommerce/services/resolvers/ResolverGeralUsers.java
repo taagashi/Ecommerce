@@ -16,6 +16,7 @@ public class ResolverGeralUsers {
     private final List<ResolverUsers> resolverUsers;
 
     public void setInformationUsers(UsersEntity usersEntity) {
+        log.info("RESOLVER GERAL USERS - SET INFORMATION USERS");
         resolverUsers.stream()
                 .filter(user -> user.roleEsperada(usersEntity.getRole()))
                 .findFirst()
@@ -24,6 +25,7 @@ public class ResolverGeralUsers {
     }
 
     public void cleanCache(UsersEntity usersEntity) {
+        log.info("RESOLVER GERAL USERS - CLEAN CACHE");
         resolverUsers.stream().filter(user -> user.roleEsperada(usersEntity.getRole()))
                 .findFirst()
                 .orElseThrow(() -> throwExceptionRole(usersEntity))
@@ -31,6 +33,7 @@ public class ResolverGeralUsers {
     }
 
     public Object viewProfile(UsersEntity usersEntity) {
+        log.info("RESOLVER GERAL USERS - VIEW PROFILE");
         return resolverUsers.stream().filter(user -> user.roleEsperada(usersEntity.getRole()))
                 .findFirst()
                 .orElseThrow(() -> throwExceptionRole(usersEntity))
@@ -38,6 +41,7 @@ public class ResolverGeralUsers {
     }
 
     private RuntimeException throwExceptionRole(UsersEntity usersEntity) {
+        log.info("RESOLVER GERAL USERS - THROW EXCEPTION ROLE");
         throw new RoleNotFoundException("Role não encontrada", Map.of("Role incorreta", usersEntity.getName() + " você inseriu a role incorretamente"));
     }
 
