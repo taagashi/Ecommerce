@@ -15,6 +15,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -48,7 +49,7 @@ public class FornecedorController {
 //    GET /api/v1/funcionarios/produtos/list - Listar produtos (com paginação e filtros) [ROLE: FUNCIONARIO]
     @Operation(summary = "listar produtos", description = "Fornecedor faz a listagem de todos os produtos que ele cadastrou")
     @GetMapping("produtos/list")
-    public ResponseEntity<Pagina<ProdutoResponse>> exibirProdutos(Pageable pageable) {
+    public ResponseEntity<Pagina<ProdutoResponse>> exibirProdutos(@ParameterObject  Pageable pageable) {
         log.info("EXIBINDO PRODUTOS");
         return ResponseEntity.ok(fornecedorService.exibirProdutos(pageable));
     }
@@ -132,7 +133,7 @@ public class FornecedorController {
 
     @Operation(summary = "listar produtos com demanda", description = "fornecedor pode listar todos os produtos que possuem alguma demanda")
     @GetMapping("produtos/demanda/list")
-    public ResponseEntity<Pagina<ProdutoResponse>> listarProdutosComDemanda(Pageable pageable) {
+    public ResponseEntity<Pagina<ProdutoResponse>> listarProdutosComDemanda(@ParameterObject Pageable pageable) {
         log.info("LISTAR PRODUTOS COM DEMANDA");
         return ResponseEntity.ok(fornecedorService.listarProdutosComDemanda(pageable));
     }
