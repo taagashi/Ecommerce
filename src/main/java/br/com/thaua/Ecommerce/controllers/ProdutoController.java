@@ -11,7 +11,6 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springdoc.core.annotations.ParameterObject;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -29,7 +28,7 @@ public class ProdutoController {
     @Operation(summary = "Lista todas as categorias de um determinado produto", description = "faz a listagem de categorias de um produto atraves de seu id")
     @GetMapping("/{produtoId}/categorias/list")
     public ResponseEntity<ProdutoCategoriaResponse> exibirCategoriasDeProduto(@PathVariable Long produtoId) {
-        log.info("EXIBIR CATEGORIAS DE PRODUTO");
+        log.info("CONTROLLER PRODUTO - EXIBIR CATEGORIAS DE PRODUTO");
         return ResponseEntity.ok(produtoService.exibirCategoriasDeProduto(produtoId, ConstructorErrors.returnMapErrors()));
     }
 
@@ -45,14 +44,14 @@ public class ProdutoController {
             @Parameter(description = "preco maximo")
             @RequestParam(required = false) BigDecimal max
     ) {
-        log.info("EXIBIR PRODUTOS");
+        log.info("CONTROLLER PRODUTO - EXIBIR PRODUTOS");
         return ResponseEntity.ok(produtoService.exibirProdutos(pageable, min, max));
     }
 
     @Operation(summary = "Buscar produto por id", description = "usuario cadastrado pode buscar um produto pelo id")
     @GetMapping("/{produtoId}")
     public ResponseEntity<ProdutoResponse> buscarProduto(@PathVariable Long produtoId) {
-        log.info("BUSCAR PRODUTO");
+        log.info("CONTROLLER PRODUTO - BUSCAR PRODUTO");
         return ResponseEntity.ok(produtoService.buscarProduto(produtoId, ConstructorErrors.returnMapErrors()));
     }
 }
