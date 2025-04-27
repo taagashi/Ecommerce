@@ -7,6 +7,7 @@ import br.com.thaua.Ecommerce.repositories.UsersRepository;
 import br.com.thaua.Ecommerce.services.validators.ValidationService;
 import br.com.thaua.Ecommerce.userDetails.MyUserDetails;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -14,6 +15,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.Map;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class MyUserDetailsService implements UserDetailsService {
@@ -28,6 +30,7 @@ public class MyUserDetailsService implements UserDetailsService {
         validationService.validarExistenciaEntidade(usersEntity, errors);
         validationService.analisarException("Não foi possivel fazer login", UserNotFoundException.class, errors);
 
+        log.info("SERVICE - MYUSERDETAILSSERVICE - LOAD USER BY USERNAME");
         return new MyUserDetails(usersEntity.getId(), usersEntity.getEmail(), usersEntity.getPassword(), usersEntity.getRole().name(), usersEntity);
     }
 }
