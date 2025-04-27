@@ -1,6 +1,7 @@
 package br.com.thaua.Ecommerce.services;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -8,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.Random;
 
+@Slf4j
 @RequiredArgsConstructor
 @Service
 public class EmailMessageService {
@@ -16,6 +18,7 @@ public class EmailMessageService {
     private String remetente;
 
     public void registroDeUsuario(String nome, String destinatario) {
+        log.info("SERVICE EMAIL - REGISTRO DE USUARIO");
         enviarEmails("REGISTRO ECOMMERCE", "Parabéns " + nome + ", você acaba de se registrar no nosso Ecommerce :)", destinatario);
     }
 
@@ -25,6 +28,7 @@ public class EmailMessageService {
 
         enviarEmails("REDEFINIR SENHA",  "seu código de verificação para mudança de senha é: " + codigo, destinatario);
 
+        log.info("SERVICE EMAIL - GERAR CODIGO DE VERIFICACAO");
         return codigo;
     }
 
@@ -35,6 +39,7 @@ public class EmailMessageService {
         message.setText(texto);
         message.setFrom(remetente);
 
+        log.info("SERVICE EMAIL - ENVIAR EMAIL");
         mailSender.send(message);
     }
 }
