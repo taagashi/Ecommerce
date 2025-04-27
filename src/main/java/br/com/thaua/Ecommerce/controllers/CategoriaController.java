@@ -9,6 +9,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
@@ -31,7 +32,7 @@ public class CategoriaController {
 //    GET /api/v1/categorias/list - Listar todas as categorias [QUALQUER USUARIO AUTENTICADO]
     @Operation(summary = "exibir categorias", description = "usuario autenticado pode ver todas as categorias cadastradas")
     @GetMapping("/list")
-    public ResponseEntity<Pagina<CategoriaResponse>> exibirCategorias(Pageable pageable) {
+    public ResponseEntity<Pagina<CategoriaResponse>> exibirCategorias(@ParameterObject Pageable pageable) {
         log.info("EXIBINDO CATEGORIAS");
         return ResponseEntity.ok(categoriaService.exibirCategorias(pageable));
     }

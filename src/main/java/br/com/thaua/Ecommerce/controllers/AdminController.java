@@ -16,6 +16,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
@@ -33,7 +34,7 @@ public class AdminController {
 
     @Operation(summary = "Listar clientes", description = "Lista todos os clientes")
     @GetMapping("/clientes")
-    public ResponseEntity<Pagina<ClienteResponse>> listarClientes(Pageable pageable) {
+    public ResponseEntity<Pagina<ClienteResponse>> listarClientes(@ParameterObject  Pageable pageable) {
         log.info("LISTAR CLIENTES");
         return ResponseEntity.ok(adminService.listarClientes(pageable));
     }
@@ -54,14 +55,14 @@ public class AdminController {
 
     @Operation(summary = "listar fornecedores", description = "lista todos os fornecedores")
     @GetMapping("/fornecedores/list")
-    public ResponseEntity<Pagina<FornecedorResponse>> listarFornecedores(Pageable pageable) {
+    public ResponseEntity<Pagina<FornecedorResponse>> listarFornecedores(@ParameterObject  Pageable pageable) {
         log.info("LISTAR FORNECEDORES");
         return ResponseEntity.ok(adminService.listarFornecedores(pageable));
     }
 
     @Operation(summary = "listar admin's", description = "admin pode ver todos os admin's registrados")
     @GetMapping("/list")
-    public ResponseEntity<Pagina<AdminResponse>> listarAdmins(Pageable pageable) {
+    public ResponseEntity<Pagina<AdminResponse>> listarAdmins(@ParameterObject Pageable pageable) {
         log.info("LISTAR ADMINS");
         return ResponseEntity.ok(adminService.listarAdmins(pageable));
     }
@@ -92,7 +93,7 @@ public class AdminController {
 //   GET /api/v1/clientes/{id}/pedidos - Listar pedidos do cliente [ROLE: ADMIN]
     @Operation(summary = "listar pedidos de um cliente", description = "admin pode listar os pedidos de um determinado cliente atraves do id do cliente")
     @GetMapping("/clientes/{clienteId}/pedidos/list")
-    public ResponseEntity<Pagina<PedidoResponse>> listarPedidosDoCliente(@PathVariable Long clienteId, Pageable pageable) {
+    public ResponseEntity<Pagina<PedidoResponse>> listarPedidosDoCliente(@PathVariable Long clienteId, @ParameterObject Pageable pageable) {
         log.info("LISTAR PEDIDOS CLIENTE");
         return ResponseEntity.ok(adminService.listarPedidosDoCliente(clienteId, pageable, ConstructorErrors.returnMapErrors()));
     }
