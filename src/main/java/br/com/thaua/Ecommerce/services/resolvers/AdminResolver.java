@@ -22,11 +22,13 @@
 
         @Override
         public boolean roleEsperada(Role role) {
+            log.info("ADMIN RESOLVER - ROLE ESPERADA");
             return role.equals(Role.ADMIN);
         }
 
         @Override
         public void trackUserForRegister(UsersEntity usersEntity) {
+            log.info("ADMIN RESOLVER - TRACK USER FOR REGISTER");
             AdminEntity adminEntity = new AdminEntity();
             adminEntity.setUsers(usersEntity);
             usersEntity.setAdmin(adminEntity);
@@ -34,12 +36,14 @@
 
         @Override
         public void cleanCache(UsersEntity usersEntity) {
+            log.info("ADMIN RESOLVER - CLEAN CACHE");
             Objects.requireNonNull(cacheManager.getCache("adminsListagem")).clear();
             log.info("CACHE ADMINSLISTAGEM FOI LIMPO");
         }
 
         @Override
         public Object viewProfile(UsersEntity usersEntity) {
+            log.info("ADMIN RESOLVER - VIEW PROFILE");
             return adminMapper.adminEntityToAdminResponse(usersEntity.getAdmin());
         }
 

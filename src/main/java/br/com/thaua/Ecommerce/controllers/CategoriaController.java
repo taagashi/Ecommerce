@@ -10,16 +10,12 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springdoc.core.annotations.ParameterObject;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-import java.util.List;
-import java.util.concurrent.ConcurrentSkipListMap;
 
 @Slf4j
 @SecurityRequirement(name = "bearerAuth")
@@ -33,7 +29,7 @@ public class CategoriaController {
     @Operation(summary = "exibir categorias", description = "usuario autenticado pode ver todas as categorias cadastradas")
     @GetMapping("/list")
     public ResponseEntity<Pagina<CategoriaResponse>> exibirCategorias(@ParameterObject Pageable pageable) {
-        log.info("EXIBINDO CATEGORIAS");
+        log.info("CONTROLLER CATEGORIA - EXIBINDO CATEGORIAS");
         return ResponseEntity.ok(categoriaService.exibirCategorias(pageable));
     }
 
@@ -41,7 +37,7 @@ public class CategoriaController {
     @Operation(summary = "exibir categoria", description = "usuario atutenticado pode ver uma categoria especifica procurando pelo id da categoria")
     @GetMapping("/{categoriaId}/list")
     public ResponseEntity<CategoriaResponse> exibirCategoria(@PathVariable Long categoriaId) {
-        log.info("EXIBINDO UMA CATEGORIA");
+        log.info("CONTROLLER CATEGORIA - EXIBINDO UMA CATEGORIA");
         return ResponseEntity.ok(categoriaService.exibirCategoria(categoriaId, ConstructorErrors.returnMapErrors()));
     }
 
@@ -49,7 +45,7 @@ public class CategoriaController {
     @Operation(summary = "exibir produtos de uma categoria", description = "usuario autenticado pode ver todos os produtos de uma categoria")
     @GetMapping("/{categoriaId}/produtos/list")
     public ResponseEntity<CategoriaProdutosResponse> listarProdutosPorCategoria(@PathVariable Long categoriaId) {
-        log.info("LISTANDO PRODUTOS POR CATEGORIA");
+        log.info("CONTROLLER CATEGORIA - LISTANDO PRODUTOS POR CATEGORIA");
         return ResponseEntity.ok(categoriaService.listarProdutosPorCategoria(categoriaId, ConstructorErrors.returnMapErrors()));
     }
 }

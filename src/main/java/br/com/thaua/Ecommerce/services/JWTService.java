@@ -2,6 +2,7 @@ package br.com.thaua.Ecommerce.services;
 
 import br.com.thaua.Ecommerce.userDetails.MyUserDetails;
 import io.jsonwebtoken.Claims;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import io.jsonwebtoken.Jwts;
 
@@ -11,6 +12,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
 
+@Slf4j
 @Service
 public class JWTService {
     private final PrivateKey privateKey;
@@ -33,6 +35,8 @@ public class JWTService {
         Map<String, Object> claims = new HashMap<>();
         claims.put("id", myUserDetails.getId());
         claims.put("role", myUserDetails.getAuthorities().iterator().next().getAuthority());
+
+        log.info("SERVICE JWT - GENERATE TOKEN");
         return Jwts.builder()
                 .claims()
                 .add(claims)
@@ -45,24 +49,29 @@ public class JWTService {
     }
 
     public String extractEmail(String token) {
+        log.info("SERVICE JWT - EXTRACT EMAIL");
         return extractClaims(token, Claims::getSubject);
     }
 
     private <T> T extractClaims(String token, Function<Claims, T> claimsResolver) {
+        log.info("SERVICE JWT - EXTRACT CLAIMS");
         final Claims claims = extractAllClaims(token);
         return claimsResolver.apply(claims);
     }
 
 
     public boolean validateToken(String token) {
+        log.info("SERVICE JWT - VALIDATE TOKEN");
         return new Date(System.currentTimeMillis()).before(extractDate(token));
     }
 
     private Date extractDate(String token) {
-            return extractClaims(token, Claims::getExpiration);
+        log.info("SERVICE JWT - EXTRACT DATE");
+        return extractClaims(token, Claims::getExpiration);
     }
 
     private Claims extractAllClaims(String token) {
+        log.info("SERVICE JWT - EXTRACT ALL CLAIMS");
         return Jwts.parser()
                 .verifyWith(publicKey)
                 .build()

@@ -22,11 +22,13 @@ public class ClienteResolver implements ResolverUsers{
 
     @Override
     public boolean roleEsperada(Role role) {
+        log.info("CLIENTE RESOLVER - ROLE ESPERADA");
         return role.equals(Role.CLIENTE);
     }
 
     @Override
     public void trackUserForRegister(UsersEntity usersEntity) {
+        log.info("CLIENTE RESOLVER - TRACK USER FOR REGISTER");
         ClienteEntity clienteEntity = new ClienteEntity();
         clienteEntity.setUsers(usersEntity);
         usersEntity.setCliente(clienteEntity);
@@ -34,12 +36,14 @@ public class ClienteResolver implements ResolverUsers{
 
     @Override
     public void cleanCache(UsersEntity usersEntity) {
+        log.info("CLIENTE RESOLVER - CLEAN CACHE");
         Objects.requireNonNull(cacheManager.getCache("clientesListagem")).clear();
         log.info("CACHE CLIENTESLISTAGEM LIMPO");
     }
 
     @Override
     public Object viewProfile(UsersEntity usersEntity) {
+         log.info("CLIENTE RESOLVER - VIEW PROFILE");
          return clienteMapper.toResponseComPedido(usersEntity.getCliente());
     }
 
