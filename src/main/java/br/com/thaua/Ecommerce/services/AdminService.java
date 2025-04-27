@@ -50,70 +50,62 @@ public class AdminService {
     private final PaginaMapper paginaMapper;
     private final ValidationService validationService;
 
-//    @Cacheable(value = "adminsListagem")
     public Pagina<AdminResponse> listarAdmins(Pageable pageable) {
         Page<AdminResponse> pageAdmins = adminRepository.findAll(pageable).map(adminMapper::adminEntityToAdminResponse);
-        log.info("EXECUTANDO SERVICE-ADMIN LISTAR ADMINS");
+        log.info("SERVICE ADMIN - LISTAR ADMINS");
         return paginaMapper.toPagina(pageAdmins);
     }
 
-//    @Cacheable("admins-Admin")
     public AdminResponse buscarAdmin(Long adminId, Map<String, String> errors) {
         Optional<AdminEntity> adminEntity = adminRepository.findById(adminId);
         validationService.validarExistenciaEntidade(adminEntity.orElse(null), errors);
         validationService.analisarException("Houve um erro na hora de buscar admin", UserNotFoundException.class, errors);
 
-        log.info("EXECUTANDO SERVICE-ADMIN BUSCAR ADMIN");
+        log.info("SERVICE ADMIN - BUSCAR ADMIN");
         return adminMapper.adminEntityToAdminResponse(adminRepository.findById(adminId).get());
     }
 
-//    @Cacheable(value = "clientesListagem")
     public Pagina<ClienteResponse> listarClientes(Pageable pageable) {
         Page<ClienteResponse> pageClientes = clienteRepository.findAll(pageable).map(clienteMapper::toResponse);
 
-        log.info("EXECUTANDO SERVICE-ADMIN LISTAR CLIENTES");
+        log.info("SERVICE ADMIN - LISTAR CLIENTES");
         return paginaMapper.toPagina(pageClientes);
     }
 
-//    @Cacheable("clientes-Admin")
     public ClienteResponse buscarCliente(Long clienteId, Map<String, String> errors) {
         Optional<ClienteEntity> clienteEntity = clienteRepository.findById(clienteId);
         validationService.validarExistenciaEntidade(clienteEntity.orElse(null), errors);
         validationService.analisarException("Houve um erro na hora de buscar o cliente", UserNotFoundException.class, errors);
 
-        log.info("EXECUTANDO SERVICE-ADMIN BUSCAR CLIENTE");
+        log.info("SERVICE ADMIN - BUCAR CLIENTE");
         return clienteMapper.toResponse(clienteRepository.findById(clienteId).get());
     }
 
-//    @Cacheable("fornecedores-Admin")
     public FornecedorResponse buscarFornecedor(Long fornecedorId, Map<String, String> errors) {
         Optional<FornecedorEntity> fornecedorEntity = fornecedorRepository.findById(fornecedorId);
         validationService.validarExistenciaEntidade(fornecedorEntity.orElse(null), errors);
         validationService.analisarException("Houve um erro na hora de buscar o fornecedor", UserNotFoundException.class, errors);
 
-        log.info("EXECUTANDO SERVICE-ADMIN BUSCAR FORNECEDOR");
+        log.info("SERVICE ADMIN - BUSCAR FORNECEDOR");
         return fornecedorMapper.FornecedorToResponse(fornecedorEntity.get());
     }
 
-//    @CacheEvict(value = "categorias", allEntries = true)
     @Transactional
     public CategoriaResponse cadastrarNovaCategoria(CategoriaRequest categoriaRequest) {
         CategoriaEntity categoriaEntity = categoriaMapper.toEntity(categoriaRequest);
 
-        log.info("EXECUTANDO SERVICE-ADMIN CADASTRAR CATEGORIA");
+        log.info("SERVICE ADMIN - CADASTRAR NOVA CATEGORIA");
         return categoriaMapper.toResponse(categoriaRepository.save(categoriaEntity));
     }
 
-//    @Cacheable(value = "fornecedoresListagem")
     public Pagina<FornecedorResponse> listarFornecedores(@PageableDefault(size = 2) Pageable pageable) {
         Page<FornecedorResponse> pageFornecedores = fornecedorRepository.findAll(pageable).map(fornecedorMapper::FornecedorToResponse);
 
 
-        log.info("EXECUTANDO SERVICE-ADMIN LISTAR FORNECEDORES");
+        log.info("SERVICE ADMIN - LISTAR FORNECEDORES");
         return paginaMapper.toPagina(pageFornecedores);
     }
 
-//    @CacheEvict(value = "clientes-Admin", allEntries = true)
     @Transactional
     public String removerUsuario(Long userId, Map<String, String> errors) {
         UsersEntity usersEntity = ExtractTypeUserContextHolder.extractUser();
@@ -132,22 +124,20 @@ public class AdminService {
         usersRepository.save(usersEntity);
 
 
-//        log.info("EXECUTANDO SERVICE-ADMIN REMOVER USUARIO");
+        log.info("SERVICE ADMIN - REMOVER USUARIO");
         return userDeletar.get().getName() + " foi removido com sucesso";
     }
 
-//    @Cacheable("pedidos-Admin")
     public Pagina<PedidoResponse> listarPedidosDoCliente(Long clienteId, Pageable pageable, Map<String, String> errors) {
         Optional<ClienteEntity> clienteEntity = clienteRepository.findById(clienteId);
 
         validationService.validarExistenciaEntidade(clienteEntity.orElse(null), errors);
         validationService.analisarException("Houve um erro na hora de buscar os pedidos do cliente", PedidoNotFoundException.class, errors);
 
-        log.info("EXECUTANDO SERVICE-ADMIN LISTAR PEDIDOS DO CLIENTE");
+        log.info("SERVICE ADMIN - LISTAR PEDIDOS DO CLIENTE");
         return paginaMapper.toPagina(pedidoRepository.findAllByClienteId(clienteId, pageable).map(pedidoMapper::toPedidoResponse));
     }
 
-//    @CacheEvict(value = "pedidos-Admin", allEntries = true)
     @Transactional
     public PedidoResponse atualizarStatusPedido(Long pedidoId, PedidoPatchRequest pedidoPatchRequest, Map<String, String> errors) {
         Optional<PedidoEntity> pedidoEntity = pedidoRepository.findById(pedidoId);
@@ -158,11 +148,10 @@ public class AdminService {
         pedidoEntity.get().setStatusPedido(pedidoPatchRequest.getStatusPedido());
 
 
-        log.info("EXECUTANDO SERVICE-ADMIN ATUALIZAR STATUS PEDIDO");
+        log.info("SERVICE ADMIN - ATUALIZAR STATUS PEDIDO");
         return pedidoMapper.toPedidoResponse(pedidoRepository.save(pedidoEntity.get()));
     }
 
-//    @CachePut(value = "enderecos-Admin", key = "#userId")
     @Transactional
     public EnderecoResponse cadastrarEnderecoUsuario(Long userId, EnderecoRequest enderecoRequest, Map<String, String> errors) {
         Optional<UsersEntity> usersEntity = usersRepository.findById(userId);
@@ -175,11 +164,10 @@ public class AdminService {
         usersEntity.get().setEndereco(enderecoEntity);
 
 
-        log.info("EXECUTANDO SERVICE-ADMIN CADASTRAR ENDERECO");
+        log.info("SERVICE ADMIN - CADASTRAR ENDERECO");
         return enderecoMapper.toEnderecoResponse(usersRepository.save(usersEntity.get()).getEndereco());
     }
 
-//    @Cacheable(value = "enderecos-Admin", key = "#userId")
     public EnderecoResponse exibirEnderecoUsuario(Long userId, Map<String, String> errors) {
         Optional<UsersEntity> usersEntity = usersRepository.findById(userId);
 
@@ -187,11 +175,10 @@ public class AdminService {
         validationService.analisarException("Houve um erro ao exibir endereco de usuario", AddressNotFoundException.class, errors);
 
 
-        log.info("EXECUTANDO SERVICE-ADMIN EXIBIR ENDERECO");
+        log.info("SERVICE ADMIN - EXIBIR ENDERECO");
         return enderecoMapper.toEnderecoResponse(usersEntity.get().getEndereco());
     }
 
-//    @CachePut(value = "enderecos-Admin", key = "#userId")
     @Transactional
     public EnderecoResponse atualizarEnderecoUsuario(Long userId, EnderecoRequest enderecoRequest, Map<String, String> errors) {
         Optional<UsersEntity> usersEntity = usersRepository.findById(userId);
@@ -205,11 +192,10 @@ public class AdminService {
         usersEntity.get().setEndereco(enderecoEntity);
 
 
-        log.info("EXECUTANDO SERVICE-ADMIN ATUALIZAR ENDERECO");
+        log.info("SERVICE ADMIN - ATUALIZAR ENDERECO");
         return enderecoMapper.toEnderecoResponse(enderecoEntity);
     }
 
-//    @CacheEvict(value = "enderecos-Admin", key = "#userId")
     @Transactional
     public String deletarEnderecoUsuario(Long userId, Map<String, String> errors) {
         Optional<UsersEntity> usersEntity = usersRepository.findById(userId);
@@ -226,11 +212,10 @@ public class AdminService {
         enderecoRepository.delete(enderecoEntity);
 
 
-        log.info("EXECUTANDO SERVICE-ADMIN DELETAR ENDERECO");
+        log.info("SERVICE ADMIN - DELETAR ENDERECO");
         return usersEntity.get().getName() + " teve seu endereco limpo com sucesso";
     }
 
-//    @CacheEvict(value = "categorias", allEntries = true)
     @Transactional
     public CategoriaResponse atualizarCategoria(Long categoriaId, CategoriaRequest categoriaRequest, Map<String, String> errors) {
         Optional<CategoriaEntity> categoriaEntity = categoriaRepository.findById(categoriaId);
@@ -242,11 +227,10 @@ public class AdminService {
         categoriaEntity.get().setDescricao(categoriaRequest.getDescricao());
 
 
-        log.info("EXECUTANDO SERVICE-ADMIN ATUALIZAR CATEGORIA");
+        log.info("SERVICE ADMIN - ATUALIZAR CATEGORIA");
         return categoriaMapper.toResponse(categoriaRepository.save(categoriaEntity.get()));
     }
 
-//    @CacheEvict(value = "categorias", allEntries = true)
     @Transactional
     public String deletarCategoria(Long categoriaId, Map<String, String> errors) {
         Optional<CategoriaEntity> categoriaEntity = categoriaRepository.findById(categoriaId);
@@ -257,7 +241,7 @@ public class AdminService {
         categoriaRepository.delete(categoriaEntity.get());
 
 
-        log.info("EXECUTANDO SERVICE-ADMIN DELETAR CATEGORIA");
+        log.info("SERVICE ADMIN - DELETAR CATEGORIA");
         return "categoria " + categoriaEntity.get().getNome() + " foi deletada com sucesso";
     }
 
