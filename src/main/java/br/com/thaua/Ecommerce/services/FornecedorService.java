@@ -54,7 +54,7 @@ public class FornecedorService {
         usersEntity.setTelefone(fornecedorCNPJTelefoneRequest.getTelefone());
 
 
-        log.info("EXECUTANDO SERVICE-FORNECEDOR ATUALIZAR CNPJ E TELEFONE");
+        log.info("SERVICE FORNECEDOR - ATUALIZAR CNPJ E TELEFONE");
         return fornecedorMapper.FornecedorToResponse(usersRepository.save(usersEntity).getFornecedor());
     }
 
@@ -71,7 +71,7 @@ public class FornecedorService {
         List<ProdutoEntity> produtoEntity = produtoMapper.produtoRequestToProdutoEntity(produtoRequest);
         produtoEntity.forEach(produto -> produto.setFornecedor(usersEntity.getFornecedor()));
 
-        log.info("EXECUTANDO SERVICE-FORNECEDOR CADASTRAR PRODUTO");
+        log.info("SERVICE FORNECEDOR - CADASTRAR PRODUTO");
         return produtoMapper.produtoToResponseList(produtoRepository.saveAll(produtoEntity));
     }
 
@@ -79,7 +79,7 @@ public class FornecedorService {
     public Pagina<ProdutoResponse> exibirProdutos(Pageable pageable) {
         UsersEntity usersEntity = ExtractTypeUserContextHolder.extractUser();
 
-        log.info("EXECUTANDO SERVICE-FORNECEDOR EXIBIR PRODUTO");
+        log.info("SERVICE FORNECEDOR - CADASTRAR PRODUTOS");
         return paginaMapper.toPagina(produtoRepository.findAllByFornecedorId(usersEntity.getId(), pageable).map(produtoMapper::produtoToResponse));
     }
 
@@ -92,7 +92,7 @@ public class FornecedorService {
         validationService.analisarException(usersEntity.getName() + " houve um erro ao buscar produto", ProdutoNotFoundException.class, errors);
 
 
-        log.info("EXECUTANDO SERVICE-FORNECEDOR BUSCAR PRODUTO");
+        log.info("SERVICE FORNECEDOR - BUSCAR PRODUTO");
         return produtoMapper.produtoToResponse(produtoEntity.get());
     }
 
@@ -111,7 +111,7 @@ public class FornecedorService {
         produtoEntity.get().setEstoque(produtoRequest.getEstoque());
 
 
-        log.info("EXECUTANDO SERVICE-FORNECEDOR ATUALIZAR PRODUTO");
+        log.info("SERVICE FORNECEDOR - ATUALIZAR PRODUTO");
         return produtoMapper.produtoToResponse(produtoRepository.save(produtoEntity.get()));
     }
 
@@ -134,7 +134,7 @@ public class FornecedorService {
         produtoRepository.save(produtoEntity.get());
 
 
-        log.info("EXECUTANDO SERVICE-FORNECEDOR ADICIONAR PRODUTO A CATEGORIA");
+        log.info("SERVICE FORNECEDOR - ADICIONAR PRODUTO A CATEGORIA");
         return produtoMapper.produtoToResponse(produtoEntity.get());
     }
 
@@ -150,7 +150,7 @@ public class FornecedorService {
         produtoEntity.get().setEstoque(produtoNovoEstoqueRequest.getNovaQuantidade());
 
 
-        log.info("EXECUTANDO SERVICE-FORNECEDOR ATUALIZAR ESTOQUE PRODUTO");
+        log.info("SERVICE FORNECEDOR - ATUALIZAR ESTOQUE PRODUTO");
         return produtoMapper.produtoToResponse(produtoRepository.save(produtoEntity.get()));
     }
 
@@ -172,7 +172,7 @@ public class FornecedorService {
         produtoRepository.delete(produtoEntity.get());
 
 
-       log.info("EXECUTANDO SERVICE-FORNECEDOR REMOVER PRODUTO");
+        log.info("SERVICE FORNECEDOR - REMOVER PRODUTO");
         return produtoEntity.get().getNome() + " foi removido com sucesso, " + usersEntity.getName();
     }
 
@@ -194,7 +194,7 @@ public class FornecedorService {
         produtoRepository.save(produtoEntity.get());
 
 
-        log.info("EXECUTANDO SERVICE-FORNECEDOR REMOVER PRODUTO CATEGORIA");
+        log.info("SERVICE FORNECEDOR - REMOVER PRODUTO DE CATEGORIA");
         return produtoEntity.get().getNome() + " foi removido com sucesso da categoria" + categoriaEntity.get().getNome();
     }
 
@@ -225,6 +225,8 @@ public class FornecedorService {
         produtoEntity.get().setQuantidadeDemanda(produtoEntity.get().getQuantidadeDemanda() - itensPedidosEnviar.size());
         produtoRepository.save(produtoEntity.get());
         usersRepository.save(usersEntity);
+
+        log.info("SERVICE FORNECEDOR - ENVIAR PRODUTO");
         return produtoEntity.get().getNome() + " foi enviado com sucesso para os clientes";
     }
 
@@ -236,18 +238,21 @@ public class FornecedorService {
                 errors);
         validationService.analisarException("Houve um erro ao tentar listar demanda de produto", ProdutoException.class, errors);
 
+        log.info("SERVICE FORNECEDOR - LISTAR DEMANDA DE PRODUTO");
         return produtoEntity.get().getItensPedidos().stream().filter(item -> item.getStatusItemPedido() == StatusItemPedido.PROCESSANDO).map(itemPedidoMapper::toItemPedidoResponse).toList();
     }
 
     public FornecedorSaldoResponse exibirSaldoAtual() {
         UsersEntity usersEntity = ExtractTypeUserContextHolder.extractUser();
 
+        log.info("SERVICE FORNECEDOR - EXIBIR SALDO ATUAL");
         return fornecedorMapper.fornecedorEntityToFornecedorSaldoResponse(usersEntity.getFornecedor());
     }
 
     public Pagina<ProdutoResponse> listarProdutosComDemanda(Pageable pageable) {
         UsersEntity usersEntity = ExtractTypeUserContextHolder.extractUser();
 
+        log.info("SERVICE FORNECEDOR - LISTAR PRODUTOS COM DEMANDA");
         return paginaMapper.toPagina(produtoRepository.findAllByFornecedorIdAndQuantidadeDemandaGreaterThan(usersEntity.getId(), 0, pageable).map(produtoMapper::produtoToResponse));
     }
 }
