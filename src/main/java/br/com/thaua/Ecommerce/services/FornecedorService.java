@@ -246,11 +246,6 @@ public class FornecedorService {
         return fornecedorMapper.fornecedorEntityToFornecedorSaldoResponse(usersEntity.getFornecedor());
     }
 
-    public FornecedorViewProfileResponse exibirPerfil() {
-        UsersEntity usersEntity = ExtractTypeUserContextHolder.extractUser();
-        return fornecedorMapper.fornecedorEntityToFornecedorViiewProfileResponse(usersEntity.getFornecedor());
-    }
-
     public Pagina<ProdutoResponse> listarProdutosComDemanda(Pageable pageable) {
         UsersEntity usersEntity = ExtractTypeUserContextHolder.extractUser();
 

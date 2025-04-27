@@ -47,4 +47,10 @@ public class UsersController {
     public ResponseEntity<String> redefinirSenha(@RequestBody UserRequestGenerateNewPassword userRequestGenerateNewPassword) {
         return ResponseEntity.ok(userService.verificarCodigoRedefirnirSenha(userRequestGenerateNewPassword, ConstructorErrors.returnMapErrors()));
     }
+
+    @Operation(summary = "exibir perfil", description = "usuario autenticado pode exibir seu perfil")
+    @GetMapping("/exibir-perfil")
+    public ResponseEntity<Object> exibirPerfil() {
+        return ResponseEntity.ok(userService.exibirPerfil());
+    }
 }
