@@ -6,15 +6,12 @@ import br.com.thaua.Ecommerce.domain.enums.StatusPedido;
 import br.com.thaua.Ecommerce.dto.fornecedor.FornecedorCNPJTelefoneRequest;
 import br.com.thaua.Ecommerce.dto.fornecedor.FornecedorResponse;
 import br.com.thaua.Ecommerce.dto.fornecedor.FornecedorSaldoResponse;
-import br.com.thaua.Ecommerce.dto.fornecedor.FornecedorViewProfileResponse;
 import br.com.thaua.Ecommerce.dto.itemPedido.ItemPedidoResponse;
 import br.com.thaua.Ecommerce.dto.pagina.Pagina;
 import br.com.thaua.Ecommerce.dto.produto.ProdutoNovoEstoqueRequest;
 import br.com.thaua.Ecommerce.dto.produto.ProdutoRequest;
 import br.com.thaua.Ecommerce.dto.produto.ProdutoResponse;
-import br.com.thaua.Ecommerce.exceptions.ItemPedidoNotFoundException;
-import br.com.thaua.Ecommerce.exceptions.ProdutoException;
-import br.com.thaua.Ecommerce.exceptions.ProdutoNotFoundException;
+import br.com.thaua.Ecommerce.exceptions.*;
 import br.com.thaua.Ecommerce.mappers.FornecedorMapper;
 import br.com.thaua.Ecommerce.mappers.ItemPedidoMapper;
 import br.com.thaua.Ecommerce.mappers.PaginaMapper;
@@ -46,7 +43,6 @@ public class FornecedorService {
     private final PedidoRepository pedidoRepository;
     private final ItemPedidoMapper itemPedidoMapper;
 
-//    @CachePut(value = "forneceedores", key = "T(org.springframework.security.core.context.SecurityContextHolder).getContext().getAuthentication().getPrincipal().getUsername()")
     @Transactional
     public FornecedorResponse atualizarCNPJeTelefone(FornecedorCNPJTelefoneRequest fornecedorCNPJTelefoneRequest) {
         UsersEntity usersEntity = ExtractTypeUserContextHolder.extractUser();
@@ -58,7 +54,6 @@ public class FornecedorService {
         return fornecedorMapper.FornecedorToResponse(usersRepository.save(usersEntity).getFornecedor());
     }
 
-//    @CacheEvict(value = "produtos-Fornecedor", allEntries = true)
     @Transactional
     public List<ProdutoResponse> cadastrarProduto(List<ProdutoRequest> produtoRequest, Map<String, String> errors) {
         UsersEntity usersEntity = ExtractTypeUserContextHolder.extractUser();
@@ -66,7 +61,7 @@ public class FornecedorService {
         validationService.validarCNPJ(usersEntity, errors);
         validationService.validarTelefone(usersEntity, errors);
         validationService.validarEnderecoNaoExistente(usersEntity, errors);
-        validationService.analisarException(usersEntity.getName() + ", houve um erro ao tentar cadastrar o produto", ProdutoException.class, errors);
+        validationService.analisarException(usersEntity.getName() + ", houve um erro ao tentar cadastrar o produto", CadastrarProdutoException.class, errors);
 
         List<ProdutoEntity> produtoEntity = produtoMapper.produtoRequestToProdutoEntity(produtoRequest);
         produtoEntity.forEach(produto -> produto.setFornecedor(usersEntity.getFornecedor()));
@@ -75,7 +70,6 @@ public class FornecedorService {
         return produtoMapper.produtoToResponseList(produtoRepository.saveAll(produtoEntity));
     }
 
-//    @Cacheable(value = "produtos-Fornecedor", key = "T(org.springframework.security.core.context.SecurityContextHolder).getContext().getAuthentication().getPrincipal().getUsername() + '_' + #pageable.getPageNumber() + '_' + #pageable.getPageSize()")
     public Pagina<ProdutoResponse> exibirProdutos(Pageable pageable) {
         UsersEntity usersEntity = ExtractTypeUserContextHolder.extractUser();
 
@@ -83,7 +77,6 @@ public class FornecedorService {
         return paginaMapper.toPagina(produtoRepository.findAllByFornecedorId(usersEntity.getId(), pageable).map(produtoMapper::produtoToResponse));
     }
 
-//    @Cacheable("produtos-Fornecedor")
     public ProdutoResponse buscarProduto(Long produtoId, Map<String, String> errors) {
         UsersEntity usersEntity = ExtractTypeUserContextHolder.extractUser();
         Optional<ProdutoEntity> produtoEntity = produtoRepository.findByIdAndFornecedorId(produtoId, usersEntity.getId());
@@ -96,7 +89,6 @@ public class FornecedorService {
         return produtoMapper.produtoToResponse(produtoEntity.get());
     }
 
-//    @CacheEvict(value = "produtos-Fornecedor", allEntries = true)
     @Transactional
     public ProdutoResponse atualizarProduto(Long produtoid, ProdutoRequest produtoRequest, Map<String, String> errors) {
         UsersEntity usersEntity = ExtractTypeUserContextHolder.extractUser();
@@ -115,7 +107,6 @@ public class FornecedorService {
         return produtoMapper.produtoToResponse(produtoRepository.save(produtoEntity.get()));
     }
 
-//    @CachePut(value = "categorias-Produtos", key = "#categoriaId")
     @Transactional
     public ProdutoResponse adicionarProdutoACategoria(Long categoriaId, Long produtoId, Map<String, String> errors) {
         UsersEntity usersEntity = ExtractTypeUserContextHolder.extractUser();
@@ -125,7 +116,7 @@ public class FornecedorService {
         validationService.validarExistenciaEntidade(categoriaEntity.orElse(null), errors);
         validationService.validarExistenciaEntidade(produtoEntity.orElse(null), errors);
 
-        validationService.analisarException(usersEntity.getName() + " houve um erro ao tentar adicionar produto na categoria", ProdutoNotFoundException.class, errors);
+        validationService.analisarException(usersEntity.getName() + " houve um erro ao tentar adicionar produto na categoria", ProdutoCategoriaException.class, errors);
 
         categoriaEntity.get().getProdutos().add(produtoEntity.get());
         produtoEntity.get().getCategorias().add(categoriaEntity.get());
@@ -138,7 +129,6 @@ public class FornecedorService {
         return produtoMapper.produtoToResponse(produtoEntity.get());
     }
 
-//    @CacheEvict(value = "produtos-Fornecedor", allEntries = true)
     @Transactional
     public ProdutoResponse atualizarEstoqueProduto(Long produtoId, ProdutoNovoEstoqueRequest produtoNovoEstoqueRequest, Map<String, String> errors) {
         UsersEntity usersEntity = ExtractTypeUserContextHolder.extractUser();
@@ -155,7 +145,6 @@ public class FornecedorService {
     }
 
 //    PRECISO DAR UMA REVISADA MELHOR NESSE PARTE DE CODIGO
-//    @CacheEvict(value = "produtos-Fornecedor", allEntries = true)
     @Transactional
     public String removerProduto(Long produtoId, Map<String, String> errors) {
         UsersEntity usersEntity = ExtractTypeUserContextHolder.extractUser();
@@ -177,7 +166,6 @@ public class FornecedorService {
     }
 
 
-//    @CacheEvict(value = "categorias-Produtos", allEntries = true)
     @Transactional
     public String removerProdutoDeCategoria(Long categoriaId, Long produtoId, Map<String, String> errors) {
         UsersEntity usersEntity = ExtractTypeUserContextHolder.extractUser();
@@ -186,7 +174,7 @@ public class FornecedorService {
 
         validationService.validarExistenciaEntidade(produtoEntity.orElse(null), errors);
         validationService.validarExistenciaEntidade(categoriaEntity.orElse(null), errors);
-        validationService.analisarException(usersEntity.getName() + " houve um erro ao tentar remover produto de categoria", ProdutoNotFoundException.class, errors);
+        validationService.analisarException(usersEntity.getName() + " houve um erro ao tentar remover produto de categoria", ProdutoCategoriaException.class, errors);
 
         categoriaEntity.get().getProdutos().remove(produtoEntity.get());
         produtoEntity.get().getCategorias().remove(categoriaEntity.get());
@@ -213,7 +201,7 @@ public class FornecedorService {
                 .toList();
 
         validationService.validarStatusPedidoEnviar(itensPedidosEnviar, errors);
-        validationService.analisarException(usersEntity.getName() + " houve um erro ao tentar enviar produto", ItemPedidoNotFoundException.class, errors);
+        validationService.analisarException(usersEntity.getName() + " houve um erro ao tentar enviar produto", EnviarProdutoException.class, errors);
 
         for(ItemPedidoEntity item : itensPedidosEnviar) {
             usersEntity.getFornecedor().setSaldo(usersEntity.getFornecedor().getSaldo().add(item.getValorTotal()));
@@ -236,7 +224,7 @@ public class FornecedorService {
         validationService.validarExistenciaEntidade(produtoEntity.orElse(null), errors);
         validationService.validarDemandaProduto(produtoEntity.orElse(null),
                 errors);
-        validationService.analisarException("Houve um erro ao tentar listar demanda de produto", ProdutoException.class, errors);
+        validationService.analisarException("Houve um erro ao tentar listar demanda de produto", ProdutoDemandaException.class, errors);
 
         log.info("SERVICE FORNECEDOR - LISTAR DEMANDA DE PRODUTO");
         return produtoEntity.get().getItensPedidos().stream().filter(item -> item.getStatusItemPedido() == StatusItemPedido.PROCESSANDO).map(itemPedidoMapper::toItemPedidoResponse).toList();
