@@ -33,7 +33,7 @@ public class ClienteController {
     @Operation(summary = "atualizar cpf e telefone", description = "o cliente autenticado adiciona/atualiza seu numero e cpf para pode realizar acoes mais ativas na aplicacao")
     @PatchMapping("cpf-telefone/update")
     public ResponseEntity<ClienteResponse> atualizarCpfETelefone(@RequestBody ClienteCpfTelefoneRequest clienteCpfTelefoneRequest) {
-        log.info("ATUALIZAR CPF E TELEFONE CLIENTE");
+        log.info("CONTROLLER CLIENTE - ATUALIZAR CPF E TELEFONE CLIENTE");
         return ResponseEntity.ok(clienteService.atualizarCpfETelefone(clienteCpfTelefoneRequest, ConstructorErrors.returnMapErrors()));
     }
 
@@ -41,7 +41,7 @@ public class ClienteController {
     @Operation(summary = "atualizar dados", description = "cliente atualiza dados como: nome, email, telefone e cpf")
     @PutMapping("/update")
     public ResponseEntity<String> atualizarDados(@RequestBody ClienteUpdateRequest clienteUpdateRequest) {
-        log.info("ATUALIZAR DADOS CLIENTE");
+        log.info("CONTROLLER CLIENTE - ATUALIZAR DADOS CLIENTE");
         return ResponseEntity.ok(clienteService.atualizarDados(clienteUpdateRequest));
     }
 
@@ -49,7 +49,7 @@ public class ClienteController {
     @Operation(summary = "fazer pedido", description = "cliente pode diversos pedidos de uma só vez para diferentes produtos")
     @PostMapping("/pedidos/register")
     public ResponseEntity<PedidoResponse> fazerPedido(@RequestBody List<ItemPedidoRequest> itemPedidoRequest) {
-        log.info("FAZER PEDIDO");
+        log.info("CONTROLLER CLIENTE - FAZER PEDIDO");
         return ResponseEntity.ok(clienteService.fazerPedido(itemPedidoRequest, ConstructorErrors.returnMapErrors()));
     }
 
@@ -58,6 +58,7 @@ public class ClienteController {
     @Operation(summary = "listar pedidos", description = "cliente pode listar todos os seus pedidos")
     @GetMapping("/pedidos/list")
     public ResponseEntity<Pagina<PedidoResponse>> listarPedidos(@ParameterObject  Pageable pageable, @RequestParam(required = false) String statusPedido) {
+        log.info("CONTROLLER CLIENTE - LISTAR PEDIDOS");
         return ResponseEntity.ok(clienteService.listarPedidos(pageable, statusPedido));
     }
 
@@ -65,46 +66,49 @@ public class ClienteController {
     @Operation(summary = "listar um pedido", description = "cliente pode listar um pedido especifico atraves do id do pedido")
     @GetMapping("/pedidos/{pedidoId}/list")
     public ResponseEntity<PedidoResponse> buscarPedido(@PathVariable Long pedidoId) {
+        log.info("CONTROLLER CLIENTE - BUSCAR PEDIDO");
         return ResponseEntity.ok(clienteService.buscarPedido(pedidoId, ConstructorErrors.returnMapErrors()));
     }
 
     @Operation(summary = "buscar item pedido", description = "cliente pode buscar um item pedido especifico atraves do id do item pedido")
     @GetMapping("/pedidos/itensPedidos/{itemPedidoId}")
     public ResponseEntity<ItemPedidoResponse> buscarItemPedido(@PathVariable Long itemPedidoId) {
+        log.info("CONTROLLER CLIENTE - BUSCAR ITEM PEDIDO");
         return ResponseEntity.ok(clienteService.buscarItemPedido(itemPedidoId, ConstructorErrors.returnMapErrors()));
     }
 
     @Operation(summary = "pagar pedido", description = "cliente pode pagar um pedido que foi feito por ele")
     @PostMapping("/pedidos/{pedidoId}/pagar")
     public ResponseEntity<String> pagarPedido(@PathVariable Long pedidoId, @RequestParam("valor") BigDecimal valorPedido) {
+        log.info("CONTROLLER CLIENTE - PAGAR PEDIDO");
         return ResponseEntity.ok(clienteService.pagarPedido(pedidoId, valorPedido, ConstructorErrors.returnMapErrors()));
     }
 
     @Operation(summary = "editar pedido", description = "cliente pode editar um pedido")
     @PutMapping("/pedidos/{pedidoId}/update")
     public ResponseEntity<PedidoResponse> editarPedido(@PathVariable Long pedidoId, @RequestBody List<ItemPedidoRequest> itemPedidoRequest) {
-        log.info("EDITAR PEDIDO");
+        log.info("CONTROLLER CLIENTE - EDITAR PEDIDO");
         return ResponseEntity.ok(clienteService.editarPedido(pedidoId, itemPedidoRequest, ConstructorErrors.returnMapErrors()));
     }
 
     @Operation(summary = "acrescentar produto a pedido", description = "cliente pode acrescentar mais um item pedido a um pedido que ja foi feito antes")
     @PostMapping("/pedidos/{pedidoId}/update/register")
     public ResponseEntity<PedidoResponse> adicionarProdutoAPedido(@PathVariable Long pedidoId, @RequestParam List<ItemPedidoRequest> itemPedidoRequest) {
-        log.info("ADICIONAR PRODUTO A PEDIDO");
+        log.info("CONTROLLER CLIENTE - ADICIONAR PRODUTO A PEDIDO");
         return ResponseEntity.ok(clienteService.adicionarProdutoAPedido(pedidoId, itemPedidoRequest, ConstructorErrors.returnMapErrors()));
     }
 
     @Operation(summary = "deletar item pedido de um pedido", description = "atraves do id do item pedido, o cliente pode deletar um item pedido")
     @DeleteMapping("/pedidos/itensPedidos/{itemPedidoId}/delete")
     public ResponseEntity<String> deletarItemPedido(@PathVariable Long itemPedidoId) {
-        log.info("DELETAR ITEM PEDIDO");
+        log.info("CONTROLLER CLIENTE - DELETAR ITEM PEDIDO");
         return ResponseEntity.ok(clienteService.deletarItemPedido(itemPedidoId, ConstructorErrors.returnMapErrors()));
     }
 
     @Operation(summary = "deletar pedido", description = "cliente pode deletar pedido")
     @DeleteMapping("/pedidos/{pedidoId}/delete")
     public ResponseEntity<String> deletarPedido(@PathVariable Long pedidoId) {
-        log.info("DELETAR PEDIDO");
+        log.info("CONTROLLER CLIENTE - DELETAR PEDIDO");
         return ResponseEntity.ok(clienteService.deletarPedido(pedidoId, ConstructorErrors.returnMapErrors()));
     }
 }
