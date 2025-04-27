@@ -101,9 +101,6 @@ public class UsersService {
     public EnderecoResponse exibirEndereco(Map<String, String> errors) {
         UsersEntity usersEntity = ExtractTypeUserContextHolder.extractUser();
 
-        validationService.validarEnderecoNaoExistente(usersEntity, errors);
-        validationService.analisarException(usersEntity.getName() + ", houve um erro durante a exibição do seu endereço", AddressException.class, errors);
-
         log.info("SERVICE USERS - EXIBIR ENDERECO");
         return enderecoMapper.toEnderecoResponse(usersEntity.getEndereco());
     }
