@@ -10,6 +10,7 @@ import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
@@ -35,6 +36,7 @@ public class ProdutoController {
     @Operation(summary = "Lista todos os produtos com filtrando os precos", description = "lista todos os produtos usando um filtro de precos para o usuario poder ver qual eh o produto mais barato e afins")
     @GetMapping("/list")
     public ResponseEntity<Pagina<ProdutoResponse>> exibirProdutos(
+            @ParameterObject
             Pageable pageable,
 
             @Parameter(description = "preco minimo")
