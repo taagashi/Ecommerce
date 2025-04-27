@@ -14,6 +14,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -64,7 +65,7 @@ public class ClienteController {
 
     @Operation(summary = "listar pedidos", description = "cliente pode listar todos os seus pedidos")
     @GetMapping("/pedidos/list")
-    public ResponseEntity<Pagina<PedidoResponse>> listarPedidos(Pageable pageable) {
+    public ResponseEntity<Pagina<PedidoResponse>> listarPedidos(@ParameterObject  Pageable pageable) {
         return ResponseEntity.ok(clienteService.listarPedidos(pageable));
     }
 
