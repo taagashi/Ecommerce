@@ -66,9 +66,9 @@ public class FornecedorService {
         validationService.validarCNPJ(usersEntity, errors);
         validationService.validarTelefone(usersEntity, errors);
         validationService.validarEnderecoNaoExistente(usersEntity, errors);
-        validationService.analisarException(usersEntity.getName() + ", houve um erro ao tentar cadastrar o produtos", ProdutoException.class, errors);
+        validationService.analisarException(usersEntity.getName() + ", houve um erro ao tentar cadastrar o produto", ProdutoException.class, errors);
 
-        List<ProdutoEntity> produtoEntity = produtoMapper.produtoRequestToEntityList(produtoRequest);
+        List<ProdutoEntity> produtoEntity = produtoMapper.produtoRequestToProdutoEntity(produtoRequest);
         produtoEntity.forEach(produto -> produto.setFornecedor(usersEntity.getFornecedor()));
 
         log.info("EXECUTANDO SERVICE-FORNECEDOR CADASTRAR PRODUTO");

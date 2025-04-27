@@ -1,6 +1,7 @@
 package br.com.thaua.Ecommerce.repositories;
 
 import br.com.thaua.Ecommerce.domain.entity.PedidoEntity;
+import br.com.thaua.Ecommerce.domain.enums.StatusPedido;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -12,4 +13,5 @@ import java.util.Optional;
 public interface PedidoRepository extends JpaRepository<PedidoEntity, Long> {
     Optional<PedidoEntity> findByIdAndClienteId(Long pedidoId, Long id);
     Page<PedidoEntity> findAllByClienteId(Long clienteId, Pageable pageable);
+    Page<PedidoEntity> findAllByClienteIdAndStatusPedido(Long clienteId, StatusPedido statusPedido, Pageable pageable);
 }
