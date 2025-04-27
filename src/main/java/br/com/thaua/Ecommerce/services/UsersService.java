@@ -20,6 +20,7 @@ import br.com.thaua.Ecommerce.services.resolvers.ResolverGeralUsers;
 import br.com.thaua.Ecommerce.services.returnTypeUsers.ExtractTypeUserContextHolder;
 import br.com.thaua.Ecommerce.userDetails.MyUserDetails;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -30,6 +31,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Map;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class UsersService {
@@ -55,6 +57,7 @@ public class UsersService {
 //        resolverGeralUsers.cleanCache(usersEntity);
 
 //        emailMessageService.registroDeUsuario(usuario.getName(), usuario.getEmail());
+        log.info("SERVICE USERS - CADASTRAR USUARIO");
         return jwtService.generateToken(new MyUserDetails(saveUser.getId(), saveUser.getEmail(), saveUser.getPassword(), saveUser.getRole().name(), saveUser));
     }
 
@@ -64,6 +67,7 @@ public class UsersService {
 
 //        resolverGeralUsers.cleanCache(myUserDetails.getUser());
 
+        log.info("SERVICE USERS - LOGIN");
         return jwtService.generateToken(myUserDetails);
     }
 
@@ -75,10 +79,10 @@ public class UsersService {
 
 //        resolverGeralUsers.cleanCache(usersEntity);
 
+        log.info("SERVICE USERS - DELETAR CONTA");
         return usersEntity.getName() + " sua conta foi deletada com sucesso";
     }
 
-//    @CachePut(value = "enderecos", key = "T(org.springframework.security.core.context.SecurityContextHolder).getContext().getAuthentication().getPrincipal().getUsername()")
     public EnderecoResponse cadastrarEndereco(EnderecoRequest enderecoRequest, Map<String, String> errors) {
         UsersEntity usersEntity = ExtractTypeUserContextHolder.extractUser();
 
@@ -90,20 +94,20 @@ public class UsersService {
         enderecoEntity.setUsers(usersEntity);
         usersEntity.setEndereco(enderecoEntity);
 
+        log.info("SERVICE USERS - CADASTRAR ENDERECO");
         return enderecoMapper.toEnderecoResponse(usersRepository.save(usersEntity).getEndereco());
     }
 
-//    @Cacheable(value = "enderecos", key = "T(org.springframework.security.core.context.SecurityContextHolder).getContext().getAuthentication().getPrincipal().getUsername()")
     public EnderecoResponse exibirEndereco(Map<String, String> errors) {
         UsersEntity usersEntity = ExtractTypeUserContextHolder.extractUser();
 
         validationService.validarEnderecoNaoExistente(usersEntity, errors);
         validationService.analisarException(usersEntity.getName() + ", houve um erro durante a exibição do seu endereço", AddressException.class, errors);
 
+        log.info("SERVICE USERS - EXIBIR ENDERECO");
         return enderecoMapper.toEnderecoResponse(usersEntity.getEndereco());
     }
 
-//    @CacheEvict(value = "enderecos", key = "T(org.springframework.security.core.context.SecurityContextHolder).getContext().getAuthentication().getPrincipal().getUsername()")
     public String deletarEndereco(Map<String, String> errors) {
         UsersEntity usersEntity = ExtractTypeUserContextHolder.extractUser();
 
@@ -116,10 +120,11 @@ public class UsersService {
 
         usersRepository.save(usersEntity);
         enderecoRepository.delete(enderecoEntity);
+
+        log.info("SERVICE USERS - DELETAR ENDERECO");
         return usersEntity.getName() + ", as informacoes do seu endereco foram deletadas com sucesso";
     }
 
-//    @CachePut(value = "enderecos", key = "T(org.springframework.security.core.context.SecurityContextHolder).getContext().getAuthentication().getPrincipal().getUsername()")
     @Transactional
     public EnderecoResponse atualizarEndereco(EnderecoRequest enderecoRequest, Map<String, String> errors) {
         UsersEntity usersEntity = ExtractTypeUserContextHolder.extractUser();
@@ -133,6 +138,7 @@ public class UsersService {
         enderecoEntity.setId(usersEntity.getEndereco().getId());
         usersEntity.setEndereco(enderecoEntity);
 
+        log.info("SERVICE USERS - ATUALIZAR ENDERECO");
         return enderecoMapper.toEnderecoResponse(usersRepository.save(usersEntity).getEndereco());
     }
 
@@ -143,6 +149,7 @@ public class UsersService {
 
         codigoVerificacaoRepository.save(new CodigoVerificacaoEntity(emailMessageService.gerarCodigoRedefinirSenha(userRequestGenerateCode.getEmail())));
 
+        log.info("SERVICE USERS - GERAR CODIGO DE VERIFICACAO");
         return "Foi enviado um codigo de verificação para " + userRequestGenerateCode.getEmail();
     }
 
@@ -156,12 +163,14 @@ public class UsersService {
         usersRepository.save(usersEntity);
         codigoVerificacaoRepository.delete(codigoVerificacaoEntity);
 
+        log.info("SERVICE USERS - VERIFICAR CODIGO DE VERIFICACAO");
         return usersEntity.getName() + " sua senha foi redefinida com sucesso";
     }
 
     public Object exibirPerfil() {
         UsersEntity usersEntity = ExtractTypeUserContextHolder.extractUser();
 
+        log.info("SERVICE USERS - EXIBIR PERFIL");
         return resolverGeralUsers.viewProfile(usersEntity);
     }
 }
