@@ -38,25 +38,24 @@ public class ProdutoService {
         validationService.analisarException("Houve um erro ao tentar exibir categorias de um produto", ProdutoNotFoundException.class, errors);
 
 
-        log.info("EXECUTANDO SERVICE-PRODUTO EXIBIR CATEGORIAS PRODUTOS");
+        log.info("SERVICE PRODUTO - EXIBIR CATEGORIAS DE PRODUTO");
         return produtoMapper.toProdutoCategoriaResponse(produtoEntity.get());
     }
 
 //    @Cacheable("produtos")
     public Pagina<ProdutoResponse> exibirProdutos(Pageable pageable, BigDecimal min, BigDecimal max) {
 
-        log.info("EXECUTANDO SERVICE-PRODUTO EXIBIR PRODUTOS");
+        log.info("SERVICE PRODUTO - EXIBIR PRODUTOS");
         return paginaMapper.toPagina(produtoSpecifications.buscarComFiltros(min, max, pageable).map(produtoMapper::produtoToResponse));
     }
 
     public ProdutoResponse buscarProduto(Long produtoId, Map<String, String> errors) {
-        log.info("EXECUTANDO SERVICE-PRODUTO BUSCAR PRODUTO");
-
         Optional<ProdutoEntity> produtoEntity = produtoRepository.findById(produtoId);
 
         validationService.validarExistenciaEntidade(produtoEntity.orElse(null), errors);
         validationService.analisarException("Houve um erro ao tentar buscar o produto", ProdutoNotFoundException.class, errors);
 
+        log.info("SERVICE PRODUTO - BUSCAR PRODUTO");
         return produtoMapper.produtoToResponse(produtoEntity.get());
     }
 }
