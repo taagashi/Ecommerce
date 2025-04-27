@@ -22,11 +22,13 @@ public class FornecedorResolver implements ResolverUsers{
 
     @Override
     public boolean roleEsperada(Role role) {
+        log.info("FORNECEDOR RESOLVER - ROLE ESPERADA");
         return role.equals(Role.FORNECEDOR);
     }
 
     @Override
     public void trackUserForRegister(UsersEntity usersEntity) {
+        log.info("FORNECEDOR RESOLVER - TRACK USER FOR REGISTER");
         FornecedorEntity fornecedorEntity = new FornecedorEntity();
         fornecedorEntity.setUsers(usersEntity);
         usersEntity.setFornecedor(fornecedorEntity);
@@ -34,12 +36,14 @@ public class FornecedorResolver implements ResolverUsers{
 
     @Override
     public void cleanCache(UsersEntity usersEntity) {
+        log.info("FORNECEDOR RESOLVER - CLEAN CACHE");
         Objects.requireNonNull(cacheManager.getCache("fornecedoresListagem")).clear();
         log.info("CACHE FORNECEDORESLITAGEM FOI LIMPO");
     }
 
     @Override
     public Object viewProfile(UsersEntity usersEntity) {
+        log.info("FORNECEDOR RESOLVER - VIEW PROFILE");
         return fornecedorMapper.fornecedorEntityToFornecedorViewProfileResponse(usersEntity.getFornecedor());
     }
 
