@@ -50,7 +50,6 @@ public class ClienteService {
     private final PaginaMapper paginaMapper;
     private final JWTService jwtService;
 
-//    @CachePut(value = "clientes", key = "T(org.springframework.security.core.context.SecurityContextHolder).getContext().getAuthentication().getPrincipal().getUsername()")
     @Transactional
     public ClienteResponse atualizarCpfETelefone(ClienteCpfTelefoneRequest clienteCpfTelefoneRequest, Map<String, String> errors) {
         UsersEntity usersEntity = ExtractTypeUserContextHolder.extractUser();
@@ -59,11 +58,10 @@ public class ClienteService {
         usersEntity.setTelefone(clienteCpfTelefoneRequest.getTelefone());
 
 
-        log.info("EXECUTANDO SERVICE-CLIENTE ATUALIZAR CPF E TELEFONE");
+        log.info("SERVICE CLIENTE - ATUALIZAR CPF E TELEFONE");
         return clienteMapper.toResponse(usersRepository.save(usersEntity).getCliente());
     }
 
-//    @CachePut(value = "clientes", key = "T(org.springframework.security.core.context.SecurityContextHolder).getContext().getAuthentication().getPrincipal().getUsername()")
     @Transactional
     public String atualizarDados(ClienteUpdateRequest clienteUpdateRequest) {
         UsersEntity usersEntity = ExtractTypeUserContextHolder.extractUser();
@@ -74,11 +72,10 @@ public class ClienteService {
 
         usersRepository.save(usersEntity);
 
-        log.info("EXECUTANDO SERVICE-CLIENTE ATUALIZAR DADOS");
+        log.info("SERVICE CLIENTE - ATUALIZAR DADOS ");
         return jwtService.generateToken(new MyUserDetails(usersEntity.getId(), usersEntity.getEmail(), usersEntity.getRole().toString(), usersEntity.getPassword(), usersEntity));
     }
 
-//    @CachePut(value = "pedidos", key = "T(org.springframework.security.core.context.SecurityContexHolder).getContext().getAuthentication().getPrincipal().getUsername()")
     @Transactional
     public PedidoResponse fazerPedido(List<ItemPedidoRequest> itemPedidoRequest, Map<String, String> errors) {
        UsersEntity usersEntity = ExtractTypeUserContextHolder.extractUser();
@@ -112,26 +109,24 @@ public class ClienteService {
         pedidoEntity.setItensPedidos(itemPedidoEntityList);
         pedidoEntity.setStatusPedido(StatusPedido.AGUARDANDO_PAGAMENTO);
 
-        log.info("EXECUTANDO SERVICE-CLIENTE FAZER PEDIDO");
+        log.info("SERVICE CLIENTE - FAZER PEDIDO");
         pedidoRepository.save(pedidoEntity);
 
         return pedidoMapper.toPedidoResponse(pedidoEntity);
     }
 
-//    @Cacheable(value = "pedidos", key = "T(org.springframework.security.core.context.SecurityContextHolder).getContext().getAuthentication().getPrincipal().getUsername()")
     public Pagina<PedidoResponse> listarPedidos(Pageable pageable, String statusPedido) {
         UsersEntity usersEntity = ExtractTypeUserContextHolder.extractUser();
 
         if(statusPedido != null) {
-            log.info("EXECUTANDO SERVICE-CLIENTE LISTAR PEDIDOS");
+            log.info("SERVICE CLIENTE - LISTAR PEDIDOS COM FILTRO");
             return paginaMapper.toPagina(pedidoRepository.findAllByClienteIdAndStatusPedido(usersEntity.getId(), StatusPedido.valueOf(statusPedido), pageable).map(pedidoMapper::toPedidoResponse));
         }
 
-        log.info("EXECUTANDO SERVICE-CLIENTE LISTAR PEDIDOS");
+        log.info("SERVICE CLIENTE - LISTAR PEDIDOS");
         return paginaMapper.toPagina(pedidoRepository.findAllByClienteId(usersEntity.getId(), pageable).map(pedidoMapper::toPedidoResponse));
     }
 
-//    @Cacheable(value = "pedidos", key = "(Org.springframework.security.core.context.SecurityContextHolder).getContext().getAuthentication().getPrincipal().getUsername()")
     public PedidoResponse buscarPedido(Long pedidoId, Map<String, String> errors) {
         UsersEntity usersEntity = ExtractTypeUserContextHolder.extractUser();
         Optional<PedidoEntity> pedidoEntity = pedidoRepository.findByIdAndClienteId(pedidoId, usersEntity.getId());
@@ -140,11 +135,10 @@ public class ClienteService {
         validationService.analisarException(usersEntity.getName() + " houve um erro ao tentar buscar pedido", PedidoNotFoundException.class, errors);
 
 
-        log.info("EXECUTANDO SERVICE-CLIENTE BUSCAR PEDIDO");
+        log.info("SERVICE CLIENTE - BUSCAR PEDIDO");
         return pedidoMapper.toPedidoResponse(pedidoEntity.get());
     }
 
-//    @Cacheable(value = "pedidos", key = "T(org.springframework.security.core.context.SecurityContextHolder).getContext().getAuthentication().getPrincipal().getUsername()")
     public ItemPedidoResponse buscarItemPedido(Long itemPedidoId, Map<String, String> errors) {
         UsersEntity usersEntity = ExtractTypeUserContextHolder.extractUser();
         Optional<ItemPedidoEntity> itemPedidoEntity = itemPedidoRepository.findByIdAndPedidoClienteId(itemPedidoId, usersEntity.getId());
@@ -153,7 +147,7 @@ public class ClienteService {
         validationService.analisarException(usersEntity.getName() + " houve um erro ao tentar buscar item pedido", ItemPedidoNotFoundException.class, errors);
 
 
-        log.info("EXECUTANDO SERVICE-CLIENTE BUSCAR ITEM PEDIDO");
+        log.info("SERVICE CLIENTE - BUSCAR ITEM PEDIDO");
         return itemPedidoMapper.toItemPedidoResponse(itemPedidoEntity.get());
     }
 
@@ -177,6 +171,7 @@ public class ClienteService {
 
         pedidoEntity.get().setStatusPedido(StatusPedido.PAGO);
 
+        log.info("SERVICE CLIENTE - PAGAR PEDIDO");
         return usersEntity.getName() + " seu pedido foi pago com sucesso";
     }
 
@@ -218,6 +213,8 @@ public class ClienteService {
         }
 
         validationService.analisarException(usersEntity.getName() + " houve um erro ao tentar atualizar seu pedido", PedidoException.class, errors);
+
+        log.info("SERVICE CLIENTE - EDITAR PEDIDO");
         return pedidoMapper.toPedidoResponse(pedidoRepository.save(pedidoEntity.get()));
     }
 
@@ -247,6 +244,7 @@ public class ClienteService {
             pedidoEntity.get().getItensPedidos().add(itemPedidoEntityList.get(i));
         }
 
+        log.info("SERVICE CLIENTE - ADICIOIANR PRODUTO A  PEDIDO");
         return pedidoMapper.toPedidoResponse(pedidoRepository.save(pedidoEntity.get()));
     }
 
@@ -266,6 +264,7 @@ public class ClienteService {
         pedidoRepository.save(pedidoEntity);
         itemPedidoRepository.delete(itemPedidoEntity.get());
 
+        log.info("SERVICE CLIENTE - DELETAR ITEM PEDIDO");
         return usersEntity.getName() + " seu item pedido foi deletado com sucesso";
     }
 
@@ -280,6 +279,7 @@ public class ClienteService {
 
         pedidoRepository.delete(pedidoEntity.get());
 
+        log.info("SERVICE CLIENTE - DELETAR PEDIDO");
         return usersEntity.getName() + " seu pedido foi deletado com sucesso";
     }
 }
