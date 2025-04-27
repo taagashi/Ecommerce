@@ -15,7 +15,6 @@ import br.com.thaua.Ecommerce.mappers.EnderecoMapper;
 import br.com.thaua.Ecommerce.mappers.UserMapper;
 import br.com.thaua.Ecommerce.repositories.CodigoVerificacaoRepository;
 import br.com.thaua.Ecommerce.repositories.EnderecoRepository;
-import br.com.thaua.Ecommerce.repositories.FornecedorRepository;
 import br.com.thaua.Ecommerce.repositories.UsersRepository;
 import br.com.thaua.Ecommerce.services.resolvers.ResolverGeralUsers;
 import br.com.thaua.Ecommerce.services.returnTypeUsers.ExtractTypeUserContextHolder;
@@ -160,4 +159,9 @@ public class UsersService {
         return usersEntity.getName() + " sua senha foi redefinida com sucesso";
     }
 
+    public Object exibirPerfil() {
+        UsersEntity usersEntity = ExtractTypeUserContextHolder.extractUser();
+
+        return resolverGeralUsers.viewProfile(usersEntity);
+    }
 }

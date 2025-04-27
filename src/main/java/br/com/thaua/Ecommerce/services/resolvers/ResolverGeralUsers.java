@@ -30,6 +30,13 @@ public class ResolverGeralUsers {
                 .cleanCache(usersEntity);
     }
 
+    public Object viewProfile(UsersEntity usersEntity) {
+        return resolverUsers.stream().filter(user -> user.roleEsperada(usersEntity.getRole()))
+                .findFirst()
+                .orElseThrow(() -> throwExceptionRole(usersEntity))
+                .viewProfile(usersEntity);
+    }
+
     private RuntimeException throwExceptionRole(UsersEntity usersEntity) {
         throw new RoleNotFoundException("Role não encontrada", Map.of("Role incorreta", usersEntity.getName() + " você inseriu a role incorretamente"));
     }

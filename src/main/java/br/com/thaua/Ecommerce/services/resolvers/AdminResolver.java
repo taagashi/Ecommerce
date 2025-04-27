@@ -3,6 +3,7 @@
     import br.com.thaua.Ecommerce.domain.entity.AdminEntity;
     import br.com.thaua.Ecommerce.domain.entity.UsersEntity;
     import br.com.thaua.Ecommerce.domain.enums.Role;
+    import br.com.thaua.Ecommerce.mappers.AdminMapper;
     import br.com.thaua.Ecommerce.repositories.UsersRepository;
     import lombok.RequiredArgsConstructor;
     import lombok.extern.slf4j.Slf4j;
@@ -17,6 +18,7 @@
     public class AdminResolver implements ResolverUsers {
         private final UsersRepository usersRepository;
         private final CacheManager cacheManager;
+        private final AdminMapper adminMapper;
 
         @Override
         public boolean roleEsperada(Role role) {
@@ -34,6 +36,11 @@
         public void cleanCache(UsersEntity usersEntity) {
             Objects.requireNonNull(cacheManager.getCache("adminsListagem")).clear();
             log.info("CACHE ADMINSLISTAGEM FOI LIMPO");
+        }
+
+        @Override
+        public Object viewProfile(UsersEntity usersEntity) {
+            return adminMapper.adminEntityToAdminResponse(usersEntity.getAdmin());
         }
 
     }
