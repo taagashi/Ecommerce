@@ -8,9 +8,7 @@ import br.com.thaua.Ecommerce.dto.endereco.EnderecoResponse;
 import br.com.thaua.Ecommerce.dto.users.UserRequestGenerateCode;
 import br.com.thaua.Ecommerce.dto.users.UserRequestGenerateNewPassword;
 import br.com.thaua.Ecommerce.dto.users.UsersRequest;
-import br.com.thaua.Ecommerce.exceptions.AddressException;
-import br.com.thaua.Ecommerce.exceptions.CodeNotValidException;
-import br.com.thaua.Ecommerce.exceptions.UserNotFoundException;
+import br.com.thaua.Ecommerce.exceptions.*;
 import br.com.thaua.Ecommerce.mappers.EnderecoMapper;
 import br.com.thaua.Ecommerce.mappers.UserMapper;
 import br.com.thaua.Ecommerce.repositories.CodigoVerificacaoRepository;
@@ -88,7 +86,7 @@ public class UsersService {
 
         validationService.validarCadastroEndereco(usersEntity, errors);
         validationService.validarSiglaEstado(enderecoRequest, errors);
-        validationService.analisarException(usersEntity.getName() + ", houve um erro no cadastrado do endereco", AddressException.class, errors);
+        validationService.analisarException(usersEntity.getName() + ", houve um erro no cadastrado do endereco", CadastroEnderecoException.class, errors);
 
         EnderecoEntity enderecoEntity = enderecoMapper.enderecoRequestToEntity(enderecoRequest);
         enderecoEntity.setUsers(usersEntity);
@@ -109,7 +107,7 @@ public class UsersService {
         UsersEntity usersEntity = ExtractTypeUserContextHolder.extractUser();
 
         validationService.validarDelecaoEndereco(usersEntity, errors);
-        validationService.analisarException(usersEntity.getName() + " você não pode limpar as informações do seu endereco porque ainda não adicionou um", AddressException.class, errors);
+        validationService.analisarException(usersEntity.getName() + " você não pode limpar as informações do seu endereco porque ainda não adicionou um", EnderecoNaoExistenteException.class, errors);
 
         EnderecoEntity enderecoEntity = usersEntity.getEndereco();
         usersEntity.getEndereco().setUsers(null);
@@ -128,7 +126,7 @@ public class UsersService {
 
         validationService.validarAtualizacaoEndereco(usersEntity, errors);
         validationService.validarSiglaEstado(enderecoRequest, errors);
-        validationService.analisarException(usersEntity.getName() + ", houve um erro na atualização do seu endereço", AddressException.class, errors);
+        validationService.analisarException(usersEntity.getName() + ", houve um erro na atualização do seu endereço", AtualizarEnderecoException.class, errors);
 
         EnderecoEntity enderecoEntity = enderecoMapper.enderecoRequestToEntity(enderecoRequest);
         enderecoEntity.setUsers(usersEntity);
