@@ -21,7 +21,7 @@ public class ResolverGeralUsers {
                 .filter(user -> user.roleEsperada(usersEntity.getRole()))
                 .findFirst()
                 .orElseThrow(() -> throwExceptionRole(usersEntity))
-                .trackUserForRegister(usersEntity);
+                .rastrearUsuarioParaRegistro(usersEntity);
     }
 
     public void cleanCache(UsersEntity usersEntity) {
@@ -29,7 +29,7 @@ public class ResolverGeralUsers {
         resolverUsers.stream().filter(user -> user.roleEsperada(usersEntity.getRole()))
                 .findFirst()
                 .orElseThrow(() -> throwExceptionRole(usersEntity))
-                .cleanCache(usersEntity);
+                .limparCache(usersEntity);
     }
 
     public Object viewProfile(UsersEntity usersEntity) {
@@ -37,7 +37,7 @@ public class ResolverGeralUsers {
         return resolverUsers.stream().filter(user -> user.roleEsperada(usersEntity.getRole()))
                 .findFirst()
                 .orElseThrow(() -> throwExceptionRole(usersEntity))
-                .viewProfile(usersEntity);
+                .exibirPerfil(usersEntity);
     }
 
     private RuntimeException throwExceptionRole(UsersEntity usersEntity) {

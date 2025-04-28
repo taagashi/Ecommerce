@@ -27,7 +27,7 @@
         }
 
         @Override
-        public void trackUserForRegister(UsersEntity usersEntity) {
+        public void rastrearUsuarioParaRegistro(UsersEntity usersEntity) {
             log.info("ADMIN RESOLVER - TRACK USER FOR REGISTER");
             AdminEntity adminEntity = new AdminEntity();
             adminEntity.setUsers(usersEntity);
@@ -35,14 +35,14 @@
         }
 
         @Override
-        public void cleanCache(UsersEntity usersEntity) {
+        public void limparCache(UsersEntity usersEntity) {
             log.info("ADMIN RESOLVER - CLEAN CACHE");
             Objects.requireNonNull(cacheManager.getCache("adminsListagem")).clear();
             log.info("CACHE ADMINSLISTAGEM FOI LIMPO");
         }
 
         @Override
-        public Object viewProfile(UsersEntity usersEntity) {
+        public Object exibirPerfil(UsersEntity usersEntity) {
             log.info("ADMIN RESOLVER - VIEW PROFILE");
             return adminMapper.adminEntityToAdminResponse(usersEntity.getAdmin());
         }

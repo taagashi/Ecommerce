@@ -27,7 +27,7 @@ public class FornecedorResolver implements ResolverUsers{
     }
 
     @Override
-    public void trackUserForRegister(UsersEntity usersEntity) {
+    public void rastrearUsuarioParaRegistro(UsersEntity usersEntity) {
         log.info("FORNECEDOR RESOLVER - TRACK USER FOR REGISTER");
         FornecedorEntity fornecedorEntity = new FornecedorEntity();
         fornecedorEntity.setUsers(usersEntity);
@@ -35,14 +35,14 @@ public class FornecedorResolver implements ResolverUsers{
     }
 
     @Override
-    public void cleanCache(UsersEntity usersEntity) {
+    public void limparCache(UsersEntity usersEntity) {
         log.info("FORNECEDOR RESOLVER - CLEAN CACHE");
         Objects.requireNonNull(cacheManager.getCache("fornecedoresListagem")).clear();
         log.info("CACHE FORNECEDORESLITAGEM FOI LIMPO");
     }
 
     @Override
-    public Object viewProfile(UsersEntity usersEntity) {
+    public Object exibirPerfil(UsersEntity usersEntity) {
         log.info("FORNECEDOR RESOLVER - VIEW PROFILE");
         return fornecedorMapper.fornecedorEntityToFornecedorViewProfileResponse(usersEntity.getFornecedor());
     }

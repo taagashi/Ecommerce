@@ -52,7 +52,7 @@ public class UsersService {
 
         resolverGeralUsers.setInformationUsers(usersEntity);
         UsersEntity saveUser = usersRepository.save(usersEntity);
-//        resolverGeralUsers.cleanCache(usersEntity);
+//        resolverGeralUsers.limparCache(usersEntity);
 
 //        emailMessageService.registroDeUsuario(usuario.getName(), usuario.getEmail());
         log.info("SERVICE USERS - CADASTRAR USUARIO");
@@ -63,7 +63,7 @@ public class UsersService {
         Authentication authenticateUser = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(email, password));
         MyUserDetails myUserDetails = (MyUserDetails) authenticateUser.getPrincipal();
 
-//        resolverGeralUsers.cleanCache(myUserDetails.getUser());
+//        resolverGeralUsers.limparCache(myUserDetails.getUser());
 
         log.info("SERVICE USERS - LOGIN");
         return jwtService.generateToken(myUserDetails);
@@ -75,7 +75,7 @@ public class UsersService {
         UsersEntity usersEntity = ExtractTypeUserContextHolder.extractUser();
         usersRepository.delete(usersEntity);
 
-//        resolverGeralUsers.cleanCache(usersEntity);
+//        resolverGeralUsers.limparCache(usersEntity);
 
         log.info("SERVICE USERS - DELETAR CONTA");
         return usersEntity.getName() + " sua conta foi deletada com sucesso";

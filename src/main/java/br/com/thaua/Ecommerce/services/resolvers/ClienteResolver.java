@@ -27,7 +27,7 @@ public class ClienteResolver implements ResolverUsers{
     }
 
     @Override
-    public void trackUserForRegister(UsersEntity usersEntity) {
+    public void rastrearUsuarioParaRegistro(UsersEntity usersEntity) {
         log.info("CLIENTE RESOLVER - TRACK USER FOR REGISTER");
         ClienteEntity clienteEntity = new ClienteEntity();
         clienteEntity.setUsers(usersEntity);
@@ -35,14 +35,14 @@ public class ClienteResolver implements ResolverUsers{
     }
 
     @Override
-    public void cleanCache(UsersEntity usersEntity) {
+    public void limparCache(UsersEntity usersEntity) {
         log.info("CLIENTE RESOLVER - CLEAN CACHE");
         Objects.requireNonNull(cacheManager.getCache("clientesListagem")).clear();
         log.info("CACHE CLIENTESLISTAGEM LIMPO");
     }
 
     @Override
-    public Object viewProfile(UsersEntity usersEntity) {
+    public Object exibirPerfil(UsersEntity usersEntity) {
          log.info("CLIENTE RESOLVER - VIEW PROFILE");
          return clienteMapper.toResponseComPedido(usersEntity.getCliente());
     }
