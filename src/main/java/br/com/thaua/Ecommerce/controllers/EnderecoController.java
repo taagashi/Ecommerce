@@ -24,7 +24,6 @@ import org.springframework.web.bind.annotation.*;
 public class EnderecoController {
 //    POST /api/v1/users/enderecos/register - Cadastrar endereco [USUARIO AUTENTICADO]
     private final UsersService usersService;
-    private final EnderecoMapper enderecoMapper;
 
     @Operation(summary = "cadastrar endereco", description = "o usuario autenticado pode cadastrar um endereco para si")
     @PostMapping("/register")

@@ -3,6 +3,8 @@ package br.com.thaua.Ecommerce.controllers;
 import br.com.thaua.Ecommerce.dto.categoria.CategoriaProdutosResponse;
 import br.com.thaua.Ecommerce.dto.categoria.CategoriaResponse;
 import br.com.thaua.Ecommerce.dto.categoria.ProdutoComponentResponse;
+import br.com.thaua.Ecommerce.dto.endereco.EnderecoRequest;
+import br.com.thaua.Ecommerce.dto.endereco.EnderecoResponse;
 import br.com.thaua.Ecommerce.dto.produto.CategoriaComponentResponse;
 import br.com.thaua.Ecommerce.dto.produto.ProdutoCategoriaResponse;
 import br.com.thaua.Ecommerce.dto.produto.ProdutoResponse;
@@ -68,5 +70,29 @@ public class ControllersFixture {
         produtoResponse.setQuantidadeDemanda(quantidadeDemanda);
         produtoResponse.setCategoriasAssociadas(categoriasAssociadas);
         return produtoResponse;
+    }
+
+    public static EnderecoRequest createEnderecoRequest(String rua, String numero, String bairro, String cidade, String estado, String cep) {
+        EnderecoRequest enderecoRequest = new EnderecoRequest();
+        enderecoRequest.setRua(rua);
+        enderecoRequest.setBairro(bairro);
+        enderecoRequest.setNumero(numero);
+        enderecoRequest.setCep(cep);
+        enderecoRequest.setCidade(cidade);
+        enderecoRequest.setEstado(estado);
+        return enderecoRequest;
+    }
+
+    public static EnderecoResponse createEnderecoResponse(Long idEndereco, String nameUser, String rua, String numero, String bairro, String cidade, String estado, String cep) {
+        EnderecoResponse enderecoResponse = new EnderecoResponse();
+        enderecoResponse.setIdEndereco(idEndereco);
+        enderecoResponse.setNameUser(nameUser);
+        enderecoResponse.setRua(rua);
+        enderecoResponse.setNumero(numero);
+        enderecoResponse.setBairro(bairro);
+        enderecoResponse.setCidade(cidade);
+        enderecoResponse.setEstado(estado);
+        enderecoResponse.setCep(cep);
+        return enderecoResponse;
     }
 }
