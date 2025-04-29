@@ -1,10 +1,8 @@
 package br.com.thaua.Ecommerce.dto.cliente;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
 
-@Getter
-@Setter
+@Data
 public class ClienteCpfTelefoneRequest {
     private String cpf;
     private String telefone;
