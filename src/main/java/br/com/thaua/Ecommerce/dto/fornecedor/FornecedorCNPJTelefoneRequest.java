@@ -1,10 +1,8 @@
 package br.com.thaua.Ecommerce.dto.fornecedor;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
 
-@Getter
-@Setter
+@Data
 public class FornecedorCNPJTelefoneRequest {
     private String cnpj;
     private String telefone;
