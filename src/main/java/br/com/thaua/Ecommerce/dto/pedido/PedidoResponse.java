@@ -1,16 +1,13 @@
 package br.com.thaua.Ecommerce.dto.pedido;
 
-import br.com.thaua.Ecommerce.domain.enums.StatusPedido;
 import br.com.thaua.Ecommerce.dto.itemPedido.ItemPedidoResponse;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 
-@Getter
-@Setter
+@Data
 public class PedidoResponse {
     private Long pedidoId;
     private String cliente;
