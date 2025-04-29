@@ -1,13 +1,11 @@
 package br.com.thaua.Ecommerce.dto.itemPedido;
 
 import br.com.thaua.Ecommerce.domain.enums.StatusItemPedido;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
 
 import java.math.BigDecimal;
 
-@Getter
-@Setter
+@Data
 public class ItemPedidoResponse {
     private Long itemPedidoId;
     private Long produtoId;
