@@ -3,6 +3,9 @@ package br.com.thaua.Ecommerce.controllers;
 import br.com.thaua.Ecommerce.dto.categoria.CategoriaProdutosResponse;
 import br.com.thaua.Ecommerce.dto.categoria.CategoriaResponse;
 import br.com.thaua.Ecommerce.dto.categoria.ProdutoComponentResponse;
+import br.com.thaua.Ecommerce.dto.produto.CategoriaComponentResponse;
+import br.com.thaua.Ecommerce.dto.produto.ProdutoCategoriaResponse;
+import br.com.thaua.Ecommerce.dto.produto.ProdutoResponse;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -37,5 +40,33 @@ public class ControllersFixture {
         categoriaProdutosResponse.setDescricao(descricao);
         categoriaProdutosResponse.setProdutos(produtos);
         return categoriaProdutosResponse;
+    }
+
+    public static CategoriaComponentResponse createCategoriaComponentResponse(Long categoriaId, String nome) {
+            CategoriaComponentResponse categoriaComponentResponse = new CategoriaComponentResponse();
+            categoriaComponentResponse.setCategoriaId(categoriaId);
+            categoriaComponentResponse.setNome(nome);
+            return categoriaComponentResponse;
+    }
+
+    public static ProdutoCategoriaResponse createProdutoCategoriaResponse(Long id, String nome, String preco, List<CategoriaComponentResponse> categorias) {
+        ProdutoCategoriaResponse produtoCategoriaResponse = new ProdutoCategoriaResponse();
+        produtoCategoriaResponse.setProdutoId(id);
+        produtoCategoriaResponse.setNome(nome);
+        produtoCategoriaResponse.setPreco(preco);
+        produtoCategoriaResponse.setCategorias(categorias);
+        return produtoCategoriaResponse;
+    }
+
+    public static ProdutoResponse createProdutoResponse(Long id, String nome, String descricao, BigDecimal preco, Integer estoque, Integer quantidadeDemanda, Integer categoriasAssociadas) {
+        ProdutoResponse produtoResponse = new ProdutoResponse();
+        produtoResponse.setProdutoId(id);
+        produtoResponse.setNome(nome);
+        produtoResponse.setDescricao(descricao);
+        produtoResponse.setPreco(preco);
+        produtoResponse.setEstoque(estoque);
+        produtoResponse.setQuantidadeDemanda(quantidadeDemanda);
+        produtoResponse.setCategoriasAssociadas(categoriasAssociadas);
+        return produtoResponse;
     }
 }
