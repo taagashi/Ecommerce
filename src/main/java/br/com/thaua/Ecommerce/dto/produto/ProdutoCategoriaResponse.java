@@ -1,12 +1,10 @@
 package br.com.thaua.Ecommerce.dto.produto;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
 
 import java.util.List;
 
-@Getter
-@Setter
+@Data
 public class ProdutoCategoriaResponse {
     private Long produtoId;
     private String nome;
