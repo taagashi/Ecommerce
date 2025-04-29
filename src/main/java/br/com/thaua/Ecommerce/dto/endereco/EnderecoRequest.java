@@ -1,12 +1,8 @@
 package br.com.thaua.Ecommerce.dto.endereco;
 
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
 
-@EqualsAndHashCode
-@Getter
-@Setter
+@Data
 public class EnderecoRequest {
     private String rua;
     private String numero;

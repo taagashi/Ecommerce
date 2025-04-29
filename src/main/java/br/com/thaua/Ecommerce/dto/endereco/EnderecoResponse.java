@@ -1,10 +1,8 @@
 package br.com.thaua.Ecommerce.dto.endereco;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
 
-@Getter
-@Setter
+@Data
 public class EnderecoResponse {
     private Long idEndereco;
     private String nameUser;
