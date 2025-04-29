@@ -1,6 +1,7 @@
 package br.com.thaua.Ecommerce.controllers.categoria;
 
 import br.com.thaua.Ecommerce.controllers.CategoriaController;
+import br.com.thaua.Ecommerce.controllers.ControllersFixture;
 import br.com.thaua.Ecommerce.controllers.handler.ConstructorErrors;
 import br.com.thaua.Ecommerce.controllers.handler.ExceptionHandlerClass;
 import br.com.thaua.Ecommerce.dto.categoria.CategoriaProdutosResponse;
@@ -175,5 +176,7 @@ public class CategoriaControllerTest {
                 .andExpect(jsonPath("$.message").value(errorMessage))
                 .andExpect(jsonPath("$.fieldsErrors").isMap())
                 .andExpect(jsonPath("$.fieldsErrors.['Falha de busca']").value("Item não encontrado"));
+
+        verify(categoriaService, times(1)).listarProdutosPorCategoria(categoriaIdError, errors);
     }
 }

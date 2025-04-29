@@ -1,14 +1,11 @@
-package br.com.thaua.Ecommerce.controllers.categoria;
+package br.com.thaua.Ecommerce.controllers;
 
 import br.com.thaua.Ecommerce.dto.categoria.CategoriaProdutosResponse;
 import br.com.thaua.Ecommerce.dto.categoria.CategoriaResponse;
 import br.com.thaua.Ecommerce.dto.categoria.ProdutoComponentResponse;
-import br.com.thaua.Ecommerce.dto.produto.ProdutoCategoriaResponse;
-import br.com.thaua.Ecommerce.exceptions.AbstractException;
 
 import java.math.BigDecimal;
 import java.util.List;
-import java.util.Map;
 
 public class ControllersFixture {
     public static CategoriaResponse createCategoriaResponse(Long id, String nome, String descricao, Integer produtosAssociados) {
