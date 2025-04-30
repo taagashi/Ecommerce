@@ -149,7 +149,7 @@ public class UsersService {
     }
 
     @Transactional
-    public String verificarCodigoRedefirnirSenha(UserRequestGenerateNewPassword userRequestGenerateNewPassword, Map<String, String> errors) {
+    public String verificarCodigoRedefinirSenha(UserRequestGenerateNewPassword userRequestGenerateNewPassword, Map<String, String> errors) {
         UsersEntity usersEntity = validationService.validarExistenciaEmail(userRequestGenerateNewPassword.getEmail(), errors);
         CodigoVerificacaoEntity codigoVerificacaoEntity = validationService.validarCodigoVerificacao(userRequestGenerateNewPassword.getCode(), errors);
         validationService.analisarException("Houve um erro ao tentar redefinir senha", CodeNotValidException.class, errors);

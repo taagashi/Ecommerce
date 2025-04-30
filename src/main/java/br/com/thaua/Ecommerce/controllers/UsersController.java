@@ -52,7 +52,7 @@ public class UsersController {
     @PatchMapping("/redefinir-senha")
     public ResponseEntity<String> redefinirSenha(@RequestBody UserRequestGenerateNewPassword userRequestGenerateNewPassword) {
         log.info("CONTROLLER USER - REDEFINIR SENHA");
-        return ResponseEntity.ok(userService.verificarCodigoRedefirnirSenha(userRequestGenerateNewPassword, ConstructorErrors.returnMapErrors()));
+        return ResponseEntity.ok(userService.verificarCodigoRedefinirSenha(userRequestGenerateNewPassword, ConstructorErrors.returnMapErrors()));
     }
 
     @Operation(summary = "exibir perfil", description = "usuario autenticado pode exibir seu perfil")
