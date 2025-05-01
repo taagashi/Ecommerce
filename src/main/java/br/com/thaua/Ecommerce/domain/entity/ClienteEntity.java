@@ -12,7 +12,7 @@ import java.util.List;
 @Getter
 @Setter
 public class ClienteEntity extends AbstractRelationWithUsers {
-//    @CPF(message = "CPF invalido")
+    @CPF(message = "CPF invalido")
 //    @Column(unique = true)
     private String cpf;
 

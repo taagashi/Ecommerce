@@ -1,11 +1,18 @@
 package br.com.thaua.Ecommerce.controllers;
 
+import br.com.thaua.Ecommerce.domain.enums.StatusItemPedido;
 import br.com.thaua.Ecommerce.dto.admin.AdminResponse;
 import br.com.thaua.Ecommerce.dto.categoria.CategoriaProdutosResponse;
 import br.com.thaua.Ecommerce.dto.categoria.CategoriaResponse;
 import br.com.thaua.Ecommerce.dto.categoria.ProdutoComponentResponse;
+import br.com.thaua.Ecommerce.dto.cliente.ClienteCpfTelefoneRequest;
+import br.com.thaua.Ecommerce.dto.cliente.ClienteResponse;
+import br.com.thaua.Ecommerce.dto.cliente.ClienteUpdateRequest;
 import br.com.thaua.Ecommerce.dto.endereco.EnderecoRequest;
 import br.com.thaua.Ecommerce.dto.endereco.EnderecoResponse;
+import br.com.thaua.Ecommerce.dto.itemPedido.ItemPedidoRequest;
+import br.com.thaua.Ecommerce.dto.itemPedido.ItemPedidoResponse;
+import br.com.thaua.Ecommerce.dto.pedido.PedidoResponse;
 import br.com.thaua.Ecommerce.dto.produto.CategoriaComponentResponse;
 import br.com.thaua.Ecommerce.dto.produto.ProdutoCategoriaResponse;
 import br.com.thaua.Ecommerce.dto.produto.ProdutoResponse;
@@ -150,5 +157,60 @@ public class ControllersFixture {
         adminResponse.setContasBanidas(contasBanidas);
         adminResponse.setUltimoAcesso(ultimoAcesso);
         return adminResponse;
+    }
+
+    public static ClienteCpfTelefoneRequest createClienteCpfTelefoneRequest(String cpf, String telefone) {
+        ClienteCpfTelefoneRequest clienteCpfTelefoneRequest = new ClienteCpfTelefoneRequest();
+        clienteCpfTelefoneRequest.setCpf(cpf);
+        clienteCpfTelefoneRequest.setTelefone(telefone);
+        return clienteCpfTelefoneRequest;
+    }
+
+    public static ClienteResponse createClienteResponse(Long id, String name, String email, String telefone, String cpf) {
+        ClienteResponse clienteResponse = new ClienteResponse();
+        clienteResponse.setId(id);
+        clienteResponse.setName(name);
+        clienteResponse.setEmail(email);
+        clienteResponse.setTelefone(telefone);
+        clienteResponse.setCpf(cpf);
+        return clienteResponse;
+    }
+
+    public static ClienteUpdateRequest createClienteUpdateRequest(String name, String email, String telefone, String cpf) {
+        ClienteUpdateRequest clienteUpdateRequest = new ClienteUpdateRequest();
+        clienteUpdateRequest.setName(name);
+        clienteUpdateRequest.setEmail(email);
+        clienteUpdateRequest.setTelefone(telefone);
+        clienteUpdateRequest.setCpf(cpf);
+        return clienteUpdateRequest;
+    }
+
+    public static ItemPedidoRequest createItemPedidoRequest(Long produtoId, int quantidade) {
+        ItemPedidoRequest itemPedidoRequest = new ItemPedidoRequest();
+        itemPedidoRequest.setProdutoId(produtoId);
+        itemPedidoRequest.setQuantidade(quantidade);
+        return itemPedidoRequest;
+    }
+
+    public static ItemPedidoResponse createItemPedidoResponse(Long itemPedidoId, Long produtoId, String produto, int quantidade, BigDecimal valorTotal, StatusItemPedido statusItemPedido) {
+        ItemPedidoResponse itemPedidoResponse = new ItemPedidoResponse();
+        itemPedidoResponse.setItemPedidoId(itemPedidoId);
+        itemPedidoResponse.setProdutoId(produtoId);
+        itemPedidoResponse.setProduto(produto);
+        itemPedidoResponse.setQuantidade(quantidade);
+        itemPedidoResponse.setValorTotal(valorTotal);
+        itemPedidoResponse.setStatusItemPedido(statusItemPedido);
+        return itemPedidoResponse;
+    }
+
+    public static PedidoResponse createPedidoResponse(Long pedidoId, String cliente, LocalDateTime dataPedido, BigDecimal valorPedido, String statusPedido, List<ItemPedidoResponse> itensPedidos) {
+        PedidoResponse pedidoResponse = new PedidoResponse();
+        pedidoResponse.setPedidoId(pedidoId);
+        pedidoResponse.setCliente(cliente);
+        pedidoResponse.setDataPedido(dataPedido);
+        pedidoResponse.setValorPedido(valorPedido);
+        pedidoResponse.setStatusPedido(statusPedido);
+        pedidoResponse.setItensPedidos(itensPedidos);
+        return pedidoResponse;
     }
 }
