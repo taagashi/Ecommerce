@@ -10,12 +10,13 @@ import br.com.thaua.Ecommerce.dto.cliente.ClienteResponse;
 import br.com.thaua.Ecommerce.dto.cliente.ClienteUpdateRequest;
 import br.com.thaua.Ecommerce.dto.endereco.EnderecoRequest;
 import br.com.thaua.Ecommerce.dto.endereco.EnderecoResponse;
+import br.com.thaua.Ecommerce.dto.fornecedor.FornecedorCNPJTelefoneRequest;
+import br.com.thaua.Ecommerce.dto.fornecedor.FornecedorResponse;
+import br.com.thaua.Ecommerce.dto.fornecedor.FornecedorSaldoResponse;
 import br.com.thaua.Ecommerce.dto.itemPedido.ItemPedidoRequest;
 import br.com.thaua.Ecommerce.dto.itemPedido.ItemPedidoResponse;
 import br.com.thaua.Ecommerce.dto.pedido.PedidoResponse;
-import br.com.thaua.Ecommerce.dto.produto.CategoriaComponentResponse;
-import br.com.thaua.Ecommerce.dto.produto.ProdutoCategoriaResponse;
-import br.com.thaua.Ecommerce.dto.produto.ProdutoResponse;
+import br.com.thaua.Ecommerce.dto.produto.*;
 import br.com.thaua.Ecommerce.dto.users.UserRequestGenerateCode;
 import br.com.thaua.Ecommerce.dto.users.UserRequestGenerateNewPassword;
 import br.com.thaua.Ecommerce.dto.users.UsersRequest;
@@ -212,5 +213,43 @@ public class ControllersFixture {
         pedidoResponse.setStatusPedido(statusPedido);
         pedidoResponse.setItensPedidos(itensPedidos);
         return pedidoResponse;
+    }
+
+    public static FornecedorCNPJTelefoneRequest createFornecedorCNPJTelefoneRequest(String cnpj, String telefone) {
+        FornecedorCNPJTelefoneRequest fornecedorCNPJTelefoneRequest = new FornecedorCNPJTelefoneRequest();
+        fornecedorCNPJTelefoneRequest.setCnpj(cnpj);
+        fornecedorCNPJTelefoneRequest.setTelefone(telefone);
+        return fornecedorCNPJTelefoneRequest;
+    }
+
+    public static FornecedorResponse createFornecedorResponse(Long id, String name, String email, String telefone, String cnpj) {
+        FornecedorResponse fornecedorResponse = new FornecedorResponse();
+        fornecedorResponse.setId(id);
+        fornecedorResponse.setName(name);
+        fornecedorResponse.setEmail(email);
+        fornecedorResponse.setTelefone(telefone);
+        fornecedorResponse.setCnpj(cnpj);
+        return fornecedorResponse;
+    }
+
+    public static ProdutoRequest createProdutoRequest(String nome, String descricao, BigDecimal preco, int estoque) {
+        ProdutoRequest produtoRequest = new ProdutoRequest();
+        produtoRequest.setNome(nome);
+        produtoRequest.setDescricao(descricao);
+        produtoRequest.setPreco(preco);
+        produtoRequest.setEstoque(estoque);
+        return produtoRequest;
+    }
+
+    public static ProdutoNovoEstoqueRequest createProdutoNovoEstoqueRequest(int novaQuantidade) {
+        ProdutoNovoEstoqueRequest produtoNovoEstoqueRequest = new ProdutoNovoEstoqueRequest();
+        produtoNovoEstoqueRequest.setNovaQuantidade(novaQuantidade);
+        return produtoNovoEstoqueRequest;
+    }
+
+    public static FornecedorSaldoResponse createFornecedorSaldoResponse(BigDecimal saldo) {
+        FornecedorSaldoResponse fornecedorSaldoResponse = new FornecedorSaldoResponse();
+        fornecedorSaldoResponse.setSaldo(saldo);
+        return fornecedorSaldoResponse;
     }
 }
