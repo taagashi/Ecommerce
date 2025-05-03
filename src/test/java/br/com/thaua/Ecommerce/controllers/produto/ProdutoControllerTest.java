@@ -42,12 +42,18 @@ public class ProdutoControllerTest {
 
     private MockMvc mockMvc;
 
+    private Map<String, String> emptyMap;
+
+    private Map<String, String> errors;
+
     @BeforeEach
     public void setUp() {
         mockMvc = MockMvcBuilders.standaloneSetup(produtoController)
                 .setControllerAdvice(new ExceptionHandlerClass())
                 .setCustomArgumentResolvers(new PageableHandlerMethodArgumentResolver())
                 .build();
+        errors = ConstructorErrors.returnMapErrors();
+        emptyMap = ConstructorErrors.returnMapErrors();
     }
 
     @DisplayName("Deve retornar com sucesso todas as categorias de um produto cadastrado")
@@ -57,9 +63,8 @@ public class ProdutoControllerTest {
         CategoriaComponentResponse categoriaComponentResponse2 = ControllersFixture.createCategoriaComponentResponse(2L, "rapido");
         ProdutoCategoriaResponse produtoCategoriaResponse = ControllersFixture.createProdutoCategoriaResponse(15L, "carro", "10000",  List.of(categoriaComponentResponse, categoriaComponentResponse2));
         Long produtoId = produtoCategoriaResponse.getProdutoId();
-        Map<String, String> errors = ConstructorErrors.returnMapErrors();
 
-        when(produtoService.exibirCategoriasDeProduto(produtoId, errors)).thenReturn(produtoCategoriaResponse);
+        when(produtoService.exibirCategoriasDeProduto(eq(produtoId), eq(emptyMap))).thenReturn(produtoCategoriaResponse);
 
         mockMvc.perform(get("/api/v1/produtos/{produtoId}/categorias/list", produtoId))
                 .andExpect(status().isOk())
@@ -72,27 +77,27 @@ public class ProdutoControllerTest {
                 .andExpect(jsonPath("$.categorias[1].categoriaId").value(categoriaComponentResponse2.getCategoriaId()))
                 .andExpect(jsonPath("$.categorias[1].nome").value(categoriaComponentResponse2.getNome()));
 
-        verify(produtoService,times(1)).exibirCategoriasDeProduto(produtoId, errors);
+        verify(produtoService,times(1)).exibirCategoriasDeProduto(eq(produtoId), eq(emptyMap));
     }
 
     @DisplayName("Deve retornar um ProdutoNotFoundException ao tentar exibir categorias de um produto que nao existe")
     @Test
     public void testExibirCategoriasProdutoError() throws Exception {
         Long produtoIdError = 11L;
-        Map<String, String> errors = ConstructorErrors.returnMapErrors();
+        errors.put("Falha de busca", "Item não encontrado");
         String errorMessage = ControllersFixture.createErrorMessage("Houve um erro ao tentar exibir categorias de um produto");
-        ProdutoNotFoundException produtoNotFoundException = new ProdutoNotFoundException(errorMessage, Map.of("Falha de busca", "Item não encontrado"));
+        ProdutoNotFoundException produtoNotFoundException = new ProdutoNotFoundException(errorMessage, errors);
 
-        when(produtoService.exibirCategoriasDeProduto(produtoIdError, errors)).thenThrow(produtoNotFoundException);
+        when(produtoService.exibirCategoriasDeProduto(eq(produtoIdError), eq(emptyMap))).thenThrow(produtoNotFoundException);
 
         mockMvc.perform(get("/api/v1/produtos/{produtoId}/categorias/list", produtoIdError))
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.code").value(HttpStatus.BAD_REQUEST.value()))
                 .andExpect(jsonPath("$.message").value(errorMessage))
                 .andExpect(jsonPath("$.fieldsErrors").isMap())
-                .andExpect(jsonPath("$.fieldsErrors['Falha de busca']").value("Item não encontrado"));
+                .andExpect(jsonPath("$.fieldsErrors['Falha de busca']").value(errors.get("Falha de busca")));
 
-        verify(produtoService, times(1)).exibirCategoriasDeProduto(produtoIdError, errors);
+        verify(produtoService, times(1)).exibirCategoriasDeProduto(eq(produtoIdError), eq(emptyMap));
     }
 
     @DisplayName("Deve retornar com sucesso todos os produtos cadastrados")
@@ -112,7 +117,7 @@ public class ProdutoControllerTest {
         produtoResponsePagina.setTotalItens((long) produtoResponseList.size());
         produtoResponsePagina.setUltimaPagina(true);
 
-        when(produtoService.exibirProdutos(pageable, precoMinimo, precoMaximo)).thenReturn(produtoResponsePagina);
+        when(produtoService.exibirProdutos(eq(pageable), eq(precoMinimo), eq(precoMaximo))).thenReturn(produtoResponsePagina);
 
         mockMvc.perform(get("/api/v1/produtos/list")
                 .param("page", "0")
@@ -129,7 +134,7 @@ public class ProdutoControllerTest {
                 .andExpect(jsonPath("$.conteudo[0].quantidadeDemanda").value(produtoResponse.getQuantidadeDemanda()))
                 .andExpect(jsonPath("$.conteudo[0].categoriasAssociadas").value(produtoResponse.getCategoriasAssociadas()));
 
-        verify(produtoService, times(1)).exibirProdutos(pageable, precoMinimo, precoMaximo);
+        verify(produtoService, times(1)).exibirProdutos(eq(pageable), eq(precoMinimo), eq(precoMaximo));
     }
 
     @DisplayName("Deve retornar com sucesso um produto cadastrado")
@@ -137,9 +142,8 @@ public class ProdutoControllerTest {
     public void testBuscarProdutoSucesso() throws Exception {
         ProdutoResponse produtoResponse = ControllersFixture.createProdutoResponse(1L, "relogio", "produto de relogio", BigDecimal.valueOf(500), 2, 2, 10);
         Long produtoId = produtoResponse.getProdutoId();
-        Map<String, String> errors = ConstructorErrors.returnMapErrors();
 
-        when(produtoService.buscarProduto(produtoId, errors)).thenReturn(produtoResponse);
+        when(produtoService.buscarProduto(eq(produtoId), eq(emptyMap))).thenReturn(produtoResponse);
 
         mockMvc.perform(get("/api/v1/produtos/{produtoId}", produtoId))
                 .andExpect(status().isOk())
@@ -151,27 +155,27 @@ public class ProdutoControllerTest {
                 .andExpect(jsonPath("$.quantidadeDemanda").value(produtoResponse.getQuantidadeDemanda()))
                 .andExpect(jsonPath("$.categoriasAssociadas").value(produtoResponse.getCategoriasAssociadas()));
 
-        verify(produtoService, times(1)).buscarProduto(produtoId, errors);
+        verify(produtoService, times(1)).buscarProduto(eq(produtoId), eq(emptyMap));
     }
 
     @DisplayName("Deve retornar um ProdutoNotFoundException ao tentar buscar um produto que nao existe")
     @Test
     public void testBuscarProdutoError() throws Exception {
         Long produtoIdError = 2L;
-        Map<String, String> errors = ConstructorErrors.returnMapErrors();
+        errors.put("Falha de busca", "Item não encontrado");
         String errorMessage = ControllersFixture.createErrorMessage("Houve um erro ao tentar buscar o produto");
-        ProdutoNotFoundException produtoNotFoundException = new ProdutoNotFoundException(errorMessage, Map.of("Falha de busca", "Item não encontrado"));
+        ProdutoNotFoundException produtoNotFoundException = new ProdutoNotFoundException(errorMessage, errors);
 
-        when(produtoService.buscarProduto(produtoIdError, errors)).thenThrow(produtoNotFoundException);
+        when(produtoService.buscarProduto(eq(produtoIdError), eq(emptyMap))).thenThrow(produtoNotFoundException);
 
         mockMvc.perform(get("/api/v1/produtos/{produtoId}", produtoIdError))
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.code").value(HttpStatus.BAD_REQUEST.value()))
                 .andExpect(jsonPath("$.message").value(errorMessage))
                 .andExpect(jsonPath("$.fieldsErrors").isMap())
-                .andExpect(jsonPath("$.fieldsErrors['Falha de busca']").value("Item não encontrado"));
+                .andExpect(jsonPath("$.fieldsErrors['Falha de busca']").value(errors.get("Falha de busca")));
 
-        verify(produtoService, times(1)).buscarProduto(produtoIdError, errors);
+        verify(produtoService, times(1)).buscarProduto(eq(produtoIdError), eq(emptyMap));
 
     }
 }
