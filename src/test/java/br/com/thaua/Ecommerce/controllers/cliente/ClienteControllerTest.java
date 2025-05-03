@@ -42,7 +42,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -60,6 +59,8 @@ public class ClienteControllerTest {
 
     private ObjectMapper objectMapper;
 
+    private Map<String, String> errors;
+
     private Map<String, String> emptyMap;
 
     @BeforeEach
@@ -70,6 +71,7 @@ public class ClienteControllerTest {
                 .build();
         objectMapper = new ObjectMapper();
         emptyMap = ConstructorErrors.returnMapErrors();
+        errors = ConstructorErrors.returnMapErrors();
     }
 
     @DisplayName("Deve retornar com sucesso um cliente com cpf e telefone cadastrados")
@@ -99,7 +101,6 @@ public class ClienteControllerTest {
     @Test
     public void testAtualizarCpfETelefoneError() throws Exception {
         String errorMessage = ControllersFixture.createErrorMessage("Erro de validação");
-        Map<String, String> errors = ConstructorErrors.returnMapErrors();
         errors.put("Erro de validação: ", "Cpf invalido");
         ConstraintViolationException constraintViolationException = new ConstraintViolationException("Cpf invalido", Set.of(ConstraintViolationImpl.forBeanValidation(null, null, null, "Cpf invalido", null, null, null, null, null, null, null)));
 
@@ -180,7 +181,6 @@ public class ClienteControllerTest {
     @DisplayName("Deve retornar FazerPedidoException ao tentar fazer pedido com erros")
     @Test
     public void testFazerPedidoError() throws Exception {
-        Map<String, String> errors = ConstructorErrors.returnMapErrors();
         errors.put("Endereço", "Endereço não cadastrado");
         errors.put("Telefone", "Telefone não cadastrado");
         errors.put("nome do produto", "Quantidade acima do estoque ou igual a 0 para este produto");
@@ -234,7 +234,7 @@ public class ClienteControllerTest {
         pedidoResponsePagina.setTotalItens((long) pedidoResponseList.size());
         pedidoResponsePagina.setUltimaPagina(true);
 
-        when(clienteService.listarPedidos(any(Pageable.class), eq(statusPedido), eq(emptyMap))).thenReturn(pedidoResponsePagina);
+        when(clienteService.listarPedidos(eq(pageable), eq(statusPedido), eq(emptyMap))).thenReturn(pedidoResponsePagina);
 
         mockMvc.perform(get("/api/v1/clientes/pedidos/list")
                 .param("page", String.valueOf(pageable.getPageNumber()))
@@ -267,13 +267,12 @@ public class ClienteControllerTest {
                 .andExpect(jsonPath("$.conteudo[0].itensPedidos[1].valorTotal").value(itemPedidoResponse2.getValorTotal()))
                 .andExpect(jsonPath("$.conteudo[0].itensPedidos[1].statusItemPedido").value(itemPedidoResponse2.getStatusItemPedido().toString()));
 
-        verify(clienteService, times(1)).listarPedidos(any(Pageable.class), eq(statusPedido), eq(emptyMap));
+        verify(clienteService, times(1)).listarPedidos(eq(pageable), eq(statusPedido), eq(emptyMap));
     }
 
     @DisplayName("Deve retornar InvalidStatusPedidoException ao listar pedidos com status inválido")
     @Test
     public void testListarPedidosError() throws Exception {
-        Map<String, String> errors = ConstructorErrors.returnMapErrors();
         errors.put("Status", "O Status digitado não existe");
         String errorMessage = "usuario houve um erro ao tentar listar pedidos";
         InvalidStatusPedidoException invalidStatusPedidoException = new InvalidStatusPedidoException(errorMessage, errors);
@@ -282,7 +281,7 @@ public class ClienteControllerTest {
 
         Pageable pageable = PageRequest.of(0, 5);
 
-        when(clienteService.listarPedidos(any(Pageable.class), eq(statusPedidoError), eq(emptyMap))).thenThrow(invalidStatusPedidoException);
+        when(clienteService.listarPedidos(eq(pageable), eq(statusPedidoError), eq(emptyMap))).thenThrow(invalidStatusPedidoException);
 
         mockMvc.perform(get("/api/v1/clientes/pedidos/list")
                 .param("page", String.valueOf(pageable.getPageNumber()))
@@ -294,7 +293,7 @@ public class ClienteControllerTest {
                 .andExpect(jsonPath("$.fieldsErrors").isMap())
                 .andExpect(jsonPath("$.fieldsErrors['Status']").value(errors.get("Status")));
 
-        verify(clienteService, times(1)).listarPedidos(any(Pageable.class), eq(statusPedidoError), eq(emptyMap));
+        verify(clienteService, times(1)).listarPedidos(eq(pageable), eq(statusPedidoError), eq(emptyMap));
     }
 
     @DisplayName("Deve retornar com sucesso um pedido específico pelo ID")
@@ -336,7 +335,6 @@ public class ClienteControllerTest {
     @Test
     public void testBuscarPedidoError() throws Exception {
         Long pedidoIdError = 10L;
-        Map<String, String> errors = ConstructorErrors.returnMapErrors();
         errors.put("Falha de busca", "Item não encontrado");
         String errorMessage =  "usuario houve um erro ao tentar buscar pedido";
         PedidoNotFoundException pedidoNotFoundException = new PedidoNotFoundException(errorMessage, errors);
@@ -377,7 +375,6 @@ public class ClienteControllerTest {
     @Test
     public void testBuscarItemPedidoError() throws Exception {
         Long itemPedidoIdError = 200L;
-        Map<String, String> errors = ConstructorErrors.returnMapErrors();
         errors.put("Falha de busca", "Item não encontrado");
         String errorMessage = "usuario houve um erro ao tentar buscar item pedido";
         ItemPedidoNotFoundException itemPedidoNotFoundException = new ItemPedidoNotFoundException(errorMessage, errors);
@@ -415,7 +412,6 @@ public class ClienteControllerTest {
     @Test
     public void testPagarPedidoError() throws Exception {
         String errorMessage = "usuario houve um erro ao tentar pagar pedido";
-        Map<String, String> errors = ConstructorErrors.returnMapErrors();
         errors.put("Falha de busca", "Item não encontrado");
         errors.put("Valor", "O valor fornecido é invalido para a compra do pedido");
         errors.put("Status", "O pedido já foi pago");
@@ -452,7 +448,7 @@ public class ClienteControllerTest {
 
         String itemPedidoRequestListJson = objectMapper.writeValueAsString(itemPedidoRequestList);
 
-        when(clienteService.editarPedido(any(Long.class), eq(itemPedidoRequestList), eq(emptyMap))).thenReturn(pedidoResponse);
+        when(clienteService.editarPedido(eq(pedidoId), eq(itemPedidoRequestList), eq(emptyMap))).thenReturn(pedidoResponse);
 
         mockMvc.perform(put("/api/v1/clientes/pedidos/{pedidoId}/update", pedidoId)
                         .contentType(MediaType.APPLICATION_JSON)
@@ -477,7 +473,7 @@ public class ClienteControllerTest {
                 .andExpect(jsonPath("$.itensPedidos[0].valorTotal").value(itemPedidoResponse.getValorTotal()))
                 .andExpect(jsonPath("$.itensPedidos[0].statusItemPedido").value(itemPedidoResponse.getStatusItemPedido().toString()));
 
-        verify(clienteService, times(1)).editarPedido(any(Long.class), eq(itemPedidoRequestList), eq(emptyMap));
+        verify(clienteService, times(1)).editarPedido(eq(pedidoId), eq(itemPedidoRequestList), eq(emptyMap));
 
     }
 
@@ -485,7 +481,6 @@ public class ClienteControllerTest {
     @Test
     public void testEditarPedidoError() throws Exception {
         String errorMessage = "usuario houve um erro ao tentar atualizar seu pedido";
-        Map<String, String> errors = ConstructorErrors.returnMapErrors();
         errors.put("Falha de busca", "Item não encontrado");
         errors.put("Status", "Só é possível editar um pedido que ainda não foi pago");
         errors.put("nome do produto", "Quantidade acima do estoque ou igual a 0 para este produto");
@@ -560,7 +555,6 @@ public class ClienteControllerTest {
     @Test
     public void testAdicionarProdutoAPedidoError() throws Exception {
         String errorMessage = "usuario houve um erro ao tentar adicionar produto a um pedido";
-        Map<String, String> errors = ConstructorErrors.returnMapErrors();
         errors.put("Falha de busca", "Item não encontrado");
         errors.put("Status", "Status do pedido inválido para adicionar produto");
         AdicionarProdutoAPedidoException adicionarProdutoAPedidoException = new AdicionarProdutoAPedidoException(errorMessage, errors);
@@ -605,7 +599,6 @@ public class ClienteControllerTest {
     @Test
     public void testDeletarItemPedidoError() throws Exception {
         String errorMessage = "usuario houve um erro ao tentar buscar pelo item pedido";
-        Map<String, String> errors = ConstructorErrors.returnMapErrors();
         errors.put("Falha de busca", "Item não encontrado");
         ItemPedidoNotFoundException itemPedidoNotFoundException = new ItemPedidoNotFoundException(errorMessage, errors);
 
@@ -627,7 +620,6 @@ public class ClienteControllerTest {
     @Test
     public void testDeletarItemPedidoError2() throws Exception {
         String errorMessage =  "usuario houve um erro ao tentar deletar seu item pedido";
-        Map<String, String> errors = ConstructorErrors.returnMapErrors();
         errors.put("Status", "Status do pedido inválido para deletar item pedido");
         InvalidStatusPedidoException invalidStatusPedidoException = new InvalidStatusPedidoException(errorMessage, errors);
 
@@ -664,7 +656,6 @@ public class ClienteControllerTest {
     @Test
     public void testDeletarPedidoError() throws Exception {
         String errorMessage = "usuario houve um erro ao tentar deletar seu pedido";
-        Map<String, String> errors = ConstructorErrors.returnMapErrors();
         errors.put("Falha de busca", "Item não encontrado");
         errors.put("Status", "Status do pedido inválido para deletar item pedido");
         DeletarPedidoException deletarPedidoException = new DeletarPedidoException(errorMessage, errors);
