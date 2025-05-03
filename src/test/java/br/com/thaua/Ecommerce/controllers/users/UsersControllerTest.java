@@ -43,12 +43,18 @@ public class UsersControllerTest {
 
     private ObjectMapper objectMapper;
 
+    private Map<String, String> emptyMap;
+
+    private Map<String, String> errors;
+
     @BeforeEach
     public void setUp() {
         mockMvc = MockMvcBuilders.standaloneSetup(usersController)
                 .setControllerAdvice(new ExceptionHandlerClass())
                 .build();
         objectMapper = new ObjectMapper();
+        errors = ConstructorErrors.returnMapErrors();
+        emptyMap = ConstructorErrors.returnMapErrors();
     }
 
     @DisplayName("Deve retornar com sucesso token ao final do cadastro")
@@ -92,7 +98,7 @@ public class UsersControllerTest {
 
         String userRequestGenerateCodeJson = objectMapper.writeValueAsString(userRequestGenerateCode);
 
-        when(usersService.gerarCodigoRedefinirSenha(eq(userRequestGenerateCode), any(Map.class))).thenReturn(menssagemCodigoEnviado);
+        when(usersService.gerarCodigoRedefinirSenha(eq(userRequestGenerateCode), eq(emptyMap))).thenReturn(menssagemCodigoEnviado);
 
         mockMvc.perform(post("/api/v1/users/gerar-codigo")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -100,20 +106,20 @@ public class UsersControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(content().string(menssagemCodigoEnviado));
 
-        verify(usersService, times(1)).gerarCodigoRedefinirSenha(eq(userRequestGenerateCode), any(Map.class));
+        verify(usersService, times(1)).gerarCodigoRedefinirSenha(eq(userRequestGenerateCode), eq(emptyMap));
     }
 
     @DisplayName("Deve retornar um UserNotFoundException ao tentar gerar codigo de verificacao")
     @Test
     public void testGerarCodigoVerificacaoError() throws Exception {
         UserRequestGenerateCode userRequestGenerateCode = ControllersFixture.createUserRequestGenerateCode("tomas@gmail.com");
-        Map<String, String> errors = ConstructorErrors.returnMapErrors();
+        errors.put("Email", "Email não foi encontrado");
         String errorMessage = ControllersFixture.createErrorMessage("Houve um erro ao tentar gerar codigo para redefinir senha");
-        UserNotFoundException userNotFoundException = new UserNotFoundException(errorMessage, Map.of("Email", "Email não foi encontrado"));
+        UserNotFoundException userNotFoundException = new UserNotFoundException(errorMessage, errors);
 
         String userRequestGenerateCodeJson = objectMapper.writeValueAsString(userRequestGenerateCode);
 
-        when(usersService.gerarCodigoRedefinirSenha(any(UserRequestGenerateCode.class), eq(errors))).thenThrow(userNotFoundException);
+        when(usersService.gerarCodigoRedefinirSenha(eq(userRequestGenerateCode), eq(emptyMap))).thenThrow(userNotFoundException);
 
         mockMvc.perform(post("/api/v1/users/gerar-codigo")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -122,9 +128,9 @@ public class UsersControllerTest {
                 .andExpect(jsonPath("$.code").value(HttpStatus.BAD_REQUEST.value()))
                 .andExpect(jsonPath("$.message").value(errorMessage))
                 .andExpect(jsonPath("$.fieldsErrors").isMap())
-                .andExpect(jsonPath("$.fieldsErrors['Email']").value("Email não foi encontrado"));
+                .andExpect(jsonPath("$.fieldsErrors['Email']").value(errors.get("Email")));
 
-        verify(usersService, times(1)).gerarCodigoRedefinirSenha(any(UserRequestGenerateCode.class), eq(errors));
+        verify(usersService, times(1)).gerarCodigoRedefinirSenha(eq(userRequestGenerateCode), eq(emptyMap));
     }
 
     @DisplayName("Deve retornar com sucesso mensagem ao redefinir senha")
@@ -136,7 +142,7 @@ public class UsersControllerTest {
 
         String userRequestGenerateNewPasswordJson = objectMapper.writeValueAsString(userRequestGenerateNewPassword);
 
-        when(usersService.verificarCodigoRedefinirSenha(eq(userRequestGenerateNewPassword), any(Map.class))).thenReturn(mensagemRedefinirSenhaSucesso);
+        when(usersService.verificarCodigoRedefinirSenha(eq(userRequestGenerateNewPassword), eq(emptyMap))).thenReturn(mensagemRedefinirSenhaSucesso);
 
         mockMvc.perform(patch("/api/v1/users/redefinir-senha")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -144,20 +150,21 @@ public class UsersControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(content().string(mensagemRedefinirSenhaSucesso));
 
-        verify(usersService, times(1)).verificarCodigoRedefinirSenha(eq(userRequestGenerateNewPassword), any(Map.class));
+        verify(usersService, times(1)).verificarCodigoRedefinirSenha(eq(userRequestGenerateNewPassword), eq(emptyMap));
     }
 
     @DisplayName("Deve retornar um CodeNotValidException ao tentar redefinir senha")
     @Test
     public void testRedefinirSenhaError() throws Exception {
         UserRequestGenerateNewPassword userRequestGenerateNewPassword = ControllersFixture.createUserRequestGenerateNewPassword("email errado", "23213", 13302);
-        Map<String, String> errors = ConstructorErrors.returnMapErrors();
+        errors.put("Email", "Email não foi encontrado");
+        errors.put("Código", "Código de verificação inválido");
         String errorMessage = ControllersFixture.createErrorMessage("Houve um erro ao tentar redefinir senha");
-        CodeNotValidException codeNotValidException = new CodeNotValidException(errorMessage, Map.of("Email", "Email não foi encontrado", "Código", "Código de verificação inválido"));
+        CodeNotValidException codeNotValidException = new CodeNotValidException(errorMessage, errors);
 
         String userRequestGenerateNewPasswordJson = objectMapper.writeValueAsString(userRequestGenerateNewPassword);
 
-        when(usersService.verificarCodigoRedefinirSenha(any(UserRequestGenerateNewPassword.class), eq(errors))).thenThrow(codeNotValidException);
+        when(usersService.verificarCodigoRedefinirSenha(eq(userRequestGenerateNewPassword), eq(emptyMap))).thenThrow(codeNotValidException);
 
         mockMvc.perform(patch("/api/v1/users/redefinir-senha")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -166,10 +173,10 @@ public class UsersControllerTest {
                 .andExpect(jsonPath("$.code").value(HttpStatus.BAD_REQUEST.value()))
                 .andExpect(jsonPath("$.message").value(errorMessage))
                 .andExpect(jsonPath("$.fieldsErrors").isMap())
-                .andExpect(jsonPath("$.fieldsErrors['Email']").value("Email não foi encontrado"))
-                .andExpect(jsonPath("$.fieldsErrors['Código']").value("Código de verificação inválido"));
+                .andExpect(jsonPath("$.fieldsErrors['Email']").value(errors.get("Email")))
+                .andExpect(jsonPath("$.fieldsErrors['Código']").value(errors.get("Código")));
 
-        verify(usersService, times(1)).verificarCodigoRedefinirSenha(any(UserRequestGenerateNewPassword.class), eq(errors));
+        verify(usersService, times(1)).verificarCodigoRedefinirSenha(eq(userRequestGenerateNewPassword), eq(emptyMap));
     }
 
     @DisplayName("Deve retornar com sucesso os dados do usuario ao exibir perfil")
