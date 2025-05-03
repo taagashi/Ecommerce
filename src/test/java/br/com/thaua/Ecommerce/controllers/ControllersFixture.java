@@ -1,8 +1,10 @@
 package br.com.thaua.Ecommerce.controllers;
 
 import br.com.thaua.Ecommerce.domain.enums.StatusItemPedido;
+import br.com.thaua.Ecommerce.domain.enums.StatusPedido;
 import br.com.thaua.Ecommerce.dto.admin.AdminResponse;
 import br.com.thaua.Ecommerce.dto.categoria.CategoriaProdutosResponse;
+import br.com.thaua.Ecommerce.dto.categoria.CategoriaRequest;
 import br.com.thaua.Ecommerce.dto.categoria.CategoriaResponse;
 import br.com.thaua.Ecommerce.dto.categoria.ProdutoComponentResponse;
 import br.com.thaua.Ecommerce.dto.cliente.ClienteCpfTelefoneRequest;
@@ -15,6 +17,7 @@ import br.com.thaua.Ecommerce.dto.fornecedor.FornecedorResponse;
 import br.com.thaua.Ecommerce.dto.fornecedor.FornecedorSaldoResponse;
 import br.com.thaua.Ecommerce.dto.itemPedido.ItemPedidoRequest;
 import br.com.thaua.Ecommerce.dto.itemPedido.ItemPedidoResponse;
+import br.com.thaua.Ecommerce.dto.pedido.PedidoPatchRequest;
 import br.com.thaua.Ecommerce.dto.pedido.PedidoResponse;
 import br.com.thaua.Ecommerce.dto.produto.*;
 import br.com.thaua.Ecommerce.dto.users.UserRequestGenerateCode;
@@ -251,5 +254,18 @@ public class ControllersFixture {
         FornecedorSaldoResponse fornecedorSaldoResponse = new FornecedorSaldoResponse();
         fornecedorSaldoResponse.setSaldo(saldo);
         return fornecedorSaldoResponse;
+    }
+
+    public static CategoriaRequest createCategoriaRequest(String nome, String descricao) {
+        CategoriaRequest categoriaRequest = new CategoriaRequest();
+        categoriaRequest.setNome(nome);
+        categoriaRequest.setDescricao(descricao);
+        return categoriaRequest;
+    }
+
+    public static PedidoPatchRequest createPedidoPatchRequest(StatusPedido statusPedido) {
+        PedidoPatchRequest pedidoPatchRequest = new PedidoPatchRequest();
+        pedidoPatchRequest.setStatusPedido(statusPedido);
+        return pedidoPatchRequest;
     }
 }
