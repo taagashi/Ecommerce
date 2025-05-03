@@ -27,7 +27,6 @@ import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
 
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -43,12 +42,18 @@ public class CategoriaControllerTest {
 
     private MockMvc mockMvc;
 
+    private Map<String, String> errors;
+
+    private Map<String, String> emptyMap;
+
     @BeforeEach
     public void setUp() {
             mockMvc = MockMvcBuilders.standaloneSetup(categoriaController)
                     .setControllerAdvice(new ExceptionHandlerClass())
                     .setCustomArgumentResolvers(new PageableHandlerMethodArgumentResolver())
                     .build();
+            errors = ConstructorErrors.returnMapErrors();
+            emptyMap = ConstructorErrors.returnMapErrors();
     }
 
     @DisplayName("Deve retornar com sucesso todas as categorias cadastradas")
@@ -70,7 +75,7 @@ public class CategoriaControllerTest {
         paginaCategoria.setTotalItens((long) categorias.size());
         paginaCategoria.setUltimaPagina(true);
 
-        when(categoriaService.exibirCategorias(any(Pageable.class))).thenReturn(paginaCategoria);
+        when(categoriaService.exibirCategorias(eq(pageableCategoria))).thenReturn(paginaCategoria);
 
         mockMvc.perform(get("/api/v1/categorias/list")
                         .param("page", String.valueOf(pageableCategoria.getPageNumber()))
@@ -87,7 +92,7 @@ public class CategoriaControllerTest {
                 .andExpect(jsonPath("$.conteudo[1].descricao").value(categoriaResponse2.getDescricao()))
                 .andExpect(jsonPath("$.conteudo[1].produtosAssociados").value(categoriaResponse2.getProdutosAssociados()));
 
-        verify(categoriaService, times(1)).exibirCategorias(any(Pageable.class));
+        verify(categoriaService, times(1)).exibirCategorias(eq(pageableCategoria));
 
     }
 
@@ -96,9 +101,8 @@ public class CategoriaControllerTest {
     public void testExibirCategoriaSucesso() throws Exception {
         CategoriaResponse categoriaResponse = ControllersFixture.createCategoriaResponse(10L, "camisa", "categoria de camisa", 10);
         Long categoriaId = categoriaResponse.getId();
-        Map<String, String> errors = ConstructorErrors.returnMapErrors();
 
-        when(categoriaService.exibirCategoria(categoriaResponse.getId(), errors)).thenReturn(categoriaResponse);
+        when(categoriaService.exibirCategoria(eq(categoriaId), eq(emptyMap))).thenReturn(categoriaResponse);
 
         mockMvc.perform(get("/api/v1/categorias/{categoriaId}/list", categoriaId))
                 .andExpect(status().isOk())
@@ -107,27 +111,27 @@ public class CategoriaControllerTest {
                 .andExpect(jsonPath("$.produtosAssociados").value(categoriaResponse.getProdutosAssociados()))
                 .andExpect(jsonPath("$.descricao").value(categoriaResponse.getDescricao()));
 
-        verify(categoriaService, times(1)).exibirCategoria(categoriaResponse.getId(), errors);
+        verify(categoriaService, times(1)).exibirCategoria(eq(categoriaId), eq(emptyMap));
     }
 
     @DisplayName("Deve retornar uma exception CategoriaNotFoundException ao buscar uma cateogira especifica")
     @Test
     public void testExibirCategoriaError() throws Exception {
         Long categoriaIdError = 2L;
-        Map<String, String> errors = ConstructorErrors.returnMapErrors();
+        errors.put("Falha de busca", "Item não encontrado");
         String errorMessage = ControllersFixture.createErrorMessage("Houve um erro ao tentar exibir categoria");
-        CategoriaNotFoundException categoriaNotFoundException = new CategoriaNotFoundException(errorMessage, Map.of("Falha de busca", "Item não encontrado"));
+        CategoriaNotFoundException categoriaNotFoundException = new CategoriaNotFoundException(errorMessage, errors);
 
-        when(categoriaService.exibirCategoria(categoriaIdError, errors)).thenThrow(categoriaNotFoundException);
+        when(categoriaService.exibirCategoria(eq(categoriaIdError), eq(emptyMap))).thenThrow(categoriaNotFoundException);
 
         mockMvc.perform(get("/api/v1/categorias/{categoriaId}/list", categoriaIdError))
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.code").value(HttpStatus.BAD_REQUEST.value()))
                 .andExpect(jsonPath("$.message").value(errorMessage))
                 .andExpect(jsonPath("$.fieldsErrors").isMap())
-                .andExpect(jsonPath("$.fieldsErrors.['Falha de busca']").value("Item não encontrado"));
+                .andExpect(jsonPath("$.fieldsErrors.['Falha de busca']").value(errors.get("Falha de busca")));
 
-        verify(categoriaService, times(1)).exibirCategoria(categoriaIdError, errors);
+        verify(categoriaService, times(1)).exibirCategoria(categoriaIdError, emptyMap);
 
     }
 
@@ -138,9 +142,8 @@ public class CategoriaControllerTest {
         ProdutoComponentResponse produtoComponentResponse2 = ControllersFixture.createProdutoComponentResponse(2L, "tenis", BigDecimal.valueOf(200.255), 20);
         CategoriaProdutosResponse categoriaProdutosResponse = ControllersFixture.createCategoriaProdutosResponse(1L, "importados", "categoria para produtos importados", List.of(produtoComponentResponse, produtoComponentResponse2));
         Long categoriaId = categoriaProdutosResponse.getCategoriaId();
-        Map<String, String> errors = ConstructorErrors.returnMapErrors();
 
-        when(categoriaService.listarProdutosPorCategoria(categoriaId, errors)).thenReturn(categoriaProdutosResponse);
+        when(categoriaService.listarProdutosPorCategoria(eq(categoriaId), eq(emptyMap))).thenReturn(categoriaProdutosResponse);
 
         mockMvc.perform(get("/api/v1/categorias/{categoriaId}/produtos/list", categoriaId))
                 .andExpect(status().isOk())
@@ -157,26 +160,26 @@ public class CategoriaControllerTest {
                 .andExpect(jsonPath("$.produtos[1].preco").value(produtoComponentResponse2.getPreco()))
                 .andExpect(jsonPath("$.produtos[1].estoque").value(produtoComponentResponse2.getEstoque()));
 
-        verify(categoriaService, times(1)).listarProdutosPorCategoria(categoriaId, errors);
+        verify(categoriaService, times(1)).listarProdutosPorCategoria(categoriaId, emptyMap);
     }
 
     @DisplayName("Deve retornar uma exception CategoriaNotFoundException ao buscar os produtos de uma categoria")
     @Test
     public void testListarProdutosPorCategoriaError() throws Exception {
         Long categoriaIdError = 10L;
-        Map<String, String> errors = ConstructorErrors.returnMapErrors();
+        errors.put("Falha de busca", "Item não encontrado");
         String errorMessage = ControllersFixture.createErrorMessage("Houve um erro ao tentar listar produtos de uma categoria");
-        CategoriaNotFoundException categoriaNotFoundException = new CategoriaNotFoundException(errorMessage, Map.of("Falha de busca", "Item não encontrado"));
+        CategoriaNotFoundException categoriaNotFoundException = new CategoriaNotFoundException(errorMessage, errors);
 
-        when(categoriaService.listarProdutosPorCategoria(categoriaIdError, errors)).thenThrow(categoriaNotFoundException);
+        when(categoriaService.listarProdutosPorCategoria(categoriaIdError, emptyMap)).thenThrow(categoriaNotFoundException);
 
         mockMvc.perform(get("/api/v1/categorias/{categoriaId}/produtos/list", categoriaIdError))
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.code").value(HttpStatus.BAD_REQUEST.value()))
                 .andExpect(jsonPath("$.message").value(errorMessage))
                 .andExpect(jsonPath("$.fieldsErrors").isMap())
-                .andExpect(jsonPath("$.fieldsErrors.['Falha de busca']").value("Item não encontrado"));
+                .andExpect(jsonPath("$.fieldsErrors.['Falha de busca']").value(errors.get("Falha de busca")));
 
-        verify(categoriaService, times(1)).listarProdutosPorCategoria(categoriaIdError, errors);
+        verify(categoriaService, times(1)).listarProdutosPorCategoria(categoriaIdError, emptyMap);
     }
 }
