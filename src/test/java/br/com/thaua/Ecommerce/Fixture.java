@@ -7,9 +7,7 @@ import br.com.thaua.Ecommerce.dto.categoria.CategoriaProdutosResponse;
 import br.com.thaua.Ecommerce.dto.categoria.CategoriaRequest;
 import br.com.thaua.Ecommerce.dto.categoria.CategoriaResponse;
 import br.com.thaua.Ecommerce.dto.categoria.ProdutoComponentResponse;
-import br.com.thaua.Ecommerce.dto.cliente.ClienteCpfTelefoneRequest;
-import br.com.thaua.Ecommerce.dto.cliente.ClienteResponse;
-import br.com.thaua.Ecommerce.dto.cliente.ClienteUpdateRequest;
+import br.com.thaua.Ecommerce.dto.cliente.*;
 import br.com.thaua.Ecommerce.dto.endereco.EnderecoRequest;
 import br.com.thaua.Ecommerce.dto.endereco.EnderecoResponse;
 import br.com.thaua.Ecommerce.dto.fornecedor.FornecedorCNPJTelefoneRequest;
@@ -267,5 +265,16 @@ public class Fixture {
         PedidoPatchRequest pedidoPatchRequest = new PedidoPatchRequest();
         pedidoPatchRequest.setStatusPedido(statusPedido);
         return pedidoPatchRequest;
+    }
+
+    public static ClienteComPedidoResponse createClienteComPedidoResponse(Long id, String name, String email, String telefone, String cpf, int pedidosFeitos) {
+        ClienteComPedidoResponse clienteComPedidoResponse = new ClienteComPedidoResponse();
+        clienteComPedidoResponse.setId(id);
+        clienteComPedidoResponse.setName(name);
+        clienteComPedidoResponse.setEmail(email);
+        clienteComPedidoResponse.setTelefone(telefone);
+        clienteComPedidoResponse.setCpf(cpf);
+        clienteComPedidoResponse.setPedidosFeitos(pedidosFeitos);
+        return clienteComPedidoResponse;
     }
 }
