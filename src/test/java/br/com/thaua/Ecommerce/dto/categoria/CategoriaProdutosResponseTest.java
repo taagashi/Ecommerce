@@ -1,6 +1,6 @@
 package br.com.thaua.Ecommerce.dto.categoria;
 
-import br.com.thaua.Ecommerce.controllers.ControllersFixture;
+import br.com.thaua.Ecommerce.Fixture;
 import org.junit.jupiter.api.Test;
 
 import java.math.BigDecimal;
@@ -16,14 +16,14 @@ public class CategoriaProdutosResponseTest {
         BigDecimal produtoComponentPreco = BigDecimal.valueOf(40023.33);
         Integer produtoComponentEstoque = 200;
 
-        ProdutoComponentResponse produtoComponentResponse = ControllersFixture.createProdutoComponentResponse(produtoComponentId, produtoComponentNome, produtoComponentPreco, produtoComponentEstoque);
+        ProdutoComponentResponse produtoComponentResponse = Fixture.createProdutoComponentResponse(produtoComponentId, produtoComponentNome, produtoComponentPreco, produtoComponentEstoque);
 
         Long categoriaProdutosId = 1L;
         String categoriaProdutosNome = "importados";
         String categoriaProdutosDescricao = "categoria para produtos importados";
         List<ProdutoComponentResponse> categoriaProdutosProdutos = List.of(produtoComponentResponse);
 
-        CategoriaProdutosResponse categoriaProdutosResponse = ControllersFixture.createCategoriaProdutosResponse(categoriaProdutosId, categoriaProdutosNome, categoriaProdutosDescricao, categoriaProdutosProdutos);
+        CategoriaProdutosResponse categoriaProdutosResponse = Fixture.createCategoriaProdutosResponse(categoriaProdutosId, categoriaProdutosNome, categoriaProdutosDescricao, categoriaProdutosProdutos);
 
         assertThat(categoriaProdutosResponse.getCategoriaId()).isEqualTo(categoriaProdutosId);
         assertThat(categoriaProdutosResponse.getNome()).isEqualTo(categoriaProdutosNome);

@@ -1,6 +1,6 @@
 package br.com.thaua.Ecommerce.dto.admin;
 
-import br.com.thaua.Ecommerce.controllers.ControllersFixture;
+import br.com.thaua.Ecommerce.Fixture;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDateTime;
@@ -17,7 +17,7 @@ public class AdminResponseTest {
         int contasBanidas = 5;
         LocalDateTime ultimoAcesso = LocalDateTime.now();
 
-        AdminResponse adminResponse = ControllersFixture.createAdminResponse(id, name, email, contasBanidas, ultimoAcesso);
+        AdminResponse adminResponse = Fixture.createAdminResponse(id, name, email, contasBanidas, ultimoAcesso);
 
         assertThat(adminResponse.getId()).isEqualTo(id);
         assertThat(adminResponse.getName()).isEqualTo(name);

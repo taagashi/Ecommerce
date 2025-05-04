@@ -1,6 +1,6 @@
 package br.com.thaua.Ecommerce.dto.categoria;
 
-import br.com.thaua.Ecommerce.controllers.ControllersFixture;
+import br.com.thaua.Ecommerce.Fixture;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
@@ -12,7 +12,7 @@ public class CategoriaResponseTest {
         String nome = "panos";
         String descricao = "categoria para panos";
         int produtosAssociados = 3;
-        CategoriaResponse categoriaResponse = ControllersFixture.createCategoriaResponse(id, nome, descricao, produtosAssociados);
+        CategoriaResponse categoriaResponse = Fixture.createCategoriaResponse(id, nome, descricao, produtosAssociados);
 
         assertThat(categoriaResponse.getId()).isEqualTo(id);
         assertThat(categoriaResponse.getNome()).isEqualTo(nome);

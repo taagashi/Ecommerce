@@ -1,4 +1,4 @@
-package br.com.thaua.Ecommerce.controllers;
+package br.com.thaua.Ecommerce;
 
 import br.com.thaua.Ecommerce.domain.enums.StatusItemPedido;
 import br.com.thaua.Ecommerce.domain.enums.StatusPedido;
@@ -31,7 +31,7 @@ import java.util.UUID;
 import java.math.BigDecimal;
 import java.util.List;
 
-public class ControllersFixture {
+public class Fixture {
     public static CategoriaResponse createCategoriaResponse(Long id, String nome, String descricao, Integer produtosAssociados) {
         CategoriaResponse categoriaResponse = new CategoriaResponse();
         categoriaResponse.setDescricao(descricao);
