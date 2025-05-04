@@ -1,6 +1,6 @@
 package br.com.thaua.Ecommerce.controllers.produto;
 
-import br.com.thaua.Ecommerce.controllers.ControllersFixture;
+import br.com.thaua.Ecommerce.Fixture;
 import br.com.thaua.Ecommerce.controllers.ProdutoController;
 import br.com.thaua.Ecommerce.controllers.handler.ConstructorErrors;
 import br.com.thaua.Ecommerce.controllers.handler.ExceptionHandlerClass;
@@ -59,9 +59,9 @@ public class ProdutoControllerTest {
     @DisplayName("Deve retornar com sucesso todas as categorias de um produto cadastrado")
     @Test
     public void testExibirCategoriasProdutoSucesso() throws Exception {
-        CategoriaComponentResponse categoriaComponentResponse = ControllersFixture.createCategoriaComponentResponse(1L, "automovel");
-        CategoriaComponentResponse categoriaComponentResponse2 = ControllersFixture.createCategoriaComponentResponse(2L, "rapido");
-        ProdutoCategoriaResponse produtoCategoriaResponse = ControllersFixture.createProdutoCategoriaResponse(15L, "carro", "10000",  List.of(categoriaComponentResponse, categoriaComponentResponse2));
+        CategoriaComponentResponse categoriaComponentResponse = Fixture.createCategoriaComponentResponse(1L, "automovel");
+        CategoriaComponentResponse categoriaComponentResponse2 = Fixture.createCategoriaComponentResponse(2L, "rapido");
+        ProdutoCategoriaResponse produtoCategoriaResponse = Fixture.createProdutoCategoriaResponse(15L, "carro", "10000",  List.of(categoriaComponentResponse, categoriaComponentResponse2));
         Long produtoId = produtoCategoriaResponse.getProdutoId();
 
         when(produtoService.exibirCategoriasDeProduto(eq(produtoId), eq(emptyMap))).thenReturn(produtoCategoriaResponse);
@@ -85,7 +85,7 @@ public class ProdutoControllerTest {
     public void testExibirCategoriasProdutoError() throws Exception {
         Long produtoIdError = 11L;
         errors.put("Falha de busca", "Item não encontrado");
-        String errorMessage = ControllersFixture.createErrorMessage("Houve um erro ao tentar exibir categorias de um produto");
+        String errorMessage = Fixture.createErrorMessage("Houve um erro ao tentar exibir categorias de um produto");
         ProdutoNotFoundException produtoNotFoundException = new ProdutoNotFoundException(errorMessage, errors);
 
         when(produtoService.exibirCategoriasDeProduto(eq(produtoIdError), eq(emptyMap))).thenThrow(produtoNotFoundException);
@@ -105,7 +105,7 @@ public class ProdutoControllerTest {
     public void testExibirProdutosSucesso() throws Exception {
         BigDecimal precoMinimo = BigDecimal.valueOf(15.25);
         BigDecimal precoMaximo = BigDecimal.valueOf(25.60);
-        ProdutoResponse produtoResponse = ControllersFixture.createProdutoResponse(23L, "patinete", "produto de patinete", BigDecimal.valueOf(20.56), 15, 1, 4);
+        ProdutoResponse produtoResponse = Fixture.createProdutoResponse(23L, "patinete", "produto de patinete", BigDecimal.valueOf(20.56), 15, 1, 4);
         List<ProdutoResponse> produtoResponseList = List.of(produtoResponse);
         Pageable pageable = PageRequest.of(0, 1);
         Page<ProdutoResponse> produtoResponsePage = new PageImpl(produtoResponseList, pageable, produtoResponseList.size());
@@ -140,7 +140,7 @@ public class ProdutoControllerTest {
     @DisplayName("Deve retornar com sucesso um produto cadastrado")
     @Test
     public void testBuscarProdutoSucesso() throws Exception {
-        ProdutoResponse produtoResponse = ControllersFixture.createProdutoResponse(1L, "relogio", "produto de relogio", BigDecimal.valueOf(500), 2, 2, 10);
+        ProdutoResponse produtoResponse = Fixture.createProdutoResponse(1L, "relogio", "produto de relogio", BigDecimal.valueOf(500), 2, 2, 10);
         Long produtoId = produtoResponse.getProdutoId();
 
         when(produtoService.buscarProduto(eq(produtoId), eq(emptyMap))).thenReturn(produtoResponse);
@@ -163,7 +163,7 @@ public class ProdutoControllerTest {
     public void testBuscarProdutoError() throws Exception {
         Long produtoIdError = 2L;
         errors.put("Falha de busca", "Item não encontrado");
-        String errorMessage = ControllersFixture.createErrorMessage("Houve um erro ao tentar buscar o produto");
+        String errorMessage = Fixture.createErrorMessage("Houve um erro ao tentar buscar o produto");
         ProdutoNotFoundException produtoNotFoundException = new ProdutoNotFoundException(errorMessage, errors);
 
         when(produtoService.buscarProduto(eq(produtoIdError), eq(emptyMap))).thenThrow(produtoNotFoundException);

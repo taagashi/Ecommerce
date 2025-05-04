@@ -1,7 +1,6 @@
 package br.com.thaua.Ecommerce.controllers.admin;
 
 import br.com.thaua.Ecommerce.controllers.AdminController;
-import br.com.thaua.Ecommerce.controllers.ControllersFixture;
 import br.com.thaua.Ecommerce.controllers.handler.ConstructorErrors;
 import br.com.thaua.Ecommerce.controllers.handler.ExceptionHandlerClass;
 import br.com.thaua.Ecommerce.domain.enums.StatusItemPedido;
@@ -13,6 +12,7 @@ import br.com.thaua.Ecommerce.dto.cliente.ClienteResponse;
 import br.com.thaua.Ecommerce.dto.endereco.EnderecoRequest;
 import br.com.thaua.Ecommerce.dto.endereco.EnderecoResponse;
 import br.com.thaua.Ecommerce.dto.fornecedor.FornecedorResponse;
+import br.com.thaua.Ecommerce.Fixture;
 import br.com.thaua.Ecommerce.dto.itemPedido.ItemPedidoResponse;
 import br.com.thaua.Ecommerce.dto.pagina.Pagina;
 import br.com.thaua.Ecommerce.dto.pedido.PedidoPatchRequest;
@@ -28,7 +28,6 @@ import jakarta.mail.Address;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -42,7 +41,6 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
-import javax.print.attribute.standard.Media;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -52,7 +50,7 @@ import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
-
+import org.junit.jupiter.api.extension.ExtendWith;
 @ExtendWith(MockitoExtension.class)
 public class AdminControllerTest {
     @InjectMocks
@@ -84,7 +82,7 @@ public class AdminControllerTest {
     @DisplayName("Deve listar clientes com sucesso")
     @Test
     public void testListarClientesSucesso() throws Exception {
-        ClienteResponse clienteResponse = ControllersFixture.createClienteResponse(1L, "klovis", "klovis@gmail.com", "840940423334", "000.000.000-00");
+        ClienteResponse clienteResponse = Fixture.createClienteResponse(1L, "klovis", "klovis@gmail.com", "840940423334", "000.000.000-00");
         List<ClienteResponse> clienteResponseList = List.of(clienteResponse);
 
         Pageable pageable = PageRequest.of(0, 1);
@@ -123,7 +121,7 @@ public class AdminControllerTest {
     @Test
     public void testBuscarClienteSucesso() throws Exception {
         Long clienteId = 2L;
-        ClienteResponse clienteResponse = ControllersFixture.createClienteResponse(clienteId, "adan", "adan@gmail.com", "84094034244", "000.000.000-00");
+        ClienteResponse clienteResponse = Fixture.createClienteResponse(clienteId, "adan", "adan@gmail.com", "84094034244", "000.000.000-00");
 
         when(adminService.buscarCliente(eq(clienteId), eq(emptyMap))).thenReturn(clienteResponse);
 
@@ -163,7 +161,7 @@ public class AdminControllerTest {
     @Test
     public void testBuscarFornecedorSucesso() throws Exception {
         Long fornecedorId = 2L;
-        FornecedorResponse fornecedorResponse = ControllersFixture.createFornecedorResponse(fornecedorId, "jonson", "jonson@gmail.com", "234423233", "000.000.000/0000-00");
+        FornecedorResponse fornecedorResponse = Fixture.createFornecedorResponse(fornecedorId, "jonson", "jonson@gmail.com", "234423233", "000.000.000/0000-00");
 
         when(adminService.buscarFornecedor(eq(fornecedorId), eq(emptyMap))).thenReturn(fornecedorResponse);
 
@@ -201,7 +199,7 @@ public class AdminControllerTest {
     @DisplayName("Deve listar fornecedores com sucesso")
     @Test
     public void testListarFornecedoresSucesso() throws Exception {
-        FornecedorResponse fornecedorResponse = ControllersFixture.createFornecedorResponse(2L, "jonson", "jonson@gmail.com", "234423233", "000.000.000/0000-00");
+        FornecedorResponse fornecedorResponse = Fixture.createFornecedorResponse(2L, "jonson", "jonson@gmail.com", "234423233", "000.000.000/0000-00");
         List<FornecedorResponse> fornecedorResponseList = List.of(fornecedorResponse);
 
         Pageable pageable = PageRequest.of(0, 1);
@@ -239,7 +237,7 @@ public class AdminControllerTest {
     @DisplayName("Deve listar admins com sucesso")
     @Test
     public void testListarAdminsSucesso() throws Exception {
-        AdminResponse adminResponse = ControllersFixture.createAdminResponse(1L, "taagashi", "taagashi@gmail.com", 4, LocalDateTime.now());
+        AdminResponse adminResponse = Fixture.createAdminResponse(1L, "taagashi", "taagashi@gmail.com", 4, LocalDateTime.now());
         List<AdminResponse> adminResponseList = List.of(adminResponse);
 
         Pageable pageable = PageRequest.of(0, 1);
@@ -284,7 +282,7 @@ public class AdminControllerTest {
     @Test
     public void testBuscarAdminSucesso() throws Exception {
         Long adminId = 5L;
-        AdminResponse adminResponse = ControllersFixture.createAdminResponse(1L, "taagashi", "taagashi@gmail.com", 4, LocalDateTime.now());
+        AdminResponse adminResponse = Fixture.createAdminResponse(1L, "taagashi", "taagashi@gmail.com", 4, LocalDateTime.now());
 
         when(adminService.buscarAdmin(eq(adminId), eq(emptyMap))).thenReturn(adminResponse);
 
@@ -328,8 +326,8 @@ public class AdminControllerTest {
     @DisplayName("Deve cadastrar uma categoria com sucesso")
     @Test
     public void testCadastrarCategoriaSucesso() throws Exception {
-        CategoriaRequest categoriaRequest = ControllersFixture.createCategoriaRequest("esporte", "categoria para esporte");
-        CategoriaResponse categoriaResponse = ControllersFixture.createCategoriaResponse(1L, categoriaRequest.getNome(), categoriaRequest.getDescricao(), 29);
+        CategoriaRequest categoriaRequest = Fixture.createCategoriaRequest("esporte", "categoria para esporte");
+        CategoriaResponse categoriaResponse = Fixture.createCategoriaResponse(1L, categoriaRequest.getNome(), categoriaRequest.getDescricao(), 29);
 
         String categoriaRequestJson = objectMapper.writeValueAsString(categoriaRequest);
 
@@ -384,8 +382,8 @@ public class AdminControllerTest {
     public void testListarPedidoDoClienteSucesso() throws Exception {
         Long clienteId = 90L;
 
-        ItemPedidoResponse itemPedidoResponse = ControllersFixture.createItemPedidoResponse(1L, 1L, "Camiseta", 5, BigDecimal.valueOf(20.55), StatusItemPedido.PENDENTE);
-        PedidoResponse pedidoResponse = ControllersFixture.createPedidoResponse(1L, "marcos", LocalDateTime.now(), itemPedidoResponse.getValorTotal(), StatusPedido.AGUARDANDO_PAGAMENTO.toString(), List.of(itemPedidoResponse));
+        ItemPedidoResponse itemPedidoResponse = Fixture.createItemPedidoResponse(1L, 1L, "Camiseta", 5, BigDecimal.valueOf(20.55), StatusItemPedido.PENDENTE);
+        PedidoResponse pedidoResponse = Fixture.createPedidoResponse(1L, "marcos", LocalDateTime.now(), itemPedidoResponse.getValorTotal(), StatusPedido.AGUARDANDO_PAGAMENTO.toString(), List.of(itemPedidoResponse));
         List<PedidoResponse> pedidoResponseList = List.of(pedidoResponse);
 
         Pageable pageable = PageRequest.of(0 , 1);
@@ -456,11 +454,11 @@ public class AdminControllerTest {
     @Test
     public void testAtualizarStatusPedidoSucesso() throws Exception {
         Long pedidoId = 6L;
-        PedidoPatchRequest pedidoPatchRequest = ControllersFixture.createPedidoPatchRequest(StatusPedido.PAGO);
-        ItemPedidoResponse itemPedidoResponse = ControllersFixture.createItemPedidoResponse(1L, 1L, "garrafa", 5, BigDecimal.valueOf(20.55), StatusItemPedido.PROCESSANDO);
+        PedidoPatchRequest pedidoPatchRequest = Fixture.createPedidoPatchRequest(StatusPedido.PAGO);
+        ItemPedidoResponse itemPedidoResponse = Fixture.createItemPedidoResponse(1L, 1L, "garrafa", 5, BigDecimal.valueOf(20.55), StatusItemPedido.PROCESSANDO);
         List<ItemPedidoResponse> itemPedidoResponseList = List.of(itemPedidoResponse);
 
-        PedidoResponse pedidoResponse = ControllersFixture.createPedidoResponse( pedidoId, "marcos", LocalDateTime.now(), itemPedidoResponse.getValorTotal(), StatusPedido.PAGO.toString(), itemPedidoResponseList);
+        PedidoResponse pedidoResponse = Fixture.createPedidoResponse( pedidoId, "marcos", LocalDateTime.now(), itemPedidoResponse.getValorTotal(), StatusPedido.PAGO.toString(), itemPedidoResponseList);
 
         String pedidoPatchRequestJson = objectMapper.writeValueAsString(pedidoPatchRequest);
 
@@ -500,7 +498,7 @@ public class AdminControllerTest {
         PedidoNotFoundException pedidoNotFoundException = new PedidoNotFoundException(errorMessage, errors);
 
         Long pedidoIdError = -323L;
-        PedidoPatchRequest pedidoPatchRequest = ControllersFixture.createPedidoPatchRequest(StatusPedido.PAGO);
+        PedidoPatchRequest pedidoPatchRequest = Fixture.createPedidoPatchRequest(StatusPedido.PAGO);
 
         String pedidoPatchRequestJson = objectMapper.writeValueAsString(pedidoPatchRequest);
 
@@ -522,8 +520,8 @@ public class AdminControllerTest {
     @Test
     public void testCadastrarEnderecoUsuarioSucesso() throws Exception {
         Long userId = 4L;
-        EnderecoRequest enderecoRequest = ControllersFixture.createEnderecoRequest("Rua Raimundo de Brito", "79", "Centro", "Cidade", "RN", "48323341");
-        EnderecoResponse enderecoResponse = ControllersFixture.createEnderecoResponse(1L, "taagashi", enderecoRequest.getRua(), enderecoRequest.getNumero(), enderecoRequest.getBairro(), enderecoRequest.getCidade(), enderecoRequest.getEstado(), enderecoRequest.getCep());
+        EnderecoRequest enderecoRequest = Fixture.createEnderecoRequest("Rua Raimundo de Brito", "79", "Centro", "Cidade", "RN", "48323341");
+        EnderecoResponse enderecoResponse = Fixture.createEnderecoResponse(1L, "taagashi", enderecoRequest.getRua(), enderecoRequest.getNumero(), enderecoRequest.getBairro(), enderecoRequest.getCidade(), enderecoRequest.getEstado(), enderecoRequest.getCep());
 
         String enderecoRequestJson = objectMapper.writeValueAsString(enderecoRequest);
 
@@ -553,7 +551,7 @@ public class AdminControllerTest {
         AddressNotFoundException addressNotFoundException = new AddressNotFoundException(errorMessage, errors);
 
         Long userIdError = -2L;
-        EnderecoRequest enderecoRequest = ControllersFixture.createEnderecoRequest("Rua Olinda Santa", "25", "Centro", "Cidade", "ES", "48323341");
+        EnderecoRequest enderecoRequest = Fixture.createEnderecoRequest("Rua Olinda Santa", "25", "Centro", "Cidade", "ES", "48323341");
 
         String enderecoRequestJson = objectMapper.writeValueAsString(enderecoRequest);
 
@@ -575,7 +573,7 @@ public class AdminControllerTest {
     @Test
     public void testExibirEnderecoUsuarioSucesso() throws Exception {
         Long userId = 2L;
-        EnderecoResponse enderecoResponse = ControllersFixture.createEnderecoResponse(1L, "marcos", "maringa", "2", "bairro", "cidade", "sul", "1233324");
+        EnderecoResponse enderecoResponse = Fixture.createEnderecoResponse(1L, "marcos", "maringa", "2", "bairro", "cidade", "sul", "1233324");
 
         when(adminService.exibirEnderecoUsuario(eq(userId), eq(emptyMap))).thenReturn(enderecoResponse);
 
@@ -618,8 +616,8 @@ public class AdminControllerTest {
     @Test
     public void testAtualizarEnderecoUsuarioSucesso() throws Exception {
         Long userId = 100L;
-        EnderecoRequest enderecoRequest = ControllersFixture.createEnderecoRequest("Rua Raimundo de Brito", "79", "Centro", "Cidade", "RN", "48323341");
-        EnderecoResponse enderecoResponse = ControllersFixture.createEnderecoResponse(1L, "taagashi", enderecoRequest.getRua(), enderecoRequest.getNumero(), enderecoRequest.getBairro(), enderecoRequest.getCidade(), enderecoRequest.getEstado(), enderecoRequest.getCep());
+        EnderecoRequest enderecoRequest = Fixture.createEnderecoRequest("Rua Raimundo de Brito", "79", "Centro", "Cidade", "RN", "48323341");
+        EnderecoResponse enderecoResponse = Fixture.createEnderecoResponse(1L, "taagashi", enderecoRequest.getRua(), enderecoRequest.getNumero(), enderecoRequest.getBairro(), enderecoRequest.getCidade(), enderecoRequest.getEstado(), enderecoRequest.getCep());
 
         String enderecoRequestJson = objectMapper.writeValueAsString(enderecoRequest);
 
@@ -649,7 +647,7 @@ public class AdminControllerTest {
         AddressNotFoundException addressNotFoundException = new AddressNotFoundException(errorMessage, errors);
 
         Long userIdError = -2L;
-        EnderecoRequest enderecoRequest = ControllersFixture.createEnderecoRequest("Rua Olinda Santa", "25", "Centro", "Cidade", "ES", "48323341");
+        EnderecoRequest enderecoRequest = Fixture.createEnderecoRequest("Rua Olinda Santa", "25", "Centro", "Cidade", "ES", "48323341");
 
         String enderecoRequestJson = objectMapper.writeValueAsString(enderecoRequest);
 
@@ -706,8 +704,8 @@ public class AdminControllerTest {
     public void testAtualizarCategoriaSucesso() throws Exception {
         Long categoriaId = 5L;
 
-        CategoriaRequest categoriaRequest = ControllersFixture.createCategoriaRequest("tecnologia", "categoria para tecnologia");
-        CategoriaResponse categoriaResponse = ControllersFixture.createCategoriaResponse(categoriaId, categoriaRequest.getNome(), categoriaRequest.getDescricao(), 29);
+        CategoriaRequest categoriaRequest = Fixture.createCategoriaRequest("tecnologia", "categoria para tecnologia");
+        CategoriaResponse categoriaResponse = Fixture.createCategoriaResponse(categoriaId, categoriaRequest.getNome(), categoriaRequest.getDescricao(), 29);
 
         String categoriaRequestJson = objectMapper.writeValueAsString(categoriaRequest);
 
@@ -733,7 +731,7 @@ public class AdminControllerTest {
 
 
         Long categoriaIdError = -2L;
-        CategoriaRequest categoriaRequest = ControllersFixture.createCategoriaRequest("tecnologia", "categoria para tecnologia");
+        CategoriaRequest categoriaRequest = Fixture.createCategoriaRequest("tecnologia", "categoria para tecnologia");
 
 
         String categoriaRequestJson = objectMapper.writeValueAsString(categoriaRequest);

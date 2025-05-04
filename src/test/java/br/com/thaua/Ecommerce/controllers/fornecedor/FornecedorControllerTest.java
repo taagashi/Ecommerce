@@ -1,10 +1,10 @@
 package br.com.thaua.Ecommerce.controllers.fornecedor;
 
-import br.com.thaua.Ecommerce.controllers.ControllersFixture;
 import br.com.thaua.Ecommerce.controllers.FornecedorController;
 import br.com.thaua.Ecommerce.controllers.handler.ConstructorErrors;
 import br.com.thaua.Ecommerce.controllers.handler.ExceptionHandlerClass;
 import br.com.thaua.Ecommerce.domain.enums.StatusItemPedido;
+import br.com.thaua.Ecommerce.Fixture;
 import br.com.thaua.Ecommerce.dto.fornecedor.FornecedorCNPJTelefoneRequest;
 import br.com.thaua.Ecommerce.dto.fornecedor.FornecedorResponse;
 import br.com.thaua.Ecommerce.dto.fornecedor.FornecedorSaldoResponse;
@@ -75,8 +75,8 @@ public class FornecedorControllerTest {
     @DisplayName("Deve atualizar CNPJ e Telefone com sucesso")
     @Test
     public void testAtualizarCNPJeTelefoneSucesso() throws Exception {
-        FornecedorCNPJTelefoneRequest fornecedorCNPJTelefoneRequest = ControllersFixture.createFornecedorCNPJTelefoneRequest("00.000.000\0000-00", "123123312");
-        FornecedorResponse fornecedorResponse = ControllersFixture.createFornecedorResponse(1L, "micael", "micael@gmail.com", fornecedorCNPJTelefoneRequest.getTelefone() , fornecedorCNPJTelefoneRequest.getCnpj());
+        FornecedorCNPJTelefoneRequest fornecedorCNPJTelefoneRequest = Fixture.createFornecedorCNPJTelefoneRequest("00.000.000\0000-00", "123123312");
+        FornecedorResponse fornecedorResponse = Fixture.createFornecedorResponse(1L, "micael", "micael@gmail.com", fornecedorCNPJTelefoneRequest.getTelefone() , fornecedorCNPJTelefoneRequest.getCnpj());
 
         String fornecedorCNPJTelefoneRequestJson = objectMapper.writeValueAsString(fornecedorCNPJTelefoneRequest);
 
@@ -99,12 +99,12 @@ public class FornecedorControllerTest {
     @DisplayName("Deve retornar ConstraintViolationException ao atualizar com CNPJ inválido")
     @Test
     public void testAtualizarCNPJeTelefoneError() throws Exception {
-        String errorMessage = ControllersFixture.createErrorMessage("Erro de validação");
+        String errorMessage = Fixture.createErrorMessage("Erro de validação");
         errors = ConstructorErrors.returnMapErrors();
         errors.put("Erro de validação: ", "CNPJ invalido");
         ConstraintViolationException constraintViolationException = new ConstraintViolationException("CNPJ invalido", Set.of(ConstraintViolationImpl.forBeanValidation(null, null, null, "CNPJ invalido", null, null, null, null, null, null, null)));
 
-        FornecedorCNPJTelefoneRequest fornecedorCNPJTelefoneRequest = ControllersFixture.createFornecedorCNPJTelefoneRequest("CPNJ invalido", "123123312");
+        FornecedorCNPJTelefoneRequest fornecedorCNPJTelefoneRequest = Fixture.createFornecedorCNPJTelefoneRequest("CPNJ invalido", "123123312");
 
         String fornecedorCNPJTelefoneRequestJson = objectMapper.writeValueAsString(fornecedorCNPJTelefoneRequest);
 
@@ -125,10 +125,10 @@ public class FornecedorControllerTest {
     @DisplayName("Deve cadastrar produto(s) com sucesso")
     @Test
     public void testCadastrarProdutoSucesso() throws Exception {
-        ProdutoRequest produtoRequest = ControllersFixture.createProdutoRequest("espelho", "produto para espelho", BigDecimal.valueOf(500), 4);
+        ProdutoRequest produtoRequest = Fixture.createProdutoRequest("espelho", "produto para espelho", BigDecimal.valueOf(500), 4);
         List<ProdutoRequest> produtoRequestList = List.of(produtoRequest);
 
-        ProdutoResponse produtoResponse = ControllersFixture.createProdutoResponse(2L, produtoRequest.getNome(), produtoRequest.getDescricao(), produtoRequest.getPreco(), produtoRequest.getEstoque(), 5, 2);
+        ProdutoResponse produtoResponse = Fixture.createProdutoResponse(2L, produtoRequest.getNome(), produtoRequest.getDescricao(), produtoRequest.getPreco(), produtoRequest.getEstoque(), 5, 2);
         List<ProdutoResponse> produtoResponseList = List.of(produtoResponse);
 
         String produtoRequestListJson = objectMapper.writeValueAsString(produtoRequestList);
@@ -154,14 +154,14 @@ public class FornecedorControllerTest {
     @DisplayName("Deve retornar CadastrarProdutoException ao tentar cadastrar produto com dados de fornecedor incompletos")
     @Test
     public void testCadastrarProdutoError() throws Exception {
-        String errorMessage = ControllersFixture.createErrorMessage("usuario, houve um erro ao tentar cadastrar o produto");
+        String errorMessage = Fixture.createErrorMessage("usuario, houve um erro ao tentar cadastrar o produto");
         errors = ConstructorErrors.returnMapErrors();
         errors.put("CNPJ", "CNPJ está não cadastrado");
         errors.put("Telefone", "Telefone não cadastrado");
         errors.put("Endereço", "Endereço não cadastrado");
         CadastrarProdutoException cadastrarProdutoException = new CadastrarProdutoException(errorMessage, errors);
 
-        ProdutoRequest produtoRequest = ControllersFixture.createProdutoRequest("patins", "produto para patins", BigDecimal.valueOf(50), 2);
+        ProdutoRequest produtoRequest = Fixture.createProdutoRequest("patins", "produto para patins", BigDecimal.valueOf(50), 2);
         List<ProdutoRequest> produtoRequestList = List.of(produtoRequest);
 
         String produtoRequestListJson = objectMapper.writeValueAsString(produtoRequestList);
@@ -185,7 +185,7 @@ public class FornecedorControllerTest {
     @DisplayName("Deve exibir página de produtos do fornecedor com sucesso")
     @Test
     public void testExibirProdutosSucesso() throws Exception {
-        ProdutoResponse produtoResponse = ControllersFixture.createProdutoResponse(10L, "garrafa", "produto de garrafa", BigDecimal.valueOf(23), 12, 2, 4);
+        ProdutoResponse produtoResponse = Fixture.createProdutoResponse(10L, "garrafa", "produto de garrafa", BigDecimal.valueOf(23), 12, 2, 4);
         List<ProdutoResponse> produtoResponseList = List.of(produtoResponse);
 
         Pageable pageable = PageRequest.of(0, 1);
@@ -220,7 +220,7 @@ public class FornecedorControllerTest {
     @Test
     public void testBuscarProdutoSucesso() throws Exception {
         Long produtoId = 2L;
-        ProdutoResponse produtoResponse = ControllersFixture.createProdutoResponse(produtoId, "mesa digitalizadora", "produto de mesa digitalizadora", BigDecimal.valueOf(190), 120, 56, 4);
+        ProdutoResponse produtoResponse = Fixture.createProdutoResponse(produtoId, "mesa digitalizadora", "produto de mesa digitalizadora", BigDecimal.valueOf(190), 120, 56, 4);
 
         when(fornecedorService.buscarProduto(eq(produtoId), eq(emptyMap))).thenReturn(produtoResponse);
 
@@ -262,9 +262,9 @@ public class FornecedorControllerTest {
     @Test
     public void testAtualizarProdutoSucesso() throws Exception {
         Long produtoId = 1L;
-        ProdutoRequest produtoRequest = ControllersFixture.createProdutoRequest("meias", "produto para meias", BigDecimal.valueOf(20), 100);
+        ProdutoRequest produtoRequest = Fixture.createProdutoRequest("meias", "produto para meias", BigDecimal.valueOf(20), 100);
 
-        ProdutoResponse produtoResponse = ControllersFixture.createProdutoResponse(produtoId, produtoRequest.getNome(), produtoRequest.getDescricao(), produtoRequest.getPreco(), produtoRequest.getEstoque(), 5, 2);
+        ProdutoResponse produtoResponse = Fixture.createProdutoResponse(produtoId, produtoRequest.getNome(), produtoRequest.getDescricao(), produtoRequest.getPreco(), produtoRequest.getEstoque(), 5, 2);
 
         String produtoRequestJson = objectMapper.writeValueAsString(produtoRequest);
 
@@ -293,7 +293,7 @@ public class FornecedorControllerTest {
         ProdutoNotFoundException produtoNotFoundException = new ProdutoNotFoundException(errorMessage, errors);
 
         Long produtoIdError = -12L;
-        ProdutoRequest produtoRequest = ControllersFixture.createProdutoRequest("ventilador", "produto para ventilador", BigDecimal.valueOf(115), 12);
+        ProdutoRequest produtoRequest = Fixture.createProdutoRequest("ventilador", "produto para ventilador", BigDecimal.valueOf(115), 12);
 
         String produtoRequestJson = objectMapper.writeValueAsString(produtoRequest);
 
@@ -318,7 +318,7 @@ public class FornecedorControllerTest {
         Long produtoId = 4L;
         Long categoriaId = 2L;
 
-        ProdutoResponse produtoResponse = ControllersFixture.createProdutoResponse(produtoId, "pijama", "produto para pijama", BigDecimal.valueOf(34), 23, 5, 2);
+        ProdutoResponse produtoResponse = Fixture.createProdutoResponse(produtoId, "pijama", "produto para pijama", BigDecimal.valueOf(34), 23, 5, 2);
 
         when(fornecedorService.adicionarProdutoACategoria(eq(categoriaId), eq(produtoId), eq(emptyMap))).thenReturn(produtoResponse);
 
@@ -361,9 +361,9 @@ public class FornecedorControllerTest {
     @Test
     public void testAtualizarEstoqueProdutoSucesso() throws Exception {
         Long produtoId = 2L;
-        ProdutoNovoEstoqueRequest produtoNovoEstoqueRequest = ControllersFixture.createProdutoNovoEstoqueRequest(5);
+        ProdutoNovoEstoqueRequest produtoNovoEstoqueRequest = Fixture.createProdutoNovoEstoqueRequest(5);
 
-        ProdutoResponse produtoResponse = ControllersFixture.createProdutoResponse(produtoId, "vestido", "produto de vestido", BigDecimal.valueOf(60.25), produtoNovoEstoqueRequest.getNovaQuantidade(), 1, 5);
+        ProdutoResponse produtoResponse = Fixture.createProdutoResponse(produtoId, "vestido", "produto de vestido", BigDecimal.valueOf(60.25), produtoNovoEstoqueRequest.getNovaQuantidade(), 1, 5);
 
         String produtoNovoEstoqueRequestJson = objectMapper.writeValueAsString(produtoNovoEstoqueRequest);
 
@@ -392,7 +392,7 @@ public class FornecedorControllerTest {
         ProdutoNotFoundException produtoNotFoundException = new ProdutoNotFoundException(errorMessage, errors);
 
         Long produtoIdError = 4L;
-        ProdutoNovoEstoqueRequest produtoNovoEstoqueRequest = ControllersFixture.createProdutoNovoEstoqueRequest(10);
+        ProdutoNovoEstoqueRequest produtoNovoEstoqueRequest = Fixture.createProdutoNovoEstoqueRequest(10);
 
         String produtoNovoEstoqueRequestJson = objectMapper.writeValueAsString(produtoNovoEstoqueRequest);
 
@@ -528,7 +528,7 @@ public class FornecedorControllerTest {
     @Test
     public void testListarDemandaProdutoSucesso() throws Exception {
         Long itemPedidoId = 2L;
-        ItemPedidoResponse itemPedidoResponse = ControllersFixture.createItemPedidoResponse(itemPedidoId, 2L, "esmalte", 2, BigDecimal.valueOf(25), StatusItemPedido.PENDENTE);
+        ItemPedidoResponse itemPedidoResponse = Fixture.createItemPedidoResponse(itemPedidoId, 2L, "esmalte", 2, BigDecimal.valueOf(25), StatusItemPedido.PENDENTE);
         List<ItemPedidoResponse> itemPedidoResponseList = List.of(itemPedidoResponse);
 
         when(fornecedorService.listarDemandaProduto(eq(itemPedidoId), eq(emptyMap))).thenReturn(itemPedidoResponseList);
@@ -570,7 +570,7 @@ public class FornecedorControllerTest {
     @DisplayName("Deve exibir o saldo atual do fornecedor com sucesso")
     @Test
     public void testExibirSaldoSucesso() throws Exception {
-        FornecedorSaldoResponse fornecedorSaldoResponse = ControllersFixture.createFornecedorSaldoResponse(BigDecimal.valueOf(123));
+        FornecedorSaldoResponse fornecedorSaldoResponse = Fixture.createFornecedorSaldoResponse(BigDecimal.valueOf(123));
 
         when(fornecedorService.exibirSaldoAtual()).thenReturn(fornecedorSaldoResponse);
 
@@ -584,7 +584,7 @@ public class FornecedorControllerTest {
     @DisplayName("Deve listar página de produtos com demanda com sucesso")
     @Test
     public void testListarProdutosComDemandaSucesso() throws Exception {
-        ProdutoResponse produtoResponse = ControllersFixture.createProdutoResponse(10L, "garrafa", "produto de garrafa", BigDecimal.valueOf(23), 12, 2, 4);
+        ProdutoResponse produtoResponse = Fixture.createProdutoResponse(10L, "garrafa", "produto de garrafa", BigDecimal.valueOf(23), 12, 2, 4);
         List<ProdutoResponse> produtoResponseList = List.of(produtoResponse);
 
         Pageable pageable = PageRequest.of(0, 1);

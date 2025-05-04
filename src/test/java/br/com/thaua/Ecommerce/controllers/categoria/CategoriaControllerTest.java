@@ -1,7 +1,6 @@
 package br.com.thaua.Ecommerce.controllers.categoria;
 
 import br.com.thaua.Ecommerce.controllers.CategoriaController;
-import br.com.thaua.Ecommerce.controllers.ControllersFixture;
 import br.com.thaua.Ecommerce.controllers.handler.ConstructorErrors;
 import br.com.thaua.Ecommerce.controllers.handler.ExceptionHandlerClass;
 import br.com.thaua.Ecommerce.dto.categoria.CategoriaProdutosResponse;
@@ -10,6 +9,7 @@ import br.com.thaua.Ecommerce.dto.categoria.ProdutoComponentResponse;
 import br.com.thaua.Ecommerce.dto.pagina.Pagina;
 import br.com.thaua.Ecommerce.exceptions.CategoriaNotFoundException;
 import br.com.thaua.Ecommerce.services.CategoriaService;
+import br.com.thaua.Ecommerce.Fixture;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -59,8 +59,8 @@ public class CategoriaControllerTest {
     @DisplayName("Deve retornar com sucesso todas as categorias cadastradas")
     @Test
     public void testExibirCategoriasSucesso() throws Exception {
-        CategoriaResponse categoriaResponse = ControllersFixture.createCategoriaResponse(1L, "carro", "categoria de carro", 2);
-        CategoriaResponse categoriaResponse2 = ControllersFixture.createCategoriaResponse(2L, "bicicleta", "categoria de bicicleta", 0);
+        CategoriaResponse categoriaResponse = Fixture.createCategoriaResponse(1L, "carro", "categoria de carro", 2);
+        CategoriaResponse categoriaResponse2 = Fixture.createCategoriaResponse(2L, "bicicleta", "categoria de bicicleta", 0);
 
         List<CategoriaResponse> categorias = List.of(categoriaResponse, categoriaResponse2);
 
@@ -99,7 +99,7 @@ public class CategoriaControllerTest {
     @DisplayName("Deve retorna com sucesso uma categoria especifica")
     @Test
     public void testExibirCategoriaSucesso() throws Exception {
-        CategoriaResponse categoriaResponse = ControllersFixture.createCategoriaResponse(10L, "camisa", "categoria de camisa", 10);
+        CategoriaResponse categoriaResponse = Fixture.createCategoriaResponse(10L, "camisa", "categoria de camisa", 10);
         Long categoriaId = categoriaResponse.getId();
 
         when(categoriaService.exibirCategoria(eq(categoriaId), eq(emptyMap))).thenReturn(categoriaResponse);
@@ -119,7 +119,7 @@ public class CategoriaControllerTest {
     public void testExibirCategoriaError() throws Exception {
         Long categoriaIdError = 2L;
         errors.put("Falha de busca", "Item não encontrado");
-        String errorMessage = ControllersFixture.createErrorMessage("Houve um erro ao tentar exibir categoria");
+        String errorMessage = Fixture.createErrorMessage("Houve um erro ao tentar exibir categoria");
         CategoriaNotFoundException categoriaNotFoundException = new CategoriaNotFoundException(errorMessage, errors);
 
         when(categoriaService.exibirCategoria(eq(categoriaIdError), eq(emptyMap))).thenThrow(categoriaNotFoundException);
@@ -138,9 +138,9 @@ public class CategoriaControllerTest {
     @DisplayName("Deve retornar com sucesso os produtos de uma categoria")
     @Test
     public void testListarProdutosPorCategoriaSucesso() throws Exception {
-        ProdutoComponentResponse produtoComponentResponse = ControllersFixture.createProdutoComponentResponse(1L, "relogio", BigDecimal.valueOf(40023.33), 200);
-        ProdutoComponentResponse produtoComponentResponse2 = ControllersFixture.createProdutoComponentResponse(2L, "tenis", BigDecimal.valueOf(200.255), 20);
-        CategoriaProdutosResponse categoriaProdutosResponse = ControllersFixture.createCategoriaProdutosResponse(1L, "importados", "categoria para produtos importados", List.of(produtoComponentResponse, produtoComponentResponse2));
+        ProdutoComponentResponse produtoComponentResponse = Fixture.createProdutoComponentResponse(1L, "relogio", BigDecimal.valueOf(40023.33), 200);
+        ProdutoComponentResponse produtoComponentResponse2 = Fixture.createProdutoComponentResponse(2L, "tenis", BigDecimal.valueOf(200.255), 20);
+        CategoriaProdutosResponse categoriaProdutosResponse = Fixture.createCategoriaProdutosResponse(1L, "importados", "categoria para produtos importados", List.of(produtoComponentResponse, produtoComponentResponse2));
         Long categoriaId = categoriaProdutosResponse.getCategoriaId();
 
         when(categoriaService.listarProdutosPorCategoria(eq(categoriaId), eq(emptyMap))).thenReturn(categoriaProdutosResponse);
@@ -168,7 +168,7 @@ public class CategoriaControllerTest {
     public void testListarProdutosPorCategoriaError() throws Exception {
         Long categoriaIdError = 10L;
         errors.put("Falha de busca", "Item não encontrado");
-        String errorMessage = ControllersFixture.createErrorMessage("Houve um erro ao tentar listar produtos de uma categoria");
+        String errorMessage = Fixture.createErrorMessage("Houve um erro ao tentar listar produtos de uma categoria");
         CategoriaNotFoundException categoriaNotFoundException = new CategoriaNotFoundException(errorMessage, errors);
 
         when(categoriaService.listarProdutosPorCategoria(categoriaIdError, emptyMap)).thenThrow(categoriaNotFoundException);

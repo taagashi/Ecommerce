@@ -1,7 +1,7 @@
 package br.com.thaua.Ecommerce.controllers.cliente;
 
 import br.com.thaua.Ecommerce.controllers.ClienteController;
-import br.com.thaua.Ecommerce.controllers.ControllersFixture;
+import br.com.thaua.Ecommerce.Fixture;
 import br.com.thaua.Ecommerce.controllers.handler.ConstructorErrors;
 import br.com.thaua.Ecommerce.controllers.handler.ExceptionHandlerClass;
 import br.com.thaua.Ecommerce.domain.enums.StatusItemPedido;
@@ -77,8 +77,8 @@ public class ClienteControllerTest {
     @DisplayName("Deve retornar com sucesso um cliente com cpf e telefone cadastrados")
     @Test
     public void testAtualizarCpfETelefoneSucesso() throws Exception {
-        ClienteCpfTelefoneRequest clienteCpfTelefoneRequest = ControllersFixture.createClienteCpfTelefoneRequest("000.000.000-00", "111222333");
-        ClienteResponse clienteResponse = ControllersFixture.createClienteResponse(1L, "taagashi", "taagashi.dev@gmail.com", clienteCpfTelefoneRequest.getTelefone(), clienteCpfTelefoneRequest.getCpf());
+        ClienteCpfTelefoneRequest clienteCpfTelefoneRequest = Fixture.createClienteCpfTelefoneRequest("000.000.000-00", "111222333");
+        ClienteResponse clienteResponse = Fixture.createClienteResponse(1L, "taagashi", "taagashi.dev@gmail.com", clienteCpfTelefoneRequest.getTelefone(), clienteCpfTelefoneRequest.getCpf());
 
         String clienteCpfTelefoneRequestJson = objectMapper.writeValueAsString(clienteCpfTelefoneRequest);
 
@@ -100,11 +100,11 @@ public class ClienteControllerTest {
     @DisplayName("Deve retornar um ConstraintViolationException ao colocar cpf errado")
     @Test
     public void testAtualizarCpfETelefoneError() throws Exception {
-        String errorMessage = ControllersFixture.createErrorMessage("Erro de validação");
+        String errorMessage = Fixture.createErrorMessage("Erro de validação");
         errors.put("Erro de validação: ", "Cpf invalido");
         ConstraintViolationException constraintViolationException = new ConstraintViolationException("Cpf invalido", Set.of(ConstraintViolationImpl.forBeanValidation(null, null, null, "Cpf invalido", null, null, null, null, null, null, null)));
 
-        ClienteCpfTelefoneRequest clienteCpfTelefoneRequest = ControllersFixture.createClienteCpfTelefoneRequest("cpf invalido", "111222333");
+        ClienteCpfTelefoneRequest clienteCpfTelefoneRequest = Fixture.createClienteCpfTelefoneRequest("cpf invalido", "111222333");
 
         String clienteCpfTelefoneRequestJson = objectMapper.writeValueAsString(clienteCpfTelefoneRequest);
 
@@ -125,8 +125,8 @@ public class ClienteControllerTest {
     @DisplayName("Deve retornar com sucesso um novo token ao atualizar dados do cliente")
     @Test
     public void testAtualizarDadosSucesso() throws Exception {
-        ClienteUpdateRequest clienteUpdateRequest = ControllersFixture.createClienteUpdateRequest("Jonas", "Jonas@gmail.com", "849902345", "000.000.000-001");
-        String jwtToken = ControllersFixture.createJwtToken();
+        ClienteUpdateRequest clienteUpdateRequest = Fixture.createClienteUpdateRequest("Jonas", "Jonas@gmail.com", "849902345", "000.000.000-001");
+        String jwtToken = Fixture.createJwtToken();
 
         String clienteUpdateRequestJson = objectMapper.writeValueAsString(clienteUpdateRequest);
 
@@ -143,10 +143,10 @@ public class ClienteControllerTest {
     @DisplayName("Deve retornar com sucesso o pedido criado")
     @Test
     public void testFazerPedidoSucesso() throws Exception {
-        ItemPedidoRequest itemPedidoRequest = ControllersFixture.createItemPedidoRequest(1L, 5);
+        ItemPedidoRequest itemPedidoRequest = Fixture.createItemPedidoRequest(1L, 5);
         List<ItemPedidoRequest> itemPedidoRequestList = List.of(itemPedidoRequest);
-        ItemPedidoResponse itemPedidoResponse = ControllersFixture.createItemPedidoResponse(1L, itemPedidoRequest.getProdutoId(), "Camiseta", 5, BigDecimal.valueOf(20.55), StatusItemPedido.PENDENTE);
-        PedidoResponse pedidoResponse = ControllersFixture.createPedidoResponse(1L, "marcos", LocalDateTime.now(), itemPedidoResponse.getValorTotal(), StatusPedido.AGUARDANDO_PAGAMENTO.toString(), List.of(itemPedidoResponse));
+        ItemPedidoResponse itemPedidoResponse = Fixture.createItemPedidoResponse(1L, itemPedidoRequest.getProdutoId(), "Camiseta", 5, BigDecimal.valueOf(20.55), StatusItemPedido.PENDENTE);
+        PedidoResponse pedidoResponse = Fixture.createPedidoResponse(1L, "marcos", LocalDateTime.now(), itemPedidoResponse.getValorTotal(), StatusPedido.AGUARDANDO_PAGAMENTO.toString(), List.of(itemPedidoResponse));
 
         String itemPedidoRequestListJson = objectMapper.writeValueAsString(itemPedidoRequestList);
 
@@ -184,10 +184,10 @@ public class ClienteControllerTest {
         errors.put("Endereço", "Endereço não cadastrado");
         errors.put("Telefone", "Telefone não cadastrado");
         errors.put("nome do produto", "Quantidade acima do estoque ou igual a 0 para este produto");
-        String errorMessage = ControllersFixture.createErrorMessage("usuario, houve um erro na hora de fazer um pedido");
+        String errorMessage = Fixture.createErrorMessage("usuario, houve um erro na hora de fazer um pedido");
         FazerPedidoException fazerPedidoException = new FazerPedidoException(errorMessage, errors);
 
-        ItemPedidoRequest itemPedidoRequest =  ControllersFixture.createItemPedidoRequest(1L, -3133);
+        ItemPedidoRequest itemPedidoRequest =  Fixture.createItemPedidoRequest(1L, -3133);
 
         List<ItemPedidoRequest> itemPedidoRequestList = List.of(itemPedidoRequest);
 
@@ -212,12 +212,12 @@ public class ClienteControllerTest {
     @DisplayName("Deve retornar com sucesso uma página de pedidos filtrados por status")
     @Test
     public void testListarPedidosSucesso() throws Exception {
-        ItemPedidoResponse itemPedidoResponse = ControllersFixture.createItemPedidoResponse(1L, 2L, "notebook", 12, BigDecimal.valueOf(200), StatusItemPedido.PROCESSANDO);
-        ItemPedidoResponse itemPedidoResponse2 = ControllersFixture.createItemPedidoResponse(2L, 5L, "chapeu", 22, BigDecimal.valueOf(200.424), StatusItemPedido.PROCESSANDO);
+        ItemPedidoResponse itemPedidoResponse = Fixture.createItemPedidoResponse(1L, 2L, "notebook", 12, BigDecimal.valueOf(200), StatusItemPedido.PROCESSANDO);
+        ItemPedidoResponse itemPedidoResponse2 = Fixture.createItemPedidoResponse(2L, 5L, "chapeu", 22, BigDecimal.valueOf(200.424), StatusItemPedido.PROCESSANDO);
 
         List<ItemPedidoResponse> itemPedidoResponseList = List.of(itemPedidoResponse, itemPedidoResponse2);
 
-        PedidoResponse pedidoResponse = ControllersFixture.createPedidoResponse(1L, "job", LocalDateTime.now(), BigDecimal.valueOf(400.424), "PAGO", itemPedidoResponseList);
+        PedidoResponse pedidoResponse = Fixture.createPedidoResponse(1L, "job", LocalDateTime.now(), BigDecimal.valueOf(400.424), "PAGO", itemPedidoResponseList);
 
         List<PedidoResponse> pedidoResponseList = List.of(pedidoResponse);
 
@@ -300,10 +300,10 @@ public class ClienteControllerTest {
     @Test
     public void testBuscarPedidoSucesso() throws Exception {
         Long pedidoId = 4L;
-        ItemPedidoResponse itemPedidoResponse = ControllersFixture.createItemPedidoResponse(1L, 2L, "relogio", 4, BigDecimal.valueOf(100), StatusItemPedido.PENDENTE);
+        ItemPedidoResponse itemPedidoResponse = Fixture.createItemPedidoResponse(1L, 2L, "relogio", 4, BigDecimal.valueOf(100), StatusItemPedido.PENDENTE);
         List<ItemPedidoResponse> itemPedidoResponseList = List.of(itemPedidoResponse);
 
-        PedidoResponse pedidoResponse = ControllersFixture.createPedidoResponse(pedidoId, "Jordan", LocalDateTime.now(), BigDecimal.valueOf(100), StatusPedido.AGUARDANDO_PAGAMENTO.toString(), itemPedidoResponseList);
+        PedidoResponse pedidoResponse = Fixture.createPedidoResponse(pedidoId, "Jordan", LocalDateTime.now(), BigDecimal.valueOf(100), StatusPedido.AGUARDANDO_PAGAMENTO.toString(), itemPedidoResponseList);
 
         when(clienteService.buscarPedido(eq(pedidoId), eq(emptyMap))).thenReturn(pedidoResponse);
 
@@ -355,7 +355,7 @@ public class ClienteControllerTest {
     @Test
     public void testBuscarItemPedidoSucesso() throws Exception {
         Long itemPedidoId = 4L;
-        ItemPedidoResponse itemPedidoResponse = ControllersFixture.createItemPedidoResponse(itemPedidoId, 2L, "chinelo", 4, BigDecimal.valueOf(15.23), StatusItemPedido.PENDENTE);
+        ItemPedidoResponse itemPedidoResponse = Fixture.createItemPedidoResponse(itemPedidoId, 2L, "chinelo", 4, BigDecimal.valueOf(15.23), StatusItemPedido.PENDENTE);
 
         when(clienteService.buscarItemPedido(eq(itemPedidoId), eq(emptyMap))).thenReturn(itemPedidoResponse);
 
@@ -439,12 +439,12 @@ public class ClienteControllerTest {
     @Test
     public void testEditarPedidoSucesso() throws Exception {
         Long pedidoId = 1L;
-        ItemPedidoRequest itemPedidoRequest = ControllersFixture.createItemPedidoRequest(1L, 4);
+        ItemPedidoRequest itemPedidoRequest = Fixture.createItemPedidoRequest(1L, 4);
         List<ItemPedidoRequest> itemPedidoRequestList = List.of(itemPedidoRequest);
 
-        ItemPedidoResponse itemPedidoResponse = ControllersFixture.createItemPedidoResponse(2L, itemPedidoRequest.getProdutoId(), "ventilador", itemPedidoRequest.getQuantidade(), BigDecimal.valueOf(200), StatusItemPedido.PENDENTE);
+        ItemPedidoResponse itemPedidoResponse = Fixture.createItemPedidoResponse(2L, itemPedidoRequest.getProdutoId(), "ventilador", itemPedidoRequest.getQuantidade(), BigDecimal.valueOf(200), StatusItemPedido.PENDENTE);
         List<ItemPedidoResponse> itemPedidoResponseList = List.of(itemPedidoResponse);
-        PedidoResponse pedidoResponse = ControllersFixture.createPedidoResponse(pedidoId, "Marcos", LocalDateTime.now(), BigDecimal.valueOf(200), StatusPedido.AGUARDANDO_PAGAMENTO.toString(), itemPedidoResponseList);
+        PedidoResponse pedidoResponse = Fixture.createPedidoResponse(pedidoId, "Marcos", LocalDateTime.now(), BigDecimal.valueOf(200), StatusPedido.AGUARDANDO_PAGAMENTO.toString(), itemPedidoResponseList);
 
         String itemPedidoRequestListJson = objectMapper.writeValueAsString(itemPedidoRequestList);
 
@@ -487,7 +487,7 @@ public class ClienteControllerTest {
         EditarPedidoException editarPedidoException = new EditarPedidoException(errorMessage, errors);
 
         Long pedidoIdError = 4L;
-        ItemPedidoRequest itemPedidoRequestError = ControllersFixture.createItemPedidoRequest(1L, -1233);
+        ItemPedidoRequest itemPedidoRequestError = Fixture.createItemPedidoRequest(1L, -1233);
         List<ItemPedidoRequest> itemPedidoRequestErrorList = List.of(itemPedidoRequestError);
 
         String itemPedidoRequestErrorJson = objectMapper.writeValueAsString(itemPedidoRequestErrorList);
@@ -513,12 +513,12 @@ public class ClienteControllerTest {
     @Test
     public void testAdicionarProdutoAPedidoSucesso() throws Exception {
         Long pedidoId = 1L;
-        ItemPedidoRequest itemPedidoRequest = ControllersFixture.createItemPedidoRequest(4L, 5);
+        ItemPedidoRequest itemPedidoRequest = Fixture.createItemPedidoRequest(4L, 5);
         List<ItemPedidoRequest> itemPedidoRequestList = List.of(itemPedidoRequest);
 
-        ItemPedidoResponse itemPedidoResponse = ControllersFixture.createItemPedidoResponse(3L, itemPedidoRequest.getProdutoId(), "ferro de passar", itemPedidoRequest.getQuantidade(), BigDecimal.valueOf(405), StatusItemPedido.PROCESSANDO);
+        ItemPedidoResponse itemPedidoResponse = Fixture.createItemPedidoResponse(3L, itemPedidoRequest.getProdutoId(), "ferro de passar", itemPedidoRequest.getQuantidade(), BigDecimal.valueOf(405), StatusItemPedido.PROCESSANDO);
         List<ItemPedidoResponse> itemPedidoResponseList = List.of(itemPedidoResponse);
-        PedidoResponse pedidoResponse = ControllersFixture.createPedidoResponse(pedidoId, "antonio", LocalDateTime.now(), BigDecimal.valueOf(200), StatusPedido.PAGO.toString(), itemPedidoResponseList);
+        PedidoResponse pedidoResponse = Fixture.createPedidoResponse(pedidoId, "antonio", LocalDateTime.now(), BigDecimal.valueOf(200), StatusPedido.PAGO.toString(), itemPedidoResponseList);
 
         String itemPedidoRequestListJson = objectMapper.writeValueAsString(itemPedidoRequestList);
 
@@ -560,7 +560,7 @@ public class ClienteControllerTest {
         AdicionarProdutoAPedidoException adicionarProdutoAPedidoException = new AdicionarProdutoAPedidoException(errorMessage, errors);
 
         Long pedidoIdError = 100L;
-        ItemPedidoRequest itemPedidoRequestError = ControllersFixture.createItemPedidoRequest(-24L, 5);
+        ItemPedidoRequest itemPedidoRequestError = Fixture.createItemPedidoRequest(-24L, 5);
         List<ItemPedidoRequest> itemPedidoRequestListError = List.of(itemPedidoRequestError);
 
         String itemPedidoRequestListErrorJson = objectMapper.writeValueAsString(itemPedidoRequestListError);

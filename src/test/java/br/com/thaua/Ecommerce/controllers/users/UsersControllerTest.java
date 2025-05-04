@@ -1,6 +1,6 @@
 package br.com.thaua.Ecommerce.controllers.users;
 
-import br.com.thaua.Ecommerce.controllers.ControllersFixture;
+import br.com.thaua.Ecommerce.Fixture;
 import br.com.thaua.Ecommerce.controllers.UsersController;
 import br.com.thaua.Ecommerce.controllers.handler.ConstructorErrors;
 import br.com.thaua.Ecommerce.controllers.handler.ExceptionHandlerClass;
@@ -60,8 +60,8 @@ public class UsersControllerTest {
     @DisplayName("Deve retornar com sucesso token ao final do cadastro")
     @Test
     public void testCadastroSucesso() throws Exception{
-        UsersRequest usersRequest = ControllersFixture.createUserRequest("taagashi", "taagashi.dev@gmail.com", "tagashis", "ADMIN");
-       String jwtToken = ControllersFixture.createJwtToken();
+        UsersRequest usersRequest = Fixture.createUserRequest("taagashi", "taagashi.dev@gmail.com", "tagashis", "ADMIN");
+       String jwtToken = Fixture.createJwtToken();
 
         String usersRequestJson = objectMapper.writeValueAsString(usersRequest);
 
@@ -93,7 +93,7 @@ public class UsersControllerTest {
     @DisplayName("Deve retornar com sucesso mensagem ao gerar codigo de verificacao")
     @Test
     public void testGerarCodigoVerificacaoSucesso() throws Exception {
-        UserRequestGenerateCode userRequestGenerateCode = ControllersFixture.createUserRequestGenerateCode("taagashi.dev@gmail.com");
+        UserRequestGenerateCode userRequestGenerateCode = Fixture.createUserRequestGenerateCode("taagashi.dev@gmail.com");
         String menssagemCodigoEnviado = "usuario, foi enviado um codigo de verificação para " + userRequestGenerateCode.getEmail();
 
         String userRequestGenerateCodeJson = objectMapper.writeValueAsString(userRequestGenerateCode);
@@ -112,9 +112,9 @@ public class UsersControllerTest {
     @DisplayName("Deve retornar um UserNotFoundException ao tentar gerar codigo de verificacao")
     @Test
     public void testGerarCodigoVerificacaoError() throws Exception {
-        UserRequestGenerateCode userRequestGenerateCode = ControllersFixture.createUserRequestGenerateCode("tomas@gmail.com");
+        UserRequestGenerateCode userRequestGenerateCode = Fixture.createUserRequestGenerateCode("tomas@gmail.com");
         errors.put("Email", "Email não foi encontrado");
-        String errorMessage = ControllersFixture.createErrorMessage("Houve um erro ao tentar gerar codigo para redefinir senha");
+        String errorMessage = Fixture.createErrorMessage("Houve um erro ao tentar gerar codigo para redefinir senha");
         UserNotFoundException userNotFoundException = new UserNotFoundException(errorMessage, errors);
 
         String userRequestGenerateCodeJson = objectMapper.writeValueAsString(userRequestGenerateCode);
@@ -136,7 +136,7 @@ public class UsersControllerTest {
     @DisplayName("Deve retornar com sucesso mensagem ao redefinir senha")
     @Test
     public void testRedefinirSenhaSucesso() throws Exception {
-        UserRequestGenerateNewPassword userRequestGenerateNewPassword = ControllersFixture.createUserRequestGenerateNewPassword("Lucas@gmail.com", "lucas123", 12332);
+        UserRequestGenerateNewPassword userRequestGenerateNewPassword = Fixture.createUserRequestGenerateNewPassword("Lucas@gmail.com", "lucas123", 12332);
         int code = userRequestGenerateNewPassword.getCode();
         String mensagemRedefinirSenhaSucesso = "usuario sua senha foi redefinida com sucesso";
 
@@ -156,10 +156,10 @@ public class UsersControllerTest {
     @DisplayName("Deve retornar um CodeNotValidException ao tentar redefinir senha")
     @Test
     public void testRedefinirSenhaError() throws Exception {
-        UserRequestGenerateNewPassword userRequestGenerateNewPassword = ControllersFixture.createUserRequestGenerateNewPassword("email errado", "23213", 13302);
+        UserRequestGenerateNewPassword userRequestGenerateNewPassword = Fixture.createUserRequestGenerateNewPassword("email errado", "23213", 13302);
         errors.put("Email", "Email não foi encontrado");
         errors.put("Código", "Código de verificação inválido");
-        String errorMessage = ControllersFixture.createErrorMessage("Houve um erro ao tentar redefinir senha");
+        String errorMessage = Fixture.createErrorMessage("Houve um erro ao tentar redefinir senha");
         CodeNotValidException codeNotValidException = new CodeNotValidException(errorMessage, errors);
 
         String userRequestGenerateNewPasswordJson = objectMapper.writeValueAsString(userRequestGenerateNewPassword);
@@ -182,7 +182,7 @@ public class UsersControllerTest {
     @DisplayName("Deve retornar com sucesso os dados do usuario ao exibir perfil")
     @Test
     public void testExibirPerfilSucesso() throws Exception {
-        AdminResponse adminResponse = ControllersFixture.createAdminResponse(1L, "taagashi", "taagashi.dev@gmail.com", 15, LocalDateTime.now());
+        AdminResponse adminResponse = Fixture.createAdminResponse(1L, "taagashi", "taagashi.dev@gmail.com", 15, LocalDateTime.now());
 
         when(usersService.exibirPerfil()).thenReturn(adminResponse);
 
