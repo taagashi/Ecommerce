@@ -1,7 +1,6 @@
-package br.com.thaua.Ecommerce.dto;
+package br.com.thaua.Ecommerce.dto.admin;
 
 import br.com.thaua.Ecommerce.controllers.ControllersFixture;
-import br.com.thaua.Ecommerce.dto.admin.AdminResponse;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDateTime;
