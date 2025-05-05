@@ -16,10 +16,7 @@ import br.com.thaua.Ecommerce.dto.itemPedido.ItemPedidoResponse;
 import br.com.thaua.Ecommerce.dto.pedido.PedidoPatchRequest;
 import br.com.thaua.Ecommerce.dto.pedido.PedidoResponse;
 import br.com.thaua.Ecommerce.dto.produto.*;
-import br.com.thaua.Ecommerce.dto.users.UserRequestGenerateCode;
-import br.com.thaua.Ecommerce.dto.users.UserRequestGenerateNewPassword;
-import br.com.thaua.Ecommerce.dto.users.UsersRequest;
-import br.com.thaua.Ecommerce.dto.users.UsersResponse;
+import br.com.thaua.Ecommerce.dto.users.*;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
@@ -287,5 +284,12 @@ public class Fixture {
         fornecedorViewProfileResponse.setProdutosEnviados(produtosEnviados);
         fornecedorViewProfileResponse.setProdutosCadastrados(produtosCadastrados);
         return fornecedorViewProfileResponse;
+    }
+
+    public static UsersLoginRequest createUsersLoginRequest(String email, String password) {
+        UsersLoginRequest usersLoginRequest = new UsersLoginRequest();
+        usersLoginRequest.setEmail(email);
+        usersLoginRequest.setPassword(password);
+        return usersLoginRequest;
     }
 }
