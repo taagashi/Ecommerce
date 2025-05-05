@@ -10,9 +10,7 @@ import br.com.thaua.Ecommerce.dto.categoria.ProdutoComponentResponse;
 import br.com.thaua.Ecommerce.dto.cliente.*;
 import br.com.thaua.Ecommerce.dto.endereco.EnderecoRequest;
 import br.com.thaua.Ecommerce.dto.endereco.EnderecoResponse;
-import br.com.thaua.Ecommerce.dto.fornecedor.FornecedorCNPJTelefoneRequest;
-import br.com.thaua.Ecommerce.dto.fornecedor.FornecedorResponse;
-import br.com.thaua.Ecommerce.dto.fornecedor.FornecedorSaldoResponse;
+import br.com.thaua.Ecommerce.dto.fornecedor.*;
 import br.com.thaua.Ecommerce.dto.itemPedido.ItemPedidoRequest;
 import br.com.thaua.Ecommerce.dto.itemPedido.ItemPedidoResponse;
 import br.com.thaua.Ecommerce.dto.pedido.PedidoPatchRequest;
@@ -276,5 +274,18 @@ public class Fixture {
         clienteComPedidoResponse.setCpf(cpf);
         clienteComPedidoResponse.setPedidosFeitos(pedidosFeitos);
         return clienteComPedidoResponse;
+    }
+
+    public static FornecedorViewProfileResponse createFornecedorViewProfileResponse(Long id, String name, String email, String telefone, String cnpj, BigDecimal saldo, Integer produtosEnviados, Integer produtosCadastrados) {
+        FornecedorViewProfileResponse fornecedorViewProfileResponse = new FornecedorViewProfileResponse();
+        fornecedorViewProfileResponse.setId(id);
+        fornecedorViewProfileResponse.setName(name);
+        fornecedorViewProfileResponse.setEmail(email);
+        fornecedorViewProfileResponse.setTelefone(telefone);
+        fornecedorViewProfileResponse.setCnpj(cnpj);
+        fornecedorViewProfileResponse.setSaldo(saldo);
+        fornecedorViewProfileResponse.setProdutosEnviados(produtosEnviados);
+        fornecedorViewProfileResponse.setProdutosCadastrados(produtosCadastrados);
+        return fornecedorViewProfileResponse;
     }
 }
