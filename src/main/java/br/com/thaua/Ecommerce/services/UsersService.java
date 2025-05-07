@@ -44,6 +44,7 @@ public class UsersService {
     private final EnderecoRepository enderecoRepository;
     private final ValidationService validationService;
     private final CodigoVerificacaoRepository codigoVerificacaoRepository;
+    private final ExtractTypeUserContextHolder extractTypeUserContextHolder;
 
     @Transactional
     public String cadastrarUsuario(UsersRequest usuario) {
@@ -72,7 +73,7 @@ public class UsersService {
 //    CRIAR LOGICA DE IMPEDIMENTO DE DELETACAO DE CONTA
     @Transactional
     public String deletarConta() {
-        UsersEntity usersEntity = ExtractTypeUserContextHolder.extractUser();
+        UsersEntity usersEntity = extractTypeUserContextHolder.extractUser();
         usersRepository.delete(usersEntity);
 
 //        resolverGeralUsers.limparCache(usersEntity);
@@ -82,7 +83,7 @@ public class UsersService {
     }
 
     public EnderecoResponse cadastrarEndereco(EnderecoRequest enderecoRequest, Map<String, String> errors) {
-        UsersEntity usersEntity = ExtractTypeUserContextHolder.extractUser();
+        UsersEntity usersEntity = extractTypeUserContextHolder.extractUser();
 
         validationService.validarCadastroEndereco(usersEntity, errors);
         validationService.validarSiglaEstado(enderecoRequest, errors);
@@ -97,14 +98,14 @@ public class UsersService {
     }
 
     public EnderecoResponse exibirEndereco(Map<String, String> errors) {
-        UsersEntity usersEntity = ExtractTypeUserContextHolder.extractUser();
+        UsersEntity usersEntity = extractTypeUserContextHolder.extractUser();
 
         log.info("SERVICE USERS - EXIBIR ENDERECO");
         return enderecoMapper.toEnderecoResponse(usersEntity.getEndereco());
     }
 
     public String deletarEndereco(Map<String, String> errors) {
-        UsersEntity usersEntity = ExtractTypeUserContextHolder.extractUser();
+        UsersEntity usersEntity = extractTypeUserContextHolder.extractUser();
 
         validationService.validarDelecaoEndereco(usersEntity, errors);
         validationService.analisarException(usersEntity.getName() + " você não pode limpar as informações do seu endereco porque ainda não adicionou um", EnderecoNaoExistenteException.class, errors);
@@ -122,7 +123,7 @@ public class UsersService {
 
     @Transactional
     public EnderecoResponse atualizarEndereco(EnderecoRequest enderecoRequest, Map<String, String> errors) {
-        UsersEntity usersEntity = ExtractTypeUserContextHolder.extractUser();
+        UsersEntity usersEntity = extractTypeUserContextHolder.extractUser();
 
         validationService.validarAtualizacaoEndereco(usersEntity, errors);
         validationService.validarSiglaEstado(enderecoRequest, errors);
@@ -163,7 +164,7 @@ public class UsersService {
     }
 
     public Object exibirPerfil() {
-        UsersEntity usersEntity = ExtractTypeUserContextHolder.extractUser();
+        UsersEntity usersEntity = extractTypeUserContextHolder.extractUser();
 
         log.info("SERVICE USERS - EXIBIR PERFIL");
         return resolverGeralUsers.viewProfile(usersEntity);
