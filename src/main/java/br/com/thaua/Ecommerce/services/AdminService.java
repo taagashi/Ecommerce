@@ -46,6 +46,7 @@ public class AdminService {
     private final AdminRepository adminRepository;
     private final PaginaMapper paginaMapper;
     private final ValidationService validationService;
+    private final ExtractTypeUserContextHolder extractTypeUserContextHolder;
 
     public Pagina<AdminResponse> listarAdmins(Pageable pageable) {
         Page<AdminResponse> pageAdmins = adminRepository.findAll(pageable).map(adminMapper::adminEntityToAdminResponse);
@@ -105,7 +106,7 @@ public class AdminService {
 
     @Transactional
     public String removerUsuario(Long userId, Map<String, String> errors) {
-        UsersEntity usersEntity = ExtractTypeUserContextHolder.extractUser();
+        UsersEntity usersEntity = extractTypeUserContextHolder.extractUser();
 
         if(usersEntity.getAdmin().getContasBanidas() == null) {
             usersEntity.getAdmin().setContasBanidas(0);
