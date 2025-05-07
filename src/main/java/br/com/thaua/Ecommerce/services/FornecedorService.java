@@ -42,10 +42,11 @@ public class FornecedorService {
     private final PaginaMapper paginaMapper;
     private final PedidoRepository pedidoRepository;
     private final ItemPedidoMapper itemPedidoMapper;
+    private final ExtractTypeUserContextHolder extractTypeUserContextHolder;
 
     @Transactional
     public FornecedorResponse atualizarCNPJeTelefone(FornecedorCNPJTelefoneRequest fornecedorCNPJTelefoneRequest) {
-        UsersEntity usersEntity = ExtractTypeUserContextHolder.extractUser();
+        UsersEntity usersEntity = extractTypeUserContextHolder.extractUser();
         usersEntity.getFornecedor().setCnpj(fornecedorCNPJTelefoneRequest.getCnpj());
         usersEntity.setTelefone(fornecedorCNPJTelefoneRequest.getTelefone());
 
@@ -56,7 +57,7 @@ public class FornecedorService {
 
     @Transactional
     public List<ProdutoResponse> cadastrarProduto(List<ProdutoRequest> produtoRequest, Map<String, String> errors) {
-        UsersEntity usersEntity = ExtractTypeUserContextHolder.extractUser();
+        UsersEntity usersEntity = extractTypeUserContextHolder.extractUser();
 
         validationService.validarCNPJ(usersEntity, errors);
         validationService.validarTelefone(usersEntity, errors);
@@ -71,14 +72,14 @@ public class FornecedorService {
     }
 
     public Pagina<ProdutoResponse> exibirProdutos(Pageable pageable) {
-        UsersEntity usersEntity = ExtractTypeUserContextHolder.extractUser();
+        UsersEntity usersEntity = extractTypeUserContextHolder.extractUser();
 
         log.info("SERVICE FORNECEDOR - CADASTRAR PRODUTOS");
         return paginaMapper.toPagina(produtoRepository.findAllByFornecedorId(usersEntity.getId(), pageable).map(produtoMapper::produtoToResponse));
     }
 
     public ProdutoResponse buscarProduto(Long produtoId, Map<String, String> errors) {
-        UsersEntity usersEntity = ExtractTypeUserContextHolder.extractUser();
+        UsersEntity usersEntity = extractTypeUserContextHolder.extractUser();
         Optional<ProdutoEntity> produtoEntity = produtoRepository.findByIdAndFornecedorId(produtoId, usersEntity.getId());
 
         validationService.validarExistenciaEntidade(produtoEntity.orElse(null), errors);
@@ -91,7 +92,7 @@ public class FornecedorService {
 
     @Transactional
     public ProdutoResponse atualizarProduto(Long produtoid, ProdutoRequest produtoRequest, Map<String, String> errors) {
-        UsersEntity usersEntity = ExtractTypeUserContextHolder.extractUser();
+        UsersEntity usersEntity = extractTypeUserContextHolder.extractUser();
         Optional<ProdutoEntity> produtoEntity = produtoRepository.findByIdAndFornecedorId(produtoid, usersEntity.getId());
 
         validationService.validarExistenciaEntidade(produtoEntity.orElse(null), errors);
@@ -109,7 +110,7 @@ public class FornecedorService {
 
     @Transactional
     public ProdutoResponse adicionarProdutoACategoria(Long categoriaId, Long produtoId, Map<String, String> errors) {
-        UsersEntity usersEntity = ExtractTypeUserContextHolder.extractUser();
+        UsersEntity usersEntity = extractTypeUserContextHolder.extractUser();
         Optional<CategoriaEntity> categoriaEntity = categoriaRepository.findById(categoriaId);
         Optional<ProdutoEntity> produtoEntity = produtoRepository.findByIdAndFornecedorId(produtoId, usersEntity.getId());
 
@@ -131,7 +132,7 @@ public class FornecedorService {
 
     @Transactional
     public ProdutoResponse atualizarEstoqueProduto(Long produtoId, ProdutoNovoEstoqueRequest produtoNovoEstoqueRequest, Map<String, String> errors) {
-        UsersEntity usersEntity = ExtractTypeUserContextHolder.extractUser();
+        UsersEntity usersEntity = extractTypeUserContextHolder.extractUser();
         Optional<ProdutoEntity> produtoEntity = produtoRepository.findByIdAndFornecedorId(produtoId, usersEntity.getId());
 
         validationService.validarExistenciaEntidade(produtoEntity.orElse(null), errors);
@@ -147,7 +148,7 @@ public class FornecedorService {
 //    PRECISO DAR UMA REVISADA MELHOR NESSE PARTE DE CODIGO
     @Transactional
     public String removerProduto(Long produtoId, Map<String, String> errors) {
-        UsersEntity usersEntity = ExtractTypeUserContextHolder.extractUser();
+        UsersEntity usersEntity = extractTypeUserContextHolder.extractUser();
         Optional<ProdutoEntity> produtoEntity = produtoRepository.findByIdAndFornecedorId(produtoId, usersEntity.getId());
 
         validationService.validarExistenciaEntidade(produtoEntity.orElse(null), errors);
@@ -168,7 +169,7 @@ public class FornecedorService {
 
     @Transactional
     public String removerProdutoDeCategoria(Long categoriaId, Long produtoId, Map<String, String> errors) {
-        UsersEntity usersEntity = ExtractTypeUserContextHolder.extractUser();
+        UsersEntity usersEntity = extractTypeUserContextHolder.extractUser();
         Optional<ProdutoEntity> produtoEntity = produtoRepository.findByIdAndFornecedorId(produtoId, usersEntity.getId());
         Optional<CategoriaEntity> categoriaEntity = categoriaRepository.findById(categoriaId);
 
@@ -188,7 +189,7 @@ public class FornecedorService {
 
     @Transactional
     public String enviarProduto(Long produtoId, Map<String, String> errors) {
-        UsersEntity usersEntity = ExtractTypeUserContextHolder.extractUser();
+        UsersEntity usersEntity = extractTypeUserContextHolder.extractUser();
 
         Optional<ProdutoEntity> produtoEntity = produtoRepository.findById(produtoId);
 
@@ -231,14 +232,14 @@ public class FornecedorService {
     }
 
     public FornecedorSaldoResponse exibirSaldoAtual() {
-        UsersEntity usersEntity = ExtractTypeUserContextHolder.extractUser();
+        UsersEntity usersEntity = extractTypeUserContextHolder.extractUser();
 
         log.info("SERVICE FORNECEDOR - EXIBIR SALDO ATUAL");
         return fornecedorMapper.fornecedorEntityToFornecedorSaldoResponse(usersEntity.getFornecedor());
     }
 
     public Pagina<ProdutoResponse> listarProdutosComDemanda(Pageable pageable) {
-        UsersEntity usersEntity = ExtractTypeUserContextHolder.extractUser();
+        UsersEntity usersEntity = extractTypeUserContextHolder.extractUser();
 
         log.info("SERVICE FORNECEDOR - LISTAR PRODUTOS COM DEMANDA");
         return paginaMapper.toPagina(produtoRepository.findAllByFornecedorIdAndQuantidadeDemandaGreaterThan(usersEntity.getId(), 0, pageable).map(produtoMapper::produtoToResponse));
