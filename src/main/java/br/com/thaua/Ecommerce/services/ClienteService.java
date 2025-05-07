@@ -47,10 +47,11 @@ public class ClienteService {
     private final ValidationService validationService;
     private final PaginaMapper paginaMapper;
     private final JWTService jwtService;
+    private final ExtractTypeUserContextHolder extractTypeUserContextHolder;
 
     @Transactional
     public ClienteResponse atualizarCpfETelefone(ClienteCpfTelefoneRequest clienteCpfTelefoneRequest, Map<String, String> errors) {
-        UsersEntity usersEntity = ExtractTypeUserContextHolder.extractUser();
+        UsersEntity usersEntity = extractTypeUserContextHolder.extractUser();
 
         usersEntity.getCliente().setCpf(clienteCpfTelefoneRequest.getCpf());
         usersEntity.setTelefone(clienteCpfTelefoneRequest.getTelefone());
@@ -62,7 +63,7 @@ public class ClienteService {
 
     @Transactional
     public String atualizarDados(ClienteUpdateRequest clienteUpdateRequest) {
-        UsersEntity usersEntity = ExtractTypeUserContextHolder.extractUser();
+        UsersEntity usersEntity = extractTypeUserContextHolder.extractUser();
         usersEntity.setName(clienteUpdateRequest.getName());
         usersEntity.setEmail(clienteUpdateRequest.getEmail());
         usersEntity.getCliente().setCpf(clienteUpdateRequest.getCpf());
@@ -76,7 +77,7 @@ public class ClienteService {
 
     @Transactional
     public PedidoResponse fazerPedido(List<ItemPedidoRequest> itemPedidoRequest, Map<String, String> errors) {
-       UsersEntity usersEntity = ExtractTypeUserContextHolder.extractUser();
+       UsersEntity usersEntity = extractTypeUserContextHolder.extractUser();
 
         validationService.validarEnderecoNaoExistente(usersEntity, errors);
         validationService.validarTelefone(usersEntity, errors);
@@ -114,7 +115,7 @@ public class ClienteService {
     }
 
     public Pagina<PedidoResponse> listarPedidos(Pageable pageable, String statusPedido, Map<String, String> errors) {
-        UsersEntity usersEntity = ExtractTypeUserContextHolder.extractUser();
+        UsersEntity usersEntity = extractTypeUserContextHolder.extractUser();
 
         if(statusPedido != null) {
             log.info("SERVICE CLIENTE - LISTAR PEDIDOS COM FILTRO");
@@ -128,7 +129,7 @@ public class ClienteService {
     }
 
     public PedidoResponse buscarPedido(Long pedidoId, Map<String, String> errors) {
-        UsersEntity usersEntity = ExtractTypeUserContextHolder.extractUser();
+        UsersEntity usersEntity = extractTypeUserContextHolder.extractUser();
         Optional<PedidoEntity> pedidoEntity = pedidoRepository.findByIdAndClienteId(pedidoId, usersEntity.getId());
 
         validationService.validarExistenciaEntidade(pedidoEntity.orElse(null), errors);
@@ -140,7 +141,7 @@ public class ClienteService {
     }
 
     public ItemPedidoResponse buscarItemPedido(Long itemPedidoId, Map<String, String> errors) {
-        UsersEntity usersEntity = ExtractTypeUserContextHolder.extractUser();
+        UsersEntity usersEntity = extractTypeUserContextHolder.extractUser();
         Optional<ItemPedidoEntity> itemPedidoEntity = itemPedidoRepository.findByIdAndPedidoClienteId(itemPedidoId, usersEntity.getId());
 
         validationService.validarExistenciaEntidade(itemPedidoEntity.orElse(null), errors);
@@ -153,7 +154,7 @@ public class ClienteService {
 
     @Transactional
     public String pagarPedido(Long pedidoId, BigDecimal valorPedido, Map<String, String> errors){
-        UsersEntity usersEntity = ExtractTypeUserContextHolder.extractUser();
+        UsersEntity usersEntity = extractTypeUserContextHolder.extractUser();
 
         Optional<PedidoEntity> pedidoEntity = pedidoRepository.findById(pedidoId);
 
@@ -176,7 +177,7 @@ public class ClienteService {
     }
 
     public PedidoResponse editarPedido(Long pedidoId, List<ItemPedidoRequest> itemPedidoRequest, Map<String, String> errors) {
-        UsersEntity usersEntity = ExtractTypeUserContextHolder.extractUser();
+        UsersEntity usersEntity = extractTypeUserContextHolder.extractUser();
 
         Optional<PedidoEntity> pedidoEntity = pedidoRepository.findById(pedidoId);
 
@@ -218,7 +219,7 @@ public class ClienteService {
     }
 
     public PedidoResponse adicionarProdutoAPedido(Long pedidoId, List<ItemPedidoRequest> itemPedidoRequest, Map<String, String> errors) {
-        UsersEntity usersEntity = ExtractTypeUserContextHolder.extractUser();
+        UsersEntity usersEntity = extractTypeUserContextHolder.extractUser();
 
         Optional<PedidoEntity> pedidoEntity = pedidoRepository.findById(pedidoId);
 
@@ -247,7 +248,7 @@ public class ClienteService {
     }
 
     public String deletarItemPedido(Long itemPedidoId, Map<String, String> errors) {
-        UsersEntity usersEntity = ExtractTypeUserContextHolder.extractUser();
+        UsersEntity usersEntity = extractTypeUserContextHolder.extractUser();
 
         Optional<ItemPedidoEntity> itemPedidoEntity = itemPedidoRepository.findById(itemPedidoId);
 
@@ -269,7 +270,7 @@ public class ClienteService {
     }
 
     public String deletarPedido(Long pedidoId, Map<String, String> errors) {
-        UsersEntity usersEntity = ExtractTypeUserContextHolder.extractUser();
+        UsersEntity usersEntity = extractTypeUserContextHolder.extractUser();
 
         Optional<PedidoEntity> pedidoEntity = pedidoRepository.findById(pedidoId);
 
