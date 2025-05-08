@@ -21,6 +21,7 @@ import br.com.thaua.Ecommerce.dto.pedido.PedidoPatchRequest;
 import br.com.thaua.Ecommerce.dto.pedido.PedidoResponse;
 import br.com.thaua.Ecommerce.dto.produto.*;
 import br.com.thaua.Ecommerce.dto.users.*;
+import org.springframework.mail.SimpleMailMessage;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
@@ -314,5 +315,14 @@ public class Fixture {
         produtoEntity.setQuantidadeDemanda(quantidadeDemanda);
         produtoEntity.setFornecedor(fornecedor);
         return produtoEntity;
+    }
+
+    public static SimpleMailMessage createSimpleMailMessage(String destinatario, String assunto, String texto, String remetente) {
+        SimpleMailMessage message = new SimpleMailMessage();
+        message.setTo(destinatario);
+        message.setSubject(assunto);
+        message.setText(texto);
+        message.setFrom(remetente);
+        return message;
     }
 }
