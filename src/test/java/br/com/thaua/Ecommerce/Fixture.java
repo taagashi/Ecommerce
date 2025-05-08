@@ -1,9 +1,7 @@
 package br.com.thaua.Ecommerce;
 
-import br.com.thaua.Ecommerce.domain.entity.CategoriaEntity;
-import br.com.thaua.Ecommerce.domain.entity.FornecedorEntity;
-import br.com.thaua.Ecommerce.domain.entity.ItemPedidoEntity;
-import br.com.thaua.Ecommerce.domain.entity.ProdutoEntity;
+import br.com.thaua.Ecommerce.domain.entity.*;
+import br.com.thaua.Ecommerce.domain.enums.Role;
 import br.com.thaua.Ecommerce.domain.enums.StatusItemPedido;
 import br.com.thaua.Ecommerce.domain.enums.StatusPedido;
 import br.com.thaua.Ecommerce.dto.admin.AdminResponse;
@@ -22,6 +20,7 @@ import br.com.thaua.Ecommerce.dto.pedido.PedidoResponse;
 import br.com.thaua.Ecommerce.dto.produto.*;
 import br.com.thaua.Ecommerce.dto.users.*;
 import org.springframework.mail.SimpleMailMessage;
+import org.springframework.security.web.webauthn.api.ImmutablePublicKeyCredentialUserEntity;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
@@ -324,5 +323,20 @@ public class Fixture {
         message.setText(texto);
         message.setFrom(remetente);
         return message;
+    }
+
+    public static UsersEntity createUsersEntity(Long userId, String name, String email, String telefone, String password, Role role, AdminEntity admin, ClienteEntity cliente, FornecedorEntity fornecedor, EnderecoEntity endereco) {
+        UsersEntity usersEntity = new UsersEntity();
+        usersEntity.setId(userId);
+        usersEntity.setName(name);
+        usersEntity.setEmail(email);
+        usersEntity.setTelefone(telefone);
+        usersEntity.setPassword(password);
+        usersEntity.setRole(role);
+        usersEntity.setAdmin(admin);
+        usersEntity.setCliente(cliente);
+        usersEntity.setFornecedor(fornecedor);
+        usersEntity.setEndereco(endereco);
+        return usersEntity;
     }
 }
