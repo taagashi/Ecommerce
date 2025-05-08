@@ -1,5 +1,7 @@
 package br.com.thaua.Ecommerce;
 
+import br.com.thaua.Ecommerce.domain.entity.CategoriaEntity;
+import br.com.thaua.Ecommerce.domain.entity.ProdutoEntity;
 import br.com.thaua.Ecommerce.domain.enums.StatusItemPedido;
 import br.com.thaua.Ecommerce.domain.enums.StatusPedido;
 import br.com.thaua.Ecommerce.dto.admin.AdminResponse;
@@ -132,10 +134,6 @@ public class Fixture {
         UserRequestGenerateCode userRequestGenerateCode = new UserRequestGenerateCode();
         userRequestGenerateCode.setEmail(email);
         return userRequestGenerateCode;
-    }
-
-    public static int createCodigoVerificacao() {
-        return 123456;
     }
 
     public static UserRequestGenerateNewPassword createUserRequestGenerateNewPassword(String email, String newPassword, int code) {
@@ -291,5 +289,14 @@ public class Fixture {
         usersLoginRequest.setEmail(email);
         usersLoginRequest.setPassword(password);
         return usersLoginRequest;
+    }
+
+    public static CategoriaEntity createCategoriaEntity(Long id, String nome, String descricao, List<ProdutoEntity> produtos) {
+        CategoriaEntity categoriaEntity = new CategoriaEntity();
+        categoriaEntity.setId(id);
+        categoriaEntity.setNome(nome);
+        categoriaEntity.setDescricao(descricao);
+        categoriaEntity.setProdutos(produtos);
+        return categoriaEntity;
     }
 }
