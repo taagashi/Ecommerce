@@ -1,6 +1,8 @@
 package br.com.thaua.Ecommerce;
 
 import br.com.thaua.Ecommerce.domain.entity.CategoriaEntity;
+import br.com.thaua.Ecommerce.domain.entity.FornecedorEntity;
+import br.com.thaua.Ecommerce.domain.entity.ItemPedidoEntity;
 import br.com.thaua.Ecommerce.domain.entity.ProdutoEntity;
 import br.com.thaua.Ecommerce.domain.enums.StatusItemPedido;
 import br.com.thaua.Ecommerce.domain.enums.StatusPedido;
@@ -298,5 +300,19 @@ public class Fixture {
         categoriaEntity.setDescricao(descricao);
         categoriaEntity.setProdutos(produtos);
         return categoriaEntity;
+    }
+
+    public static ProdutoEntity createProdutoEntity(Long id, String nome, String descricao, BigDecimal preco, Integer estoque, List<CategoriaEntity> categorias, List<ItemPedidoEntity> itensPedidos, Integer quantidadeDemanda, FornecedorEntity fornecedor) {
+        ProdutoEntity produtoEntity = new ProdutoEntity();
+        produtoEntity.setId(id);
+        produtoEntity.setNome(nome);
+        produtoEntity.setDescricao(descricao);
+        produtoEntity.setPreco(preco);
+        produtoEntity.setEstoque(estoque);
+        produtoEntity.setCategorias(categorias);
+        produtoEntity.setItensPedidos(itensPedidos);
+        produtoEntity.setQuantidadeDemanda(quantidadeDemanda);
+        produtoEntity.setFornecedor(fornecedor);
+        return produtoEntity;
     }
 }
