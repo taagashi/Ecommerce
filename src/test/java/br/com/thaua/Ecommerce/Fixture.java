@@ -1,6 +1,7 @@
 package br.com.thaua.Ecommerce;
 
 import br.com.thaua.Ecommerce.domain.entity.*;
+import br.com.thaua.Ecommerce.domain.enums.Estado;
 import br.com.thaua.Ecommerce.domain.enums.Role;
 import br.com.thaua.Ecommerce.domain.enums.StatusItemPedido;
 import br.com.thaua.Ecommerce.domain.enums.StatusPedido;
@@ -338,5 +339,23 @@ public class Fixture {
         usersEntity.setFornecedor(fornecedor);
         usersEntity.setEndereco(endereco);
         return usersEntity;
+    }
+
+    public static EnderecoEntity createEnderecoEntity(String rua, String numero, String bairro, String cidade, Estado estado, String cep, UsersEntity usersEntity) {
+        EnderecoEntity enderecoEntity = new EnderecoEntity();
+        enderecoEntity.setRua(rua);
+        enderecoEntity.setNumero(numero);
+        enderecoEntity.setBairro(bairro);
+        enderecoEntity.setCidade(cidade);
+        enderecoEntity.setEstado(estado);
+        enderecoEntity.setCep(cep);
+        return enderecoEntity;
+    }
+
+    public static CodigoVerificacaoEntity createCodigoVerificacaoEntity(Long id, int codigo) {
+        CodigoVerificacaoEntity codigoVerificacaoEntity = new CodigoVerificacaoEntity();
+        codigoVerificacaoEntity.setId(id);
+        codigoVerificacaoEntity.setCodigo(codigo);
+        return codigoVerificacaoEntity;
     }
 }
