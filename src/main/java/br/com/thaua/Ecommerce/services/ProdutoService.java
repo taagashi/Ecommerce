@@ -34,7 +34,7 @@ public class ProdutoService {
     public ProdutoCategoriaResponse exibirCategoriasDeProduto(Long produtoId, Map<String, String> errors) {
         Optional<ProdutoEntity> produtoEntity = produtoRepository.findById(produtoId);
 
-        validationService.validarExistenciaEntidade(produtoEntity.orElse(null), errors);
+        validationService.validarExistenciaEntidade(produtoEntity.orElse(null), errors, "Produto");
         validationService.analisarException("Houve um erro ao tentar exibir categorias de um produto", ProdutoNotFoundException.class, errors);
 
 
@@ -52,7 +52,7 @@ public class ProdutoService {
     public ProdutoResponse buscarProduto(Long produtoId, Map<String, String> errors) {
         Optional<ProdutoEntity> produtoEntity = produtoRepository.findById(produtoId);
 
-        validationService.validarExistenciaEntidade(produtoEntity.orElse(null), errors);
+        validationService.validarExistenciaEntidade(produtoEntity.orElse(null), errors, "Produto");
         validationService.analisarException("Houve um erro ao tentar buscar o produto", ProdutoNotFoundException.class, errors);
 
         log.info("SERVICE PRODUTO - BUSCAR PRODUTO");

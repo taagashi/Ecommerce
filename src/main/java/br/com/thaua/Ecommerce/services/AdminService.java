@@ -56,7 +56,7 @@ public class AdminService {
 
     public AdminResponse buscarAdmin(Long adminId, Map<String, String> errors) {
         Optional<AdminEntity> adminEntity = adminRepository.findById(adminId);
-        validationService.validarExistenciaEntidade(adminEntity.orElse(null), errors);
+        validationService.validarExistenciaEntidade(adminEntity.orElse(null), errors, "Administrador");
         validationService.analisarException("Houve um erro na hora de buscar admin", UserNotFoundException.class, errors);
 
         log.info("SERVICE ADMIN - BUSCAR ADMIN");
@@ -72,7 +72,7 @@ public class AdminService {
 
     public ClienteResponse buscarCliente(Long clienteId, Map<String, String> errors) {
         Optional<ClienteEntity> clienteEntity = clienteRepository.findById(clienteId);
-        validationService.validarExistenciaEntidade(clienteEntity.orElse(null), errors);
+        validationService.validarExistenciaEntidade(clienteEntity.orElse(null), errors, "Cliente");
         validationService.analisarException("Houve um erro na hora de buscar o cliente", UserNotFoundException.class, errors);
 
         log.info("SERVICE ADMIN - BUCAR CLIENTE");
@@ -81,7 +81,7 @@ public class AdminService {
 
     public FornecedorResponse buscarFornecedor(Long fornecedorId, Map<String, String> errors) {
         Optional<FornecedorEntity> fornecedorEntity = fornecedorRepository.findById(fornecedorId);
-        validationService.validarExistenciaEntidade(fornecedorEntity.orElse(null), errors);
+        validationService.validarExistenciaEntidade(fornecedorEntity.orElse(null), errors, "Fornecedor");
         validationService.analisarException("Houve um erro na hora de buscar o fornecedor", UserNotFoundException.class, errors);
 
         log.info("SERVICE ADMIN - BUSCAR FORNECEDOR");
@@ -114,7 +114,7 @@ public class AdminService {
 
         Optional<UsersEntity> userDeletar = usersRepository.findById(userId);
 
-        validationService.validarExistenciaEntidade(userDeletar.orElse(null), errors);
+        validationService.validarExistenciaEntidade(userDeletar.orElse(null), errors, "Usuario");
         validationService.analisarException(usersEntity.getName() + " houve um erro para remover conta de cliente", UserNotFoundException.class, errors);
 
         usersRepository.delete(userDeletar.get());
@@ -129,7 +129,7 @@ public class AdminService {
     public Pagina<PedidoResponse> listarPedidosDoCliente(Long clienteId, Pageable pageable, Map<String, String> errors) {
         Optional<ClienteEntity> clienteEntity = clienteRepository.findById(clienteId);
 
-        validationService.validarExistenciaEntidade(clienteEntity.orElse(null), errors);
+        validationService.validarExistenciaEntidade(clienteEntity.orElse(null), errors, "Cliente");
         validationService.analisarException("Houve um erro na hora de buscar os pedidos do cliente", PedidoNotFoundException.class, errors);
 
         log.info("SERVICE ADMIN - LISTAR PEDIDOS DO CLIENTE");
@@ -140,7 +140,7 @@ public class AdminService {
     public PedidoResponse atualizarStatusPedido(Long pedidoId, PedidoPatchRequest pedidoPatchRequest, Map<String, String> errors) {
         Optional<PedidoEntity> pedidoEntity = pedidoRepository.findById(pedidoId);
 
-        validationService.validarExistenciaEntidade(pedidoEntity.orElse(null), errors);
+        validationService.validarExistenciaEntidade(pedidoEntity.orElse(null), errors, "Pedido");
         validationService.analisarException("Houve um erro ao atualizar pedido", PedidoNotFoundException.class, errors);
 
         pedidoEntity.get().setStatusPedido(pedidoPatchRequest.getStatusPedido());
@@ -154,7 +154,7 @@ public class AdminService {
     public EnderecoResponse cadastrarEnderecoUsuario(Long userId, EnderecoRequest enderecoRequest, Map<String, String> errors) {
         Optional<UsersEntity> usersEntity = usersRepository.findById(userId);
 
-        validationService.validarExistenciaEntidade(usersEntity.orElse(null), errors);
+        validationService.validarExistenciaEntidade(usersEntity.orElse(null), errors, "Usuario");
         validationService.analisarException("Houve um erro ao cadastrar endereco para usuario", AddressNotFoundException.class, errors);
 
         EnderecoEntity enderecoEntity = enderecoMapper.enderecoRequestToEntity(enderecoRequest);
@@ -169,7 +169,7 @@ public class AdminService {
     public EnderecoResponse exibirEnderecoUsuario(Long userId, Map<String, String> errors) {
         Optional<UsersEntity> usersEntity = usersRepository.findById(userId);
 
-        validationService.validarExistenciaEntidade(usersEntity.orElse(null), errors);
+        validationService.validarExistenciaEntidade(usersEntity.orElse(null), errors, "Usuario");
         validationService.analisarException("Houve um erro ao exibir endereco de usuario", AddressNotFoundException.class, errors);
 
 
@@ -181,7 +181,7 @@ public class AdminService {
     public EnderecoResponse atualizarEnderecoUsuario(Long userId, EnderecoRequest enderecoRequest, Map<String, String> errors) {
         Optional<UsersEntity> usersEntity = usersRepository.findById(userId);
 
-        validationService.validarExistenciaEntidade(usersEntity.orElse(null), errors);
+        validationService.validarExistenciaEntidade(usersEntity.orElse(null), errors, "Usuario");
         validationService.analisarException("Houve um erro ao tentar atualizar endereco de usuario", AddressNotFoundException.class, errors);
 
         EnderecoEntity enderecoEntity = enderecoMapper.enderecoRequestToEntity(enderecoRequest);
@@ -198,7 +198,7 @@ public class AdminService {
     public String deletarEnderecoUsuario(Long userId, Map<String, String> errors) {
         Optional<UsersEntity> usersEntity = usersRepository.findById(userId);
 
-        validationService.validarExistenciaEntidade(usersEntity.orElse(null), errors);
+        validationService.validarExistenciaEntidade(usersEntity.orElse(null), errors, "Usuario");
         validationService.analisarException("Houve um erro ao tentar deletar endereco de usuario", AddressNotFoundException.class, errors);
 
         EnderecoEntity enderecoEntity = usersEntity.get().getEndereco();
@@ -218,7 +218,7 @@ public class AdminService {
     public CategoriaResponse atualizarCategoria(Long categoriaId, CategoriaRequest categoriaRequest, Map<String, String> errors) {
         Optional<CategoriaEntity> categoriaEntity = categoriaRepository.findById(categoriaId);
 
-        validationService.validarExistenciaEntidade(categoriaEntity.orElse(null), errors);
+        validationService.validarExistenciaEntidade(categoriaEntity.orElse(null), errors, "Categoria");
         validationService.analisarException("Houve um erro ao tentar atualizar categoria", CategoriaNotFoundException.class, errors);
 
         categoriaEntity.get().setNome(categoriaRequest.getNome());
@@ -233,7 +233,7 @@ public class AdminService {
     public String deletarCategoria(Long categoriaId, Map<String, String> errors) {
         Optional<CategoriaEntity> categoriaEntity = categoriaRepository.findById(categoriaId);
 
-        validationService.validarExistenciaEntidade(categoriaEntity.orElse(null), errors);
+        validationService.validarExistenciaEntidade(categoriaEntity.orElse(null), errors, "Categoria");
         validationService.analisarException("Houve um erro ao tentar deletar categoria", CategoriaNotFoundException.class, errors);
 
         categoriaRepository.delete(categoriaEntity.get());

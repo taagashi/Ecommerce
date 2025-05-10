@@ -27,7 +27,7 @@ public class MyUserDetailsService implements UserDetailsService {
         UsersEntity usersEntity = usersRepository.findByEmail(email);
 
         Map<String, String> errors = ConstructorErrors.returnMapErrors();
-        validationService.validarExistenciaEntidade(usersEntity, errors);
+        validationService.validarExistenciaEntidade(usersEntity, errors, "Usuario");
         validationService.analisarException("Não foi possivel fazer login", UserNotFoundException.class, errors);
 
         log.info("SERVICE - MYUSERDETAILSSERVICE - LOAD USER BY USERNAME");

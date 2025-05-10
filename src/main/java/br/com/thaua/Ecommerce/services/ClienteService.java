@@ -132,7 +132,7 @@ public class ClienteService {
         UsersEntity usersEntity = extractTypeUserContextHolder.extractUser();
         Optional<PedidoEntity> pedidoEntity = pedidoRepository.findByIdAndClienteId(pedidoId, usersEntity.getId());
 
-        validationService.validarExistenciaEntidade(pedidoEntity.orElse(null), errors);
+        validationService.validarExistenciaEntidade(pedidoEntity.orElse(null), errors, "Pedido");
         validationService.analisarException(usersEntity.getName() + " houve um erro ao tentar buscar pedido", PedidoNotFoundException.class, errors);
 
 
@@ -144,7 +144,7 @@ public class ClienteService {
         UsersEntity usersEntity = extractTypeUserContextHolder.extractUser();
         Optional<ItemPedidoEntity> itemPedidoEntity = itemPedidoRepository.findByIdAndPedidoClienteId(itemPedidoId, usersEntity.getId());
 
-        validationService.validarExistenciaEntidade(itemPedidoEntity.orElse(null), errors);
+        validationService.validarExistenciaEntidade(itemPedidoEntity.orElse(null), errors, "Item pedido");
         validationService.analisarException(usersEntity.getName() + " houve um erro ao tentar buscar item pedido", ItemPedidoNotFoundException.class, errors);
 
 
@@ -158,7 +158,7 @@ public class ClienteService {
 
         Optional<PedidoEntity> pedidoEntity = pedidoRepository.findById(pedidoId);
 
-        validationService.validarExistenciaEntidade(pedidoEntity.orElse(null), errors);
+        validationService.validarExistenciaEntidade(pedidoEntity.orElse(null), errors, "Pedido");
         validationService.validarPagamentoPedido(pedidoEntity.get(), valorPedido, errors);
         validationService.validarStatusPedidoPagamento(pedidoEntity.get(), errors);
         validationService.analisarException(usersEntity.getName() + " houve um erro ao tentar realizar pagamento de pedido", PagarPedidoException.class, errors);
@@ -181,7 +181,7 @@ public class ClienteService {
 
         Optional<PedidoEntity> pedidoEntity = pedidoRepository.findById(pedidoId);
 
-        validationService.validarExistenciaEntidade(pedidoEntity.orElse(null), errors);
+        validationService.validarExistenciaEntidade(pedidoEntity.orElse(null), errors, "Pedido");
         validationService.validarStatusPedidoEditar(pedidoEntity.orElse(null), errors);
 
         List<ItemPedidoEntity> itemPedidoEntityList = itemPedidoMapper.toItemPedidoEntityList(itemPedidoRequest);
@@ -223,14 +223,14 @@ public class ClienteService {
 
         Optional<PedidoEntity> pedidoEntity = pedidoRepository.findById(pedidoId);
 
-        validationService.validarExistenciaEntidade(pedidoEntity.orElse(null), errors);
+        validationService.validarExistenciaEntidade(pedidoEntity.orElse(null), errors, "Pedido");
         validationService.validarStatusPedidoAdicionarProduto(pedidoEntity.orElse(null), errors);
 
         List<ItemPedidoEntity> itemPedidoEntityList = itemPedidoMapper.toItemPedidoEntityList(itemPedidoRequest);
         List<Long> produtosIds = itemPedidoRequest.stream().map(ItemPedidoRequest::getProdutoId).toList();
         Map<Long, ProdutoEntity> produtoEntityMap = produtoRepository.findAllById(produtosIds).stream().collect(Collectors.toMap(AbstractEntity::getId, produto -> produto));
 
-        validationService.validarExistenciaEntidade(produtoEntityMap, errors);
+        validationService.validarExistenciaEntidade(produtoEntityMap, errors, "Produto");
         validationService.analisarException(usersEntity.getName() + " houve um erro ao tentar adicionar produto a um pedido", AdicionarProdutoAPedidoException.class, errors);
 
         for(int i=0 ; i<itemPedidoEntityList.size() ; i++) {
@@ -252,7 +252,7 @@ public class ClienteService {
 
         Optional<ItemPedidoEntity> itemPedidoEntity = itemPedidoRepository.findById(itemPedidoId);
 
-        validationService.validarExistenciaEntidade(itemPedidoEntity.orElse(null), errors);
+        validationService.validarExistenciaEntidade(itemPedidoEntity.orElse(null), errors, "Item pedido");
         validationService.analisarException(usersEntity.getName() + " houve um erro ao tentar buscar pelo item pedido", ItemPedidoNotFoundException.class, errors);
 
         PedidoEntity pedidoEntity = itemPedidoEntity.get().getPedido();
@@ -274,7 +274,7 @@ public class ClienteService {
 
         Optional<PedidoEntity> pedidoEntity = pedidoRepository.findById(pedidoId);
 
-        validationService.validarExistenciaEntidade(pedidoEntity.orElse(null), errors);
+        validationService.validarExistenciaEntidade(pedidoEntity.orElse(null), errors, "Pedido");
         validationService.validarStatusPedidoDeletar(pedidoEntity.orElse(null), errors);
         validationService.analisarException(usersEntity.getName() + " houve um erro ao tentar deletar seu pedido", DeletarPedidoException.class, errors);
 

@@ -106,10 +106,10 @@ public class ValidationService {
         }
     }
 
-    public void validarExistenciaEntidade(Object object, Map<String, String> errors) {
+    public void validarExistenciaEntidade(Object object, Map<String, String> errors, String nomeDado) {
         log.info("VALIDATION SERVICE - VALIDAR EXISTENCIA ENTIDADE");
         if(object == null) {
-            errors.put("Falha de busca", "Item não encontrado");
+            errors.put(nomeDado, "Item não encontrado");
         }
     }
 

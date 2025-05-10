@@ -35,7 +35,7 @@ public class CategoriaService {
     public CategoriaResponse exibirCategoria(Long categoriaId, Map<String, String> errors) {
         Optional<CategoriaEntity> categoriaEntity = categoriaRepository.findById(categoriaId);
 
-        validationService.validarExistenciaEntidade(categoriaEntity.orElse(null), errors);
+        validationService.validarExistenciaEntidade(categoriaEntity.orElse(null), errors, "Categoria");
         validationService.analisarException("Houve um erro ao tentar exibir categoria", CategoriaNotFoundException.class, errors);
 
 
@@ -46,7 +46,7 @@ public class CategoriaService {
     public CategoriaProdutosResponse listarProdutosPorCategoria(Long categoriaId, Map<String, String> errors) {
         Optional<CategoriaEntity> categoriaEntity = categoriaRepository.findById(categoriaId);
 
-        validationService.validarExistenciaEntidade(categoriaEntity.orElse(null), errors);
+        validationService.validarExistenciaEntidade(categoriaEntity.orElse(null), errors, "Categoria");
         validationService.analisarException("Houve um erro ao tentar listar produtos de uma categoria", CategoriaNotFoundException.class, errors);
 
 

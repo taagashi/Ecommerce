@@ -82,7 +82,7 @@ public class FornecedorService {
         UsersEntity usersEntity = extractTypeUserContextHolder.extractUser();
         Optional<ProdutoEntity> produtoEntity = produtoRepository.findByIdAndFornecedorId(produtoId, usersEntity.getId());
 
-        validationService.validarExistenciaEntidade(produtoEntity.orElse(null), errors);
+        validationService.validarExistenciaEntidade(produtoEntity.orElse(null), errors, "Fornecedor");
         validationService.analisarException(usersEntity.getName() + " houve um erro ao buscar produto", ProdutoNotFoundException.class, errors);
 
 
@@ -95,7 +95,7 @@ public class FornecedorService {
         UsersEntity usersEntity = extractTypeUserContextHolder.extractUser();
         Optional<ProdutoEntity> produtoEntity = produtoRepository.findByIdAndFornecedorId(produtoid, usersEntity.getId());
 
-        validationService.validarExistenciaEntidade(produtoEntity.orElse(null), errors);
+        validationService.validarExistenciaEntidade(produtoEntity.orElse(null), errors, "Produto");
         validationService.analisarException(usersEntity.getName() + " houve um erro ao tentar atualizar produto", ProdutoNotFoundException.class, errors);
 
         produtoEntity.get().setNome(produtoRequest.getNome());
@@ -114,8 +114,8 @@ public class FornecedorService {
         Optional<CategoriaEntity> categoriaEntity = categoriaRepository.findById(categoriaId);
         Optional<ProdutoEntity> produtoEntity = produtoRepository.findByIdAndFornecedorId(produtoId, usersEntity.getId());
 
-        validationService.validarExistenciaEntidade(categoriaEntity.orElse(null), errors);
-        validationService.validarExistenciaEntidade(produtoEntity.orElse(null), errors);
+        validationService.validarExistenciaEntidade(categoriaEntity.orElse(null), errors, "Categoria");
+        validationService.validarExistenciaEntidade(produtoEntity.orElse(null), errors, "Produto");
 
         validationService.analisarException(usersEntity.getName() + " houve um erro ao tentar adicionar produto na categoria", ProdutoCategoriaException.class, errors);
 
@@ -135,7 +135,7 @@ public class FornecedorService {
         UsersEntity usersEntity = extractTypeUserContextHolder.extractUser();
         Optional<ProdutoEntity> produtoEntity = produtoRepository.findByIdAndFornecedorId(produtoId, usersEntity.getId());
 
-        validationService.validarExistenciaEntidade(produtoEntity.orElse(null), errors);
+        validationService.validarExistenciaEntidade(produtoEntity.orElse(null), errors, "Produto");
         validationService.analisarException(usersEntity.getName() + " houve um erro ao atualizar estoque do produto", ProdutoNotFoundException.class, errors);
 
         produtoEntity.get().setEstoque(produtoNovoEstoqueRequest.getNovaQuantidade());
@@ -151,7 +151,7 @@ public class FornecedorService {
         UsersEntity usersEntity = extractTypeUserContextHolder.extractUser();
         Optional<ProdutoEntity> produtoEntity = produtoRepository.findByIdAndFornecedorId(produtoId, usersEntity.getId());
 
-        validationService.validarExistenciaEntidade(produtoEntity.orElse(null), errors);
+        validationService.validarExistenciaEntidade(produtoEntity.orElse(null), errors, "Produto");
         validationService.analisarException(usersEntity.getName() + " houve um erro ao tentar remover produto", ProdutoNotFoundException.class, errors);
 
         for(CategoriaEntity categoria : produtoEntity.get().getCategorias()) {
@@ -173,8 +173,8 @@ public class FornecedorService {
         Optional<ProdutoEntity> produtoEntity = produtoRepository.findByIdAndFornecedorId(produtoId, usersEntity.getId());
         Optional<CategoriaEntity> categoriaEntity = categoriaRepository.findById(categoriaId);
 
-        validationService.validarExistenciaEntidade(produtoEntity.orElse(null), errors);
-        validationService.validarExistenciaEntidade(categoriaEntity.orElse(null), errors);
+        validationService.validarExistenciaEntidade(produtoEntity.orElse(null), errors, "Produto");
+        validationService.validarExistenciaEntidade(categoriaEntity.orElse(null), errors, "Categoria");
         validationService.analisarException(usersEntity.getName() + " houve um erro ao tentar remover produto de categoria", ProdutoCategoriaException.class, errors);
 
         categoriaEntity.get().getProdutos().remove(produtoEntity.get());
@@ -193,7 +193,7 @@ public class FornecedorService {
 
         Optional<ProdutoEntity> produtoEntity = produtoRepository.findById(produtoId);
 
-        validationService.validarExistenciaEntidade(produtoEntity.orElse(null), errors);
+        validationService.validarExistenciaEntidade(produtoEntity.orElse(null), errors, "Produto");
         validationService.validarDemandaProduto(produtoEntity.orElse(null), errors);
 
         List<ItemPedidoEntity> itensPedidosEnviar = produtoEntity.get().getItensPedidos()
@@ -222,7 +222,7 @@ public class FornecedorService {
     public List<ItemPedidoResponse> listarDemandaProduto(Long produtoId, Map<String, String> errors) {
         Optional<ProdutoEntity> produtoEntity = produtoRepository.findById(produtoId);
 
-        validationService.validarExistenciaEntidade(produtoEntity.orElse(null), errors);
+        validationService.validarExistenciaEntidade(produtoEntity.orElse(null), errors, "Produto");
         validationService.validarDemandaProduto(produtoEntity.orElse(null),
                 errors);
         validationService.analisarException("Houve um erro ao tentar listar demanda de produto", ProdutoDemandaException.class, errors);
