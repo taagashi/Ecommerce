@@ -236,6 +236,9 @@ public class ClienteService {
         for(int i=0 ; i<itemPedidoEntityList.size() ; i++) {
             Long produtoId = produtosIds.get(i);
             ProdutoEntity produtoEntity =  produtoEntityMap.get(produtoId);
+            
+            validationService.validarQuantidadePedido(itemPedidoEntityList.get(i), produtoEntity, errors);
+
             itemPedidoEntityList.get(i).setPedido(pedidoEntity.get());
             itemPedidoEntityList.get(i).setProduto(produtoEntity);
             itemPedidoEntityList.get(i).setValorTotal(produtoEntity.getPreco().multiply(BigDecimal.valueOf(itemPedidoEntityList.get(i).getQuantidade())));
