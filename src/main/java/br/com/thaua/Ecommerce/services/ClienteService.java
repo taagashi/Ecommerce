@@ -182,8 +182,8 @@ public class ClienteService {
         Optional<PedidoEntity> pedidoEntity = pedidoRepository.findById(pedidoId);
 
         validationService.validarExistenciaEntidade(pedidoEntity.orElse(null), errors, "Pedido");
+        validationService.analisarException(usersEntity.getName() + " houve um erro ao tentar editar pedido", PedidoNotFoundException.class, errors);
         validationService.validarStatusPedidoEditar(pedidoEntity.orElse(null), errors);
-
         List<ItemPedidoEntity> itemPedidoEntityList = itemPedidoMapper.toItemPedidoEntityList(itemPedidoRequest);
         List<Long> produtosIds = itemPedidoRequest.stream().map(ItemPedidoRequest::getProdutoId).toList();
         Map<Long, ProdutoEntity> produtoEntityMap = produtoRepository.findAllById(produtosIds).stream().collect(Collectors.toMap(AbstractEntity::getId, produto -> produto));
@@ -236,7 +236,7 @@ public class ClienteService {
         for(int i=0 ; i<itemPedidoEntityList.size() ; i++) {
             Long produtoId = produtosIds.get(i);
             ProdutoEntity produtoEntity =  produtoEntityMap.get(produtoId);
-            
+
             validationService.validarQuantidadePedido(itemPedidoEntityList.get(i), produtoEntity, errors);
 
             itemPedidoEntityList.get(i).setPedido(pedidoEntity.get());
