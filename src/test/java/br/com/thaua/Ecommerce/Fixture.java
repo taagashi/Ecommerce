@@ -358,4 +358,46 @@ public class Fixture {
         codigoVerificacaoEntity.setCodigo(codigo);
         return codigoVerificacaoEntity;
     }
+
+    public static UsersEntity extractTypeUserContextHolder() {
+        Long userId = 4L;
+        String name = "joao";
+        String email = "joao@gmail.com";
+        String password = "senha123";
+        Role role = Role.FORNECEDOR;
+        String jwtToken = UUID.randomUUID().toString();
+
+        return createUsersEntity(userId, name, email, "+0000000-0000", password, role, null, null, null, null);
+    }
+
+    public static ClienteEntity createclienteEntity(Long id, UsersEntity users, String cpf, List<PedidoEntity> pedido) {
+        ClienteEntity clienteEntity = new ClienteEntity();
+        clienteEntity.setId(id);
+        clienteEntity.setUsers(users);
+        clienteEntity.setCpf(cpf);
+        clienteEntity.setPedido(pedido);
+        return clienteEntity;
+    }
+
+    public static PedidoEntity createPedidoEntity(Long id, LocalDateTime data, BigDecimal valorPedido, StatusPedido statusPedido, ClienteEntity cliente, List<ItemPedidoEntity> itensPedidos) {
+        PedidoEntity pedidoEntity = new PedidoEntity();
+        pedidoEntity.setId(id);
+        pedidoEntity.setDataPedido(data);
+        pedidoEntity.setValorPedido(valorPedido);
+        pedidoEntity.setStatusPedido(statusPedido);
+        pedidoEntity.setCliente(cliente);
+        pedidoEntity.setItensPedidos(itensPedidos);
+        return pedidoEntity;
+    }
+
+    public static ItemPedidoEntity createItemPedidoEntity(Long id, int quantidade, BigDecimal valorTotal, PedidoEntity pedido, ProdutoEntity produto, StatusItemPedido statusItemPedido) {
+        ItemPedidoEntity itemPedidoEntity = new ItemPedidoEntity();
+        itemPedidoEntity.setId(id);
+        itemPedidoEntity.setQuantidade(quantidade);
+        itemPedidoEntity.setValorTotal(valorTotal);
+        itemPedidoEntity.setPedido(pedido);
+        itemPedidoEntity.setProduto(produto);
+        itemPedidoEntity.setStatusItemPedido(statusItemPedido);
+        return itemPedidoEntity;
+    }
 }
