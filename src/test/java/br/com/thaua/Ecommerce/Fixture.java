@@ -400,4 +400,15 @@ public class Fixture {
         itemPedidoEntity.setStatusItemPedido(statusItemPedido);
         return itemPedidoEntity;
     }
+
+    public static FornecedorEntity createFornecedorEntity(Long id, String cnpj, List<ProdutoEntity> produtos, BigDecimal saldo, int produtosEnviados) {
+        FornecedorEntity fornecedorEntity = new FornecedorEntity();
+
+        fornecedorEntity.setId(id);
+        fornecedorEntity.setCnpj(cnpj);
+        fornecedorEntity.setProduto(produtos);
+        fornecedorEntity.setSaldo(saldo);
+        fornecedorEntity.setProdutosEnviados(produtosEnviados);
+        return fornecedorEntity;
+    }
 }
