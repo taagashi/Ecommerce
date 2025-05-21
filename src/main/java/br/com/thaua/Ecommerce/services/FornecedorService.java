@@ -40,7 +40,6 @@ public class FornecedorService {
     private final CategoriaRepository categoriaRepository;
     private final ValidationService validationService;
     private final PaginaMapper paginaMapper;
-    private final PedidoRepository pedidoRepository;
     private final ItemPedidoMapper itemPedidoMapper;
     private final ExtractTypeUserContextHolder extractTypeUserContextHolder;
 
@@ -52,7 +51,7 @@ public class FornecedorService {
 
 
         log.info("SERVICE FORNECEDOR - ATUALIZAR CNPJ E TELEFONE");
-        return fornecedorMapper.FornecedorToResponse(usersRepository.save(usersEntity).getFornecedor());
+        return fornecedorMapper.fornecedorToResponse(usersRepository.save(usersEntity).getFornecedor());
     }
 
     @Transactional
@@ -80,9 +79,9 @@ public class FornecedorService {
 
     public ProdutoResponse buscarProduto(Long produtoId, Map<String, String> errors) {
         UsersEntity usersEntity = extractTypeUserContextHolder.extractUser();
-        Optional<ProdutoEntity> produtoEntity = produtoRepository.findByIdAndFornecedorId(produtoId, usersEntity.getId());
+       forne Optional<ProdutoEntity> produtoEntity = produtoRepository.findByIdAndFornecedorId(produtoId, usersEntity.getId());
 
-        validationService.validarExistenciaEntidade(produtoEntity.orElse(null), errors, "Fornecedor");
+        validationService.validarExistenciaEntidade(produtoEntity.orElse(null), errors, "Produto");
         validationService.analisarException(usersEntity.getName() + " houve um erro ao buscar produto", ProdutoNotFoundException.class, errors);
 
 

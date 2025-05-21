@@ -85,7 +85,7 @@ public class AdminService {
         validationService.analisarException("Houve um erro na hora de buscar o fornecedor", UserNotFoundException.class, errors);
 
         log.info("SERVICE ADMIN - BUSCAR FORNECEDOR");
-        return fornecedorMapper.FornecedorToResponse(fornecedorEntity.get());
+        return fornecedorMapper.fornecedorToResponse(fornecedorEntity.get());
     }
 
     @Transactional
@@ -97,7 +97,7 @@ public class AdminService {
     }
 
     public Pagina<FornecedorResponse> listarFornecedores(@PageableDefault(size = 2) Pageable pageable) {
-        Page<FornecedorResponse> pageFornecedores = fornecedorRepository.findAll(pageable).map(fornecedorMapper::FornecedorToResponse);
+        Page<FornecedorResponse> pageFornecedores = fornecedorRepository.findAll(pageable).map(fornecedorMapper::fornecedorToResponse);
 
 
         log.info("SERVICE ADMIN - LISTAR FORNECEDORES");

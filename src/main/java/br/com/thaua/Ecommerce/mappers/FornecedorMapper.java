@@ -14,7 +14,7 @@ public interface FornecedorMapper {
     @Mapping(target = "name", source = "users.name")
     @Mapping(target = "email", source = "users.email")
     @Mapping(target = "telefone", source = "users.telefone")
-    FornecedorResponse FornecedorToResponse(FornecedorEntity fornecedorEntity);
+    FornecedorResponse fornecedorToResponse(FornecedorEntity fornecedorEntity);
     List<FornecedorResponse> toFornecedorResponseListResponse(List<FornecedorEntity> fornecedorEntityList);
 
     FornecedorSaldoResponse fornecedorEntityToFornecedorSaldoResponse(FornecedorEntity fornecedorEntity);
