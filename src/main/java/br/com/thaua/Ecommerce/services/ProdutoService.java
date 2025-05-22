@@ -37,7 +37,6 @@ public class ProdutoService {
         validationService.validarExistenciaEntidade(produtoEntity.orElse(null), errors, "Produto");
         validationService.analisarException("Houve um erro ao tentar exibir categorias de um produto", ProdutoNotFoundException.class, errors);
 
-
         log.info("SERVICE PRODUTO - EXIBIR CATEGORIAS DE PRODUTO");
         return produtoMapper.toProdutoCategoriaResponse(produtoEntity.get());
     }

@@ -79,7 +79,7 @@ public class FornecedorService {
 
     public ProdutoResponse buscarProduto(Long produtoId, Map<String, String> errors) {
         UsersEntity usersEntity = extractTypeUserContextHolder.extractUser();
-       forne Optional<ProdutoEntity> produtoEntity = produtoRepository.findByIdAndFornecedorId(produtoId, usersEntity.getId());
+        Optional<ProdutoEntity> produtoEntity = produtoRepository.findByIdAndFornecedorId(produtoId, usersEntity.getId());
 
         validationService.validarExistenciaEntidade(produtoEntity.orElse(null), errors, "Produto");
         validationService.analisarException(usersEntity.getName() + " houve um erro ao buscar produto", ProdutoNotFoundException.class, errors);
