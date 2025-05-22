@@ -47,6 +47,7 @@ import java.util.Optional;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.when;
 
@@ -214,7 +215,6 @@ public class FornecedorServiceTest {
         when(extractTypeUserContextHolder.extractUser()).thenReturn(usersEntity);
         when(produtoRepository.findByIdAndFornecedorId(produtoId, usersEntity.getId())).thenReturn(Optional.of(produtoEntity));
         when(produtoMapper.produtoToResponse(produtoEntity)).thenReturn(produtoResponse);
-        when(produtoRepository.save(produtoEntity)).thenReturn(produtoEntity);
 
         ProdutoResponse produtoResponseCompare = fornecedorService.buscarProduto(produtoId, errors);
 
@@ -370,6 +370,8 @@ public class FornecedorServiceTest {
         Long produtoIdError = 3L;
         UsersEntity usersEntity = Fixture.createUsersEntity(15L, "john", "john@gmail.com", "+0000000-0000", "senha", Role.FORNECEDOR, null, null, new FornecedorEntity(), null);
 
+        ProdutoNovoEstoqueRequest produtoNovoEstoqueRequest = Fixture.createProdutoNovoEstoqueRequest(12);
+
         String errorMessage = usersEntity.getName() + " houve um erro ao atualizar estoque do produto";
 
         errors.put("Produto", "Item não encontrado");
@@ -378,7 +380,7 @@ public class FornecedorServiceTest {
 
         doThrow(new ProdutoNotFoundException(errorMessage, errors)).when(validationService).analisarException(errorMessage, ProdutoNotFoundException.class, errors);
 
-        ProdutoNotFoundException produtoNotFoundException = assertThrows(ProdutoNotFoundException.class, () -> fornecedorService.atualizarEstoqueProduto(produtoIdError, any(ProdutoNovoEstoqueRequest.class), errors));
+        ProdutoNotFoundException produtoNotFoundException = assertThrows(ProdutoNotFoundException.class, () -> fornecedorService.atualizarEstoqueProduto(produtoIdError, produtoNovoEstoqueRequest, errors));
 
         assertThat(produtoNotFoundException.getMessage()).isEqualTo(errorMessage);
         assertThat(produtoNotFoundException.getFields().get("Produto")).isEqualTo(errors.get("Produto"));

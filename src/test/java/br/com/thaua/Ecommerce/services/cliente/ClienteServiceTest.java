@@ -512,19 +512,16 @@ public class ClienteServiceTest {
 
         itemPedidoEntity.setProduto(produtoEntity);
 
-        String errorMessage = usersEntity.getName() + " houve um erro ao tentar atualizar seu pedido";
+        String errorMessage = usersEntity.getName() + " houve um erro ao tentar editar pedido";
         errors.put(usersEntity.getName(), "Item não encontrado");
         errors.put("Status", "Só é possível editar um pedido que ainda não foi pago");
         errors.put(produtoEntity.getNome(), "Quantidade acima do estoque ou igual a 0 para este produto");
 
         when(extractTypeUserContextHolder.extractUser()).thenReturn(usersEntity);
-        when(itemPedidoMapper.toItemPedidoEntityList(itemPedidoRequestList)).thenReturn(itemPedidoEntityList);
-        when(produtoRepository.findAllById(any(Iterable.class)))
-         .thenReturn(produtoEntityList);
         when(pedidoRepository.findById(pedidoIdError)).thenReturn(Optional.of(pedidoEntity));
-        doThrow(new EditarPedidoException(errorMessage, errors)).when(validationService).analisarException(errorMessage, EditarPedidoException.class, errors);
+        doThrow(new PedidoNotFoundException(errorMessage, errors)).when(validationService).analisarException(errorMessage, PedidoNotFoundException.class, errors);
 
-        EditarPedidoException editarPedidoException = assertThrows(EditarPedidoException.class, () -> clienteService.editarPedido(pedidoIdError, itemPedidoRequestList, errors));
+        PedidoNotFoundException editarPedidoException = assertThrows(PedidoNotFoundException.class, () -> clienteService.editarPedido(pedidoIdError, itemPedidoRequestList, errors));
 
         assertThat(editarPedidoException.getMessage()).isEqualTo(errorMessage);
         assertThat(editarPedidoException.getFields().get(usersEntity.getName())).isEqualTo(errors.get(usersEntity.getName()));
