@@ -33,8 +33,7 @@ import java.util.Optional;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.doThrow;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 public class CategoriaServiceTest {
@@ -103,6 +102,10 @@ public class CategoriaServiceTest {
         assertThat(categoriaResponsePagina1.getItensPorPagina()).isEqualTo(categoriaResponsePagina.getItensPorPagina());
         assertThat(categoriaResponsePagina1.getTotalItens()).isEqualTo(categoriaResponsePagina.getTotalItens());
         assertThat(categoriaResponsePagina1.getUltimaPagina()).isEqualTo(categoriaResponsePagina.getUltimaPagina());
+
+        verify(categoriaMapper, times(1)).toResponse(categoriaEntity);
+        verify(categoriaRepository, times(1)).findAll(pageable);
+        verify(paginaMapper, times(1)).toPagina(categoriaResponsePage);
     }
 
     @DisplayName("Deve retornar com sucesso categoria response")
@@ -125,6 +128,9 @@ public class CategoriaServiceTest {
         assertThat(categoriaResponse.getNome()).isEqualTo(categoriaResponseCompare.getNome());
         assertThat(categoriaResponse.getDescricao()).isEqualTo(categoriaResponseCompare.getDescricao());
         assertThat(categoriaResponse.getProdutosAssociados()).isEqualTo(categoriaResponseCompare.getProdutosAssociados());
+
+        verify(categoriaRepository, times(1)).findById(categoriaId);
+        verify(categoriaMapper, times(1)).toResponse(categoriaEntity);
     }
 
     @DisplayName("Deve retornar CategoriaNotFoundException ao tentar buscar pro categoria com id errado")
@@ -142,6 +148,10 @@ public class CategoriaServiceTest {
 
         assertThat(categoriaNotFoundException.getMessage()).isEqualTo(errorMessage);
         assertThat(categoriaNotFoundException.getFields().get("Falha de busca")).isEqualTo(errors.get("Falha de busca"));
+
+        verify(categoriaRepository, times(1)).findById(categoriaIdError);
+        verify(validationService, times(1)).validarExistenciaEntidade(null, errors, "Categoria");
+        verify(validationService, times(1)).analisarException(errorMessage, CategoriaNotFoundException.class, errors);
     }
 
     @DisplayName("Deve retornar com sucesso lista de produtos por categoria")
@@ -171,6 +181,9 @@ public class CategoriaServiceTest {
         assertThat(categoriaProdutosResponseCompare.getProdutos().getFirst().getNome()).isEqualTo(categoriaProdutosResponse.getProdutos().getFirst().getNome());
         assertThat(categoriaProdutosResponseCompare.getProdutos().getFirst().getPreco()).isEqualTo(categoriaProdutosResponse.getProdutos().getFirst().getPreco());
         assertThat(categoriaProdutosResponseCompare.getProdutos().getFirst().getEstoque()).isEqualTo(categoriaProdutosResponse.getProdutos().getFirst().getEstoque());
+
+        verify(categoriaRepository, times(1)).findById(categoriaId);
+        verify(categoriaMapper, times(1)).toCategoriaProdutosResponse(categoriaEntity);
     }
 
     @DisplayName("Deve retornar CategoriaNotFoundException após buscar por categoria errada")
@@ -186,5 +199,9 @@ public class CategoriaServiceTest {
 
         assertThat(categoriaNotFoundException.getMessage()).isEqualTo(errorMessage);
         assertThat(categoriaNotFoundException.getFields().get("Falha de busca")).isEqualTo(errors.get("Falha de busca"));
+
+        verify(categoriaRepository, times(1)).findById(categoriaIdError);
+        verify(validationService, times(1)).validarExistenciaEntidade(null, errors, "Categoria");
+        verify(validationService, times(1)).analisarException(errorMessage, CategoriaNotFoundException.class, errors);
     }
 }
