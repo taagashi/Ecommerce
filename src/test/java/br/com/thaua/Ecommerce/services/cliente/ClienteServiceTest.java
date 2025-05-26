@@ -126,6 +126,10 @@ public class ClienteServiceTest {
         assertThat(clienteResponseCompare.getEmail()).isEqualTo(clienteResponse.getEmail());
         assertThat(clienteResponseCompare.getTelefone()).isEqualTo(clienteResponse.getTelefone());
         assertThat(clienteResponseCompare.getCpf()).isEqualTo(clienteResponse.getCpf());
+
+        verify(extractTypeUserContextHolder, times(1)).extractUser();
+        verify(usersRepository, times(1)).save(usersEntity);
+        verify(clienteMapper, times(1)).toResponse(clienteEntity);
     }
 
     @DisplayName("Deve retornar com sucesso token de acesso ao atualizar dados do cliente")
@@ -151,6 +155,10 @@ public class ClienteServiceTest {
         String jwtTokenCompare = clienteService.atualizarDados(clienteUpdateRequest);
 
         assertThat(jwtTokenCompare).isEqualTo(jwtToken);
+
+        verify(extractTypeUserContextHolder, times(1)).extractUser();
+        verify(usersRepository, times(1)).save(usersEntity);
+        verify(jwtService, times(1)).generateToken(any(MyUserDetails.class));
     }
 
     @DisplayName("Deve retornar com sucesso pedido do cliente apos ele fazer seu pedido")
@@ -196,6 +204,15 @@ public class ClienteServiceTest {
         assertThat(pedidoResponseCompare.getItensPedidos().getFirst().getQuantidade()).isEqualTo(pedidoResponse.getItensPedidos().getFirst().getQuantidade());
         assertThat(pedidoResponseCompare.getItensPedidos().getFirst().getValorTotal()).isEqualTo(pedidoResponse.getItensPedidos().getFirst().getValorTotal());
         assertThat(pedidoResponseCompare.getItensPedidos().getFirst().getStatusItemPedido()).isEqualTo(pedidoResponse.getItensPedidos().getFirst().getStatusItemPedido());
+
+        verify(extractTypeUserContextHolder, times(1)).extractUser();
+        verify(validationService, times(1)).validarEnderecoNaoExistente(usersEntity, errors);
+        verify(validationService, times(1)).validarTelefone(usersEntity, errors);
+        verify(itemPedidoMapper, times(1)).toItemPedidoEntityList(itemPedidoRequestList);
+        verify(produtoRepository, times(1)).findAllById(any(Iterable.class));
+        verify(validationService, times(1)).validarQuantidadePedido(itemPedidoEntity, produtoEntity, errors);
+        verify(pedidoRepository, times(1)).save(any(PedidoEntity.class));
+        verify(pedidoMapper, times(1)).toPedidoResponse(any(PedidoEntity.class));
     }
 
     @DisplayName("Deve retornar FazerPedidoException apos falha ao fazer pedido")
@@ -229,6 +246,14 @@ public class ClienteServiceTest {
         assertThat(fazerPedidoException.getFields().get("Endereço")).isEqualTo(errors.get("Endereço"));
         assertThat(fazerPedidoException.getFields().get("Telefone")).isEqualTo(errors.get("Telefone"));
         assertThat(fazerPedidoException.getFields().get(produtoEntity.getNome())).isEqualTo(errors.get(produtoEntity.getNome()));
+
+        verify(extractTypeUserContextHolder, times(1)).extractUser();
+        verify(validationService, times(1)).validarEnderecoNaoExistente(usersEntity, errors);
+        verify(validationService, times(1)).validarTelefone(usersEntity, errors);
+        verify(itemPedidoMapper, times(1)).toItemPedidoEntityList(itemPedidoRequestList);
+        verify(produtoRepository, times(1)).findAllById(any(Iterable.class));
+        verify(validationService, times(1)).validarQuantidadePedido(itemPedidoEntity, produtoEntity, errors);
+        verify(validationService, times(1)).analisarException(errorMessage, FazerPedidoException.class, errors);
     }
 
     @DisplayName("Deve listar pedidos do cliente com sucesso")
@@ -277,6 +302,12 @@ public class ClienteServiceTest {
         assertThat(pedidoResponsePaginaCompare.getConteudo().getFirst().getValorPedido()).isEqualTo(pedidoResponseList.getFirst().getValorPedido());
         assertThat(pedidoResponsePaginaCompare.getConteudo().getFirst().getStatusPedido()).isEqualTo(pedidoResponseList.getFirst().getStatusPedido());
 
+        verify(extractTypeUserContextHolder, times(1)).extractUser();
+        verify(validationService, times(1)).validarStatusPedidoListagem(statusPedido, errors);
+        verify(paginaMapper, times(1)).toPagina(pageResponse);
+        verify(pedidoRepository, times(1)).findAllByClienteIdAndStatusPedido(usersEntity.getId(), StatusPedido.valueOf(statusPedido), pageable);
+        verify(pedidoMapper, times(1)).toPedidoResponse(pedidoEntity);
+
     }
 
     @DisplayName("Deve retornar InvalidStatusPedidoException poas falha ao listar pedidos")
@@ -298,6 +329,10 @@ public class ClienteServiceTest {
 
         assertThat(invalidStatusPedidoException.getMessage()).isEqualTo(errorMessage);
         assertThat(invalidStatusPedidoException.getFields().get("Status")).isEqualTo(errors.get("Status"));
+
+        verify(extractTypeUserContextHolder, times(1)).extractUser();
+        verify(validationService, times(1)).validarStatusPedidoListagem(statusPedidoError, errors);
+        verify(validationService, times(1)).analisarException(errorMessage, InvalidStatusPedidoException.class, errors);
     }
 
     @DisplayName("Deve retornar pedido com suceso")
@@ -322,6 +357,11 @@ public class ClienteServiceTest {
         assertThat(pedidoResponseCompare.getValorPedido()).isEqualTo(pedidoResponse.getValorPedido());
         assertThat(pedidoResponseCompare.getStatusPedido()).isEqualTo(pedidoResponse.getStatusPedido());
         assertThat(pedidoResponseCompare.getItensPedidos()).isEqualTo(pedidoResponse.getItensPedidos());
+
+        verify(extractTypeUserContextHolder, times(1)).extractUser();
+        verify(pedidoRepository, times(1)).findByIdAndClienteId(pedidoId, usersEntity.getId());
+        verify(validationService, times(1)).validarExistenciaEntidade(pedidoEntity, errors, "Pedido");
+        verify(pedidoMapper, times(1)).toPedidoResponse(pedidoEntity);
     }
 
     @DisplayName("Deve retornar PedidoNotFoundException apos falha de busca do pedido")
@@ -340,6 +380,10 @@ public class ClienteServiceTest {
 
         assertThat(pedidoNotFoundException.getMessage()).isEqualTo(errorMessage);
         assertThat(pedidoNotFoundException.getFields().get(usersEntity.getName())).isEqualTo(errors.get(usersEntity.getName()));
+
+        verify(extractTypeUserContextHolder, times(1)).extractUser();
+        verify(pedidoRepository, times(1)).findByIdAndClienteId(pedidoIdError, usersEntity.getId());
+        verify(validationService, times(1)).analisarException(errorMessage, PedidoNotFoundException.class, errors);
     }
 
     @DisplayName("Deve retornar item pedido com sucesso")
@@ -369,6 +413,11 @@ public class ClienteServiceTest {
         assertThat(itemPedidoResponseCompare.getQuantidade()).isEqualTo(itemPedidoResponse.getQuantidade());
         assertThat(itemPedidoResponseCompare.getValorTotal()).isEqualTo(itemPedidoResponse.getValorTotal());
         assertThat(itemPedidoResponseCompare.getStatusItemPedido()).isEqualTo(itemPedidoResponse.getStatusItemPedido());
+
+        verify(extractTypeUserContextHolder, times(1)).extractUser();
+        verify(itemPedidoRepository, times(1)).findByIdAndPedidoClienteId(itemPedidoId, usersEntity.getId());
+        verify(validationService, times(1)).validarExistenciaEntidade(itemPedidoEntity, errors, "Item pedido");
+        verify(itemPedidoMapper, times(1)).toItemPedidoResponse(itemPedidoEntity);
     }
 
     @DisplayName("Deve retornar ItemPedidoNotFoundException apos falha de busca do item pedido")
@@ -388,6 +437,10 @@ public class ClienteServiceTest {
 
         assertThat(itemPedidoNotFoundException.getMessage()).isEqualTo(errorMessage);
         assertThat(itemPedidoNotFoundException.getFields().get("Item pedido")).isEqualTo(errors.get("Item pedido"));
+
+        verify(extractTypeUserContextHolder, times(1)).extractUser();
+        verify(itemPedidoRepository, times(1)).findByIdAndPedidoClienteId(itemPedidoIdError, usersEntity.getId());
+        verify(validationService, times(1)).analisarException(errorMessage, ItemPedidoNotFoundException.class, errors);
     }
 
     @DisplayName("Deve pagar pedido com sucesso")
@@ -415,6 +468,13 @@ public class ClienteServiceTest {
         String messageSucessoCompare = clienteService.pagarPedido(pedidoId, valorPedido, errors);
 
         assertThat(messageSucessoCompare).isEqualTo(messageSucesso);
+
+        verify(extractTypeUserContextHolder, times(1)).extractUser();
+        verify(pedidoRepository, times(1)).findById(pedidoId);
+        verify(validationService, times(1)).validarExistenciaEntidade(pedidoEntity, errors, "Pedido");
+        verify(validationService, times(1)).validarPagamentoPedido(pedidoEntity, valorPedido, errors);
+        verify(validationService, times(1)).validarStatusPedidoPagamento(pedidoEntity, errors);
+        verify(itemPedidoRepository, times(1)).save(itemPedidoEntity);
     }
 
     @DisplayName("Deve retornar PagarPedidoException apos falha de pagamento do pedido")
@@ -442,6 +502,13 @@ public class ClienteServiceTest {
         assertThat(pagarPedidoException.getFields().get(usersEntity.getName())).isEqualTo(errors.get(usersEntity.getName()));
         assertThat(pagarPedidoException.getFields().get("Valor")).isEqualTo(errors.get("Valor"));
         assertThat(pagarPedidoException.getFields().get("Status")).isEqualTo(errors.get("Status"));
+
+        verify(extractTypeUserContextHolder, times(1)).extractUser();
+        verify(pedidoRepository, times(1)).findById(pedidoIdError);
+        verify(validationService, times(1)).validarExistenciaEntidade(pedidoEntity, errors, "Pedido");
+        verify(validationService, times(1)).validarPagamentoPedido(pedidoEntity, valorPedidoError, errors);
+        verify(validationService, times(1)).validarStatusPedidoPagamento(pedidoEntity, errors);
+        verify(validationService, times(1)).analisarException(errorMessage, PagarPedidoException.class, errors);
     }
 
     @DisplayName("Deve editar pedido com sucesso")
@@ -489,6 +556,16 @@ public class ClienteServiceTest {
         assertThat(pedidoResponseCompare.getItensPedidos().getFirst().getQuantidade()).isEqualTo(pedidoResponse.getItensPedidos().getFirst().getQuantidade());
         assertThat(pedidoResponseCompare.getItensPedidos().getFirst().getValorTotal()).isEqualTo(pedidoResponse.getItensPedidos().getFirst().getValorTotal());
         assertThat(pedidoResponseCompare.getItensPedidos().getFirst().getStatusItemPedido()).isEqualTo(pedidoResponse.getItensPedidos().getFirst().getStatusItemPedido());
+
+        verify(extractTypeUserContextHolder, times(1)).extractUser();
+        verify(pedidoRepository, times(1)).findById(pedidoId);
+        verify(validationService, times(1)).validarExistenciaEntidade(pedidoEntity, errors, "Pedido");
+        verify(validationService, times(1)).validarStatusPedidoEditar(pedidoEntity, errors);
+        verify(itemPedidoMapper, times(1)).toItemPedidoEntityList(itemPedidoRequestList);
+        verify(produtoRepository, times(1)).findAllById(any(List.class));
+        verify(validationService, times(1)).validarQuantidadePedido(itemPedidoEntity, produtoEntity, errors);
+        verify(pedidoMapper, times(1)).toPedidoResponse(pedidoEntity);
+        verify(pedidoRepository, times(1)).save(pedidoEntity);
     }
 
     @DisplayName("Deve retornar EditarPedidoException apos falha de edição do pedido")
@@ -527,6 +604,11 @@ public class ClienteServiceTest {
         assertThat(editarPedidoException.getFields().get(usersEntity.getName())).isEqualTo(errors.get(usersEntity.getName()));
         assertThat(editarPedidoException.getFields().get("Status")).isEqualTo(errors.get("Status"));
         assertThat(editarPedidoException.getFields().get(produtoEntity.getNome())).isEqualTo(errors.get(produtoEntity.getNome()));
+
+        verify(extractTypeUserContextHolder, times(1)).extractUser();
+        verify(pedidoRepository, times(1)).findById(pedidoIdError);
+        verify(validationService, times(1)).validarExistenciaEntidade(pedidoEntity, errors, "Pedido");
+        verify(validationService, times(1)).analisarException(errorMessage, PedidoNotFoundException.class, errors);
     }
 
     @DisplayName("Deve adicionar produto ao pedido com sucesso")
@@ -575,6 +657,13 @@ public class ClienteServiceTest {
         assertThat(pedidoResponseCompare.getItensPedidos().getFirst().getQuantidade()).isEqualTo(pedidoResponse.getItensPedidos().getFirst().getQuantidade());
         assertThat(pedidoResponseCompare.getItensPedidos().getFirst().getValorTotal()).isEqualTo(pedidoResponse.getItensPedidos().getFirst().getValorTotal());
         assertThat(pedidoResponseCompare.getItensPedidos().getFirst().getStatusItemPedido()).isEqualTo(pedidoResponse.getItensPedidos().getFirst().getStatusItemPedido());
+
+        verify(extractTypeUserContextHolder, times(1)).extractUser();
+        verify(pedidoRepository, times(1)).findById(pedidoId);
+        verify(validationService, times(1)).validarExistenciaEntidade(pedidoEntity, errors, "Pedido");
+        verify(validationService, times(1)).validarStatusPedidoAdicionarProduto(pedidoEntity, errors);
+        verify(itemPedidoMapper, times(1)).toItemPedidoEntityList(itemPedidoRequestList);
+        verify(produtoRepository, times(1)).findAllById(any(Iterable.class));
     }
 
     @DisplayName("Deve retornar AdicionarProdutoAPedidoException apos falha de adicionar produto ao pedido")
@@ -605,6 +694,12 @@ public class ClienteServiceTest {
         assertThat(adicionarProdutoAPedidoException.getFields().get(usersEntity.getName())).isEqualTo(errors.get(usersEntity.getName()));
         assertThat(adicionarProdutoAPedidoException.getFields().get("Status")).isEqualTo(errors.get("Status"));
         assertThat(adicionarProdutoAPedidoException.getFields().get("Produto")).isEqualTo(errors.get("Produto"));
+
+        verify(extractTypeUserContextHolder, times(1)).extractUser();
+        verify(pedidoRepository, times(1)).findById(pedidoIdError);
+        verify(itemPedidoMapper, times(1)).toItemPedidoEntityList(itemPedidoRequestList);
+        verify(produtoRepository, times(1)).findAllById(any(Iterable.class));
+        verify(validationService, times(1)).analisarException(errorMessage, AdicionarProdutoAPedidoException.class, errors);
     }
 
     @DisplayName("Deve deletar item pedido com sucesso")
@@ -628,6 +723,13 @@ public class ClienteServiceTest {
         when(itemPedidoRepository.findById(itemPedidoId)).thenReturn(Optional.of(itemPedidoEntity));
 
         clienteService.deletarItemPedido(itemPedidoId, errors);
+
+        verify(extractTypeUserContextHolder, times(1)).extractUser();
+        verify(itemPedidoRepository, times(1)).findById(itemPedidoId);
+        verify(validationService, times(1)).validarExistenciaEntidade(itemPedidoEntity, errors, "Item pedido");
+        verify(validationService, times(1)).validarStatusPedidoDeletar(pedidoEntity, errors);
+        verify(pedidoRepository, times(1)).save(pedidoEntity);
+        verify(itemPedidoRepository, times(1)).delete(itemPedidoEntity);
     }
 
     @DisplayName("Deve retornar DeletarItemPedidoException apos falha de deletar item pedido")
@@ -648,6 +750,10 @@ public class ClienteServiceTest {
 
         assertThat(itemPedidoNotFoundException.getMessage()).isEqualTo(errorMessage);
         assertThat(itemPedidoNotFoundException.getFields().get("Item pedido")).isEqualTo(errors.get("Item pedido"));
+
+        verify(extractTypeUserContextHolder, times(1)).extractUser();
+        verify(itemPedidoRepository, times(1)).findById(itemPedidoIdError);
+         verify(validationService, times(1)).analisarException(errorMessage, ItemPedidoNotFoundException.class, errors);
     }
 
     @DisplayName("Deve deletar pedido com sucesso")
@@ -667,6 +773,12 @@ public class ClienteServiceTest {
         String messageSucessoCompare = clienteService.deletarPedido(pedidoId, errors);
 
         assertThat(messageSucessoCompare).isEqualTo(messageSucesso);
+
+        verify(extractTypeUserContextHolder, times(1)).extractUser();
+        verify(pedidoRepository, times(1)).findById(pedidoId);
+        verify(validationService, times(1)).validarExistenciaEntidade(pedidoEntity, errors, "Pedido");
+        verify(validationService, times(1)).validarStatusPedidoDeletar(pedidoEntity, errors);;
+        verify(pedidoRepository, times(1)).delete(pedidoEntity);
     }
 
     @DisplayName("Deve retornar DeletarPedidoException apos falha de deletar pedido")
@@ -689,5 +801,9 @@ public class ClienteServiceTest {
         assertThat(deletarPedidoException.getMessage()).isEqualTo(errorMessage);
         assertThat(deletarPedidoException.getFields().get("Status")).isEqualTo(errors.get("Status"));
         assertThat(deletarPedidoException.getFields().get(usersEntity.getName())).isEqualTo(errors.get(usersEntity.getName()));
+
+        verify(extractTypeUserContextHolder, times(1)).extractUser();
+        verify(pedidoRepository, times(1)).findById(pedidoIdError);
+        verify(validationService, times(1)).analisarException(errorMessage, DeletarPedidoException.class, errors);
     }
 }
