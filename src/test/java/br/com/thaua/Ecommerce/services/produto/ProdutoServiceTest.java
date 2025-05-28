@@ -33,8 +33,7 @@ import java.util.Optional;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.Mockito.doThrow;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 public class ProdutoServiceTest {
@@ -92,6 +91,10 @@ public class ProdutoServiceTest {
         assertThat(produtoResponseCompare.getEstoque()).isEqualTo(produtoResponse.getEstoque());
         assertThat(produtoResponseCompare.getQuantidadeDemanda()).isEqualTo(produtoResponse.getQuantidadeDemanda());
         assertThat(produtoResponseCompare.getCategoriasAssociadas()).isEqualTo(produtoResponse.getCategoriasAssociadas());
+
+        verify(produtoRepository, times(1)).findById(produtoId);
+        verify(validationService, times(1)).validarExistenciaEntidade(produtoEntity, errors, "Produto");
+        verify(produtoMapper, times(1)).produtoToResponse(produtoEntity);
     }
 
     @DisplayName("Deve retornar ProdutoNotFoundException ao tentar buscar produto com id incorreto")
@@ -107,6 +110,10 @@ public class ProdutoServiceTest {
 
         assertThat(produtoNotFoundException.getMessage()).isEqualTo(errorMessage);
         assertThat(produtoNotFoundException.getFields().get("Falha de busca")).isEqualTo(errors.get("Falha de busca"));
+
+        verify(produtoRepository, times(1)).findById(produtoIdError);
+        verify(validationService, times(1)).validarExistenciaEntidade(null, errors, "Produto");
+        verify(validationService, times(1)).analisarException(errorMessage, ProdutoNotFoundException.class, errors);
     }
 
     @DisplayName("Deve retornar com sucesso as categorias de um produto")
@@ -136,6 +143,10 @@ public class ProdutoServiceTest {
         assertThat(produtoCategoriaResponseCompare.getPreco()).isEqualTo(produtoCategoriaResponse.getPreco());
         assertThat(produtoCategoriaResponseCompare.getCategorias().getFirst().getCategoriaId()).isEqualTo(produtoCategoriaResponse.getCategorias().getFirst().getCategoriaId());
         assertThat(produtoCategoriaResponseCompare.getCategorias().getFirst().getNome()).isEqualTo(produtoCategoriaResponse.getCategorias().getFirst().getNome());
+
+        verify(produtoRepository, times(1)).findById(produtoId);
+        verify(validationService, times(1)).validarExistenciaEntidade(produtoEntity, errors, "Produto");
+        verify(produtoMapper, times(1)).toProdutoCategoriaResponse(produtoEntity);
     }
 
     @DisplayName("Deve retornar ProdutoNotFoundException ao tentar exibir categorias de um produto com id incorreto")
@@ -151,6 +162,10 @@ public class ProdutoServiceTest {
 
         assertThat(produtoNotFoundException.getMessage()).isEqualTo(errorMessage);
         assertThat(produtoNotFoundException.getFields().get("Falha de busca")).isEqualTo(errors.get("Falha de busca"));
+
+        verify(produtoRepository, times(1)).findById(produtoIdError);
+        verify(validationService, times(1)).validarExistenciaEntidade(null, errors, "Produto");
+        verify(validationService, times(1)).analisarException(errorMessage, ProdutoNotFoundException.class, errors);
     }
 
     @DisplayName("Deve retornar com sucesso uma pagina de produtos")
@@ -206,5 +221,9 @@ public class ProdutoServiceTest {
         assertThat(produtoResponsePaginaCompare.getItensPorPagina()).isEqualTo(produtoResponsePagina.getItensPorPagina());
         assertThat(produtoResponsePaginaCompare.getTotalItens()).isEqualTo(produtoResponsePagina.getTotalItens());
         assertThat(produtoResponsePaginaCompare.getUltimaPagina()).isEqualTo(produtoResponsePagina.getUltimaPagina());
+
+        verify(produtoMapper, times(1)).produtoToResponse(produtoEntity);
+        verify(produtoSpecifications, times(1)).buscarComFiltros(precoMinimo, precoMaximo, pageable);
+        verify(paginaMapper, times(1)).toPagina(produtoResponsePage);
     }
 }
